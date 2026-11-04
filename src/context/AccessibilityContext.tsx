@@ -421,6 +421,9 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
 
     // Immediately stop synthesis and mute microphone
     stopSpeaking();
+    // Mark speaking synchronously so speech recognition abort does not auto-restart
+    isSpeakingRef.current = true;
+    setIsSpeaking(true);
     pauseVoiceListening();
 
     const cleanText = text.replace(/<[^>]*>?/gm, '').trim();

@@ -105,147 +105,43 @@
       "createdAt": "2026-11-03T21:32:11.430Z"
     },
     {
-      "id": "usr_test_1793768009769",
-      "rollNumber": "SSC-TEST-9769",
+      "id": "usr_test_1793776703443",
+      "rollNumber": "SSC-TEST-3443",
       "name": "Pooja Verma",
-      "email": "test_candidate_1793768009769@test.ssc.in",
+      "email": "test_candidate_1793776703443@test.ssc.in",
       "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
       "role": "candidate",
       "pwdCategory": "Low Vision",
       "needScribe": false,
       "examRegion": "Western Region (WR)",
       "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T04:53:29.769Z"
+      "createdAt": "2026-11-04T07:18:23.443Z"
     },
     {
-      "id": "usr_test_1793768286310",
-      "rollNumber": "SSC-TEST-6310",
+      "id": "usr_test_1793776743819",
+      "rollNumber": "SSC-TEST-3819",
       "name": "Pooja Verma",
-      "email": "test_candidate_1793768286310@test.ssc.in",
+      "email": "test_candidate_1793776743819@test.ssc.in",
       "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
       "role": "candidate",
       "pwdCategory": "Low Vision",
       "needScribe": false,
       "examRegion": "Western Region (WR)",
       "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T04:58:06.310Z"
+      "createdAt": "2026-11-04T07:19:03.819Z"
     },
     {
-      "id": "usr_test_1793768313132",
-      "rollNumber": "SSC-TEST-3132",
+      "id": "usr_test_1793776772949",
+      "rollNumber": "SSC-TEST-2949",
       "name": "Pooja Verma",
-      "email": "test_candidate_1793768313132@test.ssc.in",
+      "email": "test_candidate_1793776772949@test.ssc.in",
       "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
       "role": "candidate",
       "pwdCategory": "Low Vision",
       "needScribe": false,
       "examRegion": "Western Region (WR)",
       "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T04:58:33.132Z"
-    },
-    {
-      "id": "usr_test_1793768991803",
-      "rollNumber": "SSC-TEST-1803",
-      "name": "Pooja Verma",
-      "email": "test_candidate_1793768991803@test.ssc.in",
-      "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
-      "role": "candidate",
-      "pwdCategory": "Low Vision",
-      "needScribe": false,
-      "examRegion": "Western Region (WR)",
-      "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T05:09:51.803Z"
-    },
-    {
-      "id": "usr_test_1793769014201",
-      "rollNumber": "SSC-TEST-4201",
-      "name": "Pooja Verma",
-      "email": "test_candidate_1793769014201@test.ssc.in",
-      "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
-      "role": "candidate",
-      "pwdCategory": "Low Vision",
-      "needScribe": false,
-      "examRegion": "Western Region (WR)",
-      "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T05:10:14.201Z"
-    },
-    {
-      "id": "usr_test_1793769749204",
-      "rollNumber": "SSC-TEST-9204",
-      "name": "Pooja Verma",
-      "email": "test_candidate_1793769749204@test.ssc.in",
-      "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
-      "role": "candidate",
-      "pwdCategory": "Low Vision",
-      "needScribe": false,
-      "examRegion": "Western Region (WR)",
-      "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T05:22:29.204Z"
-    },
-    {
-      "id": "usr_test_1793769800718",
-      "rollNumber": "SSC-TEST-0718",
-      "name": "Pooja Verma",
-      "email": "test_candidate_1793769800718@test.ssc.in",
-      "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
-      "role": "candidate",
-      "pwdCategory": "Low Vision",
-      "needScribe": false,
-      "examRegion": "Western Region (WR)",
-      "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T05:23:20.718Z"
-    },
-    {
-      "id": "usr_test_1793772123921",
-      "rollNumber": "SSC-TEST-3921",
-      "name": "Pooja Verma",
-      "email": "test_candidate_1793772123921@test.ssc.in",
-      "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
-      "role": "candidate",
-      "pwdCategory": "Low Vision",
-      "needScribe": false,
-      "examRegion": "Western Region (WR)",
-      "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T06:02:03.921Z"
-    },
-    {
-      "id": "usr_test_1793772151968",
-      "rollNumber": "SSC-TEST-1968",
-      "name": "Pooja Verma",
-      "email": "test_candidate_1793772151968@test.ssc.in",
-      "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
-      "role": "candidate",
-      "pwdCategory": "Low Vision",
-      "needScribe": false,
-      "examRegion": "Western Region (WR)",
-      "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T06:02:31.968Z"
-    },
-    {
-      "id": "usr_test_1793772290708",
-      "rollNumber": "SSC-TEST-0708",
-      "name": "Pooja Verma",
-      "email": "test_candidate_1793772290708@test.ssc.in",
-      "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
-      "role": "candidate",
-      "pwdCategory": "Low Vision",
-      "needScribe": false,
-      "examRegion": "Western Region (WR)",
-      "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T06:04:50.708Z"
-    },
-    {
-      "id": "usr_test_1793772417658",
-      "rollNumber": "SSC-TEST-7658",
-      "name": "Pooja Verma",
-      "email": "test_candidate_1793772417658@test.ssc.in",
-      "passwordHash": "c4ca4238a0b923820dcc509a6f75849b",
-      "role": "candidate",
-      "pwdCategory": "Low Vision",
-      "needScribe": false,
-      "examRegion": "Western Region (WR)",
-      "examLanguage": "Hindi",
-      "createdAt": "2026-11-04T06:06:57.658Z"
+      "createdAt": "2026-11-04T07:19:32.949Z"
     }
   ],
   "practiceAttempts": [
@@ -840,120 +736,60 @@
       "timestamp": "2026-11-03T21:32:11.432Z"
     },
     {
-      "id": "att_1793768009771",
-      "userId": "usr_bkt_test_1793768009771",
+      "id": "att_1793775841496",
+      "userId": "usr_candidate_01",
       "questionId": "SSC-MTS-NUM-001",
-      "selectedOption": "B",
+      "selectedOption": "A",
       "isCorrect": true,
-      "timeSpentSeconds": 28,
+      "timeSpentSeconds": 27,
       "mode": "voice",
-      "timestamp": "2026-11-04T04:53:29.771Z"
+      "timestamp": "2026-11-04T07:04:01.496Z"
     },
     {
-      "id": "att_1793768286312",
-      "userId": "usr_bkt_test_1793768286312",
-      "questionId": "SSC-MTS-NUM-001",
-      "selectedOption": "B",
-      "isCorrect": true,
-      "timeSpentSeconds": 28,
+      "id": "att_1793775894530",
+      "userId": "usr_candidate_01",
+      "questionId": "SSC-MTS-NUM-002",
+      "selectedOption": "C",
+      "isCorrect": false,
+      "timeSpentSeconds": 42,
       "mode": "voice",
-      "timestamp": "2026-11-04T04:58:06.312Z"
+      "timestamp": "2026-11-04T07:04:54.530Z"
     },
     {
-      "id": "att_1793768313134",
-      "userId": "usr_bkt_test_1793768313134",
+      "id": "att_1793776703446",
+      "userId": "usr_bkt_test_1793776703446",
       "questionId": "SSC-MTS-NUM-001",
       "selectedOption": "B",
       "isCorrect": true,
       "timeSpentSeconds": 28,
       "mode": "voice",
-      "timestamp": "2026-11-04T04:58:33.134Z"
+      "timestamp": "2026-11-04T07:18:23.446Z"
     },
     {
-      "id": "att_1793768991804",
-      "userId": "usr_bkt_test_1793768991804",
+      "id": "att_1793776743822",
+      "userId": "usr_bkt_test_1793776743822",
       "questionId": "SSC-MTS-NUM-001",
       "selectedOption": "B",
       "isCorrect": true,
       "timeSpentSeconds": 28,
       "mode": "voice",
-      "timestamp": "2026-11-04T05:09:51.804Z"
+      "timestamp": "2026-11-04T07:19:03.822Z"
     },
     {
-      "id": "att_1793769014203",
-      "userId": "usr_bkt_test_1793769014203",
+      "id": "att_1793776772953",
+      "userId": "usr_bkt_test_1793776772953",
       "questionId": "SSC-MTS-NUM-001",
       "selectedOption": "B",
       "isCorrect": true,
       "timeSpentSeconds": 28,
       "mode": "voice",
-      "timestamp": "2026-11-04T05:10:14.203Z"
-    },
-    {
-      "id": "att_1793769749208",
-      "userId": "usr_bkt_test_1793769749208",
-      "questionId": "SSC-MTS-NUM-001",
-      "selectedOption": "B",
-      "isCorrect": true,
-      "timeSpentSeconds": 28,
-      "mode": "voice",
-      "timestamp": "2026-11-04T05:22:29.208Z"
-    },
-    {
-      "id": "att_1793769800720",
-      "userId": "usr_bkt_test_1793769800720",
-      "questionId": "SSC-MTS-NUM-001",
-      "selectedOption": "B",
-      "isCorrect": true,
-      "timeSpentSeconds": 28,
-      "mode": "voice",
-      "timestamp": "2026-11-04T05:23:20.720Z"
-    },
-    {
-      "id": "att_1793772123923",
-      "userId": "usr_bkt_test_1793772123923",
-      "questionId": "SSC-MTS-NUM-001",
-      "selectedOption": "B",
-      "isCorrect": true,
-      "timeSpentSeconds": 28,
-      "mode": "voice",
-      "timestamp": "2026-11-04T06:02:03.923Z"
-    },
-    {
-      "id": "att_1793772151970",
-      "userId": "usr_bkt_test_1793772151970",
-      "questionId": "SSC-MTS-NUM-001",
-      "selectedOption": "B",
-      "isCorrect": true,
-      "timeSpentSeconds": 28,
-      "mode": "voice",
-      "timestamp": "2026-11-04T06:02:31.970Z"
-    },
-    {
-      "id": "att_1793772290710",
-      "userId": "usr_bkt_test_1793772290710",
-      "questionId": "SSC-MTS-NUM-001",
-      "selectedOption": "B",
-      "isCorrect": true,
-      "timeSpentSeconds": 28,
-      "mode": "voice",
-      "timestamp": "2026-11-04T06:04:50.710Z"
-    },
-    {
-      "id": "att_1793772417661",
-      "userId": "usr_bkt_test_1793772417661",
-      "questionId": "SSC-MTS-NUM-001",
-      "selectedOption": "B",
-      "isCorrect": true,
-      "timeSpentSeconds": 28,
-      "mode": "voice",
-      "timestamp": "2026-11-04T06:06:57.661Z"
+      "timestamp": "2026-11-04T07:19:32.953Z"
     }
   ],
   "mockAttempts": [
     {
-      "id": "mock_A_1793772417667",
-      "userId": "usr_student_A_1793772417667",
+      "id": "mock_A_1793776772960",
+      "userId": "usr_student_A_1793776772960",
       "examTitle": "Student A Mock",
       "session1Score": 100,
       "session2Score": 120,
@@ -963,11 +799,11 @@
       "qualified": true,
       "totalTimeSeconds": 4000,
       "answers": {},
-      "completedAt": "2026-11-04T06:06:57.667Z"
+      "completedAt": "2026-11-04T07:19:32.960Z"
     },
     {
-      "id": "mock_test_1793772417665",
-      "userId": "usr_mock_test_1793772417665",
+      "id": "mock_test_1793776772958",
+      "userId": "usr_mock_test_1793776772958",
       "examTitle": "SSC MTS Full Mock Test #1",
       "session1Score": 90,
       "session2Score": 115,
@@ -982,11 +818,11 @@
           "timeSpent": 25
         }
       },
-      "completedAt": "2026-11-04T06:06:57.665Z"
+      "completedAt": "2026-11-04T07:19:32.958Z"
     },
     {
-      "id": "mock_A_1793772290714",
-      "userId": "usr_student_A_1793772290714",
+      "id": "mock_A_1793776743829",
+      "userId": "usr_student_A_1793776743829",
       "examTitle": "Student A Mock",
       "session1Score": 100,
       "session2Score": 120,
@@ -996,11 +832,11 @@
       "qualified": true,
       "totalTimeSeconds": 4000,
       "answers": {},
-      "completedAt": "2026-11-04T06:04:50.714Z"
+      "completedAt": "2026-11-04T07:19:03.829Z"
     },
     {
-      "id": "mock_test_1793772290713",
-      "userId": "usr_mock_test_1793772290713",
+      "id": "mock_test_1793776743827",
+      "userId": "usr_mock_test_1793776743827",
       "examTitle": "SSC MTS Full Mock Test #1",
       "session1Score": 90,
       "session2Score": 115,
@@ -1015,11 +851,11 @@
           "timeSpent": 25
         }
       },
-      "completedAt": "2026-11-04T06:04:50.713Z"
+      "completedAt": "2026-11-04T07:19:03.827Z"
     },
     {
-      "id": "mock_A_1793772151973",
-      "userId": "usr_student_A_1793772151973",
+      "id": "mock_A_1793776703451",
+      "userId": "usr_student_A_1793776703451",
       "examTitle": "Student A Mock",
       "session1Score": 100,
       "session2Score": 120,
@@ -1029,11 +865,11 @@
       "qualified": true,
       "totalTimeSeconds": 4000,
       "answers": {},
-      "completedAt": "2026-11-04T06:02:31.973Z"
+      "completedAt": "2026-11-04T07:18:23.451Z"
     },
     {
-      "id": "mock_test_1793772151972",
-      "userId": "usr_mock_test_1793772151972",
+      "id": "mock_test_1793776703450",
+      "userId": "usr_mock_test_1793776703450",
       "examTitle": "SSC MTS Full Mock Test #1",
       "session1Score": 90,
       "session2Score": 115,
@@ -1048,271 +884,7 @@
           "timeSpent": 25
         }
       },
-      "completedAt": "2026-11-04T06:02:31.972Z"
-    },
-    {
-      "id": "mock_A_1793772123927",
-      "userId": "usr_student_A_1793772123927",
-      "examTitle": "Student A Mock",
-      "session1Score": 100,
-      "session2Score": 120,
-      "totalScore": 220,
-      "totalMax": 270,
-      "percentage": 81.48,
-      "qualified": true,
-      "totalTimeSeconds": 4000,
-      "answers": {},
-      "completedAt": "2026-11-04T06:02:03.927Z"
-    },
-    {
-      "id": "mock_test_1793772123926",
-      "userId": "usr_mock_test_1793772123926",
-      "examTitle": "SSC MTS Full Mock Test #1",
-      "session1Score": 90,
-      "session2Score": 115,
-      "totalScore": 205,
-      "totalMax": 270,
-      "percentage": 75.92,
-      "qualified": true,
-      "totalTimeSeconds": 5200,
-      "answers": {
-        "SSC-MTS-NUM-001": {
-          "selectedOption": "A",
-          "timeSpent": 25
-        }
-      },
-      "completedAt": "2026-11-04T06:02:03.926Z"
-    },
-    {
-      "id": "mock_A_1793769800726",
-      "userId": "usr_student_A_1793769800726",
-      "examTitle": "Student A Mock",
-      "session1Score": 100,
-      "session2Score": 120,
-      "totalScore": 220,
-      "totalMax": 270,
-      "percentage": 81.48,
-      "qualified": true,
-      "totalTimeSeconds": 4000,
-      "answers": {},
-      "completedAt": "2026-11-04T05:23:20.726Z"
-    },
-    {
-      "id": "mock_test_1793769800724",
-      "userId": "usr_mock_test_1793769800724",
-      "examTitle": "SSC MTS Full Mock Test #1",
-      "session1Score": 90,
-      "session2Score": 115,
-      "totalScore": 205,
-      "totalMax": 270,
-      "percentage": 75.92,
-      "qualified": true,
-      "totalTimeSeconds": 5200,
-      "answers": {
-        "SSC-MTS-NUM-001": {
-          "selectedOption": "A",
-          "timeSpent": 25
-        }
-      },
-      "completedAt": "2026-11-04T05:23:20.724Z"
-    },
-    {
-      "id": "mock_A_1793769749211",
-      "userId": "usr_student_A_1793769749211",
-      "examTitle": "Student A Mock",
-      "session1Score": 100,
-      "session2Score": 120,
-      "totalScore": 220,
-      "totalMax": 270,
-      "percentage": 81.48,
-      "qualified": true,
-      "totalTimeSeconds": 4000,
-      "answers": {},
-      "completedAt": "2026-11-04T05:22:29.211Z"
-    },
-    {
-      "id": "mock_test_1793769749210",
-      "userId": "usr_mock_test_1793769749210",
-      "examTitle": "SSC MTS Full Mock Test #1",
-      "session1Score": 90,
-      "session2Score": 115,
-      "totalScore": 205,
-      "totalMax": 270,
-      "percentage": 75.92,
-      "qualified": true,
-      "totalTimeSeconds": 5200,
-      "answers": {
-        "SSC-MTS-NUM-001": {
-          "selectedOption": "A",
-          "timeSpent": 25
-        }
-      },
-      "completedAt": "2026-11-04T05:22:29.210Z"
-    },
-    {
-      "id": "mock_A_1793769014208",
-      "userId": "usr_student_A_1793769014208",
-      "examTitle": "Student A Mock",
-      "session1Score": 100,
-      "session2Score": 120,
-      "totalScore": 220,
-      "totalMax": 270,
-      "percentage": 81.48,
-      "qualified": true,
-      "totalTimeSeconds": 4000,
-      "answers": {},
-      "completedAt": "2026-11-04T05:10:14.208Z"
-    },
-    {
-      "id": "mock_test_1793769014206",
-      "userId": "usr_mock_test_1793769014206",
-      "examTitle": "SSC MTS Full Mock Test #1",
-      "session1Score": 90,
-      "session2Score": 115,
-      "totalScore": 205,
-      "totalMax": 270,
-      "percentage": 75.92,
-      "qualified": true,
-      "totalTimeSeconds": 5200,
-      "answers": {
-        "SSC-MTS-NUM-001": {
-          "selectedOption": "A",
-          "timeSpent": 25
-        }
-      },
-      "completedAt": "2026-11-04T05:10:14.206Z"
-    },
-    {
-      "id": "mock_A_1793768991808",
-      "userId": "usr_student_A_1793768991808",
-      "examTitle": "Student A Mock",
-      "session1Score": 100,
-      "session2Score": 120,
-      "totalScore": 220,
-      "totalMax": 270,
-      "percentage": 81.48,
-      "qualified": true,
-      "totalTimeSeconds": 4000,
-      "answers": {},
-      "completedAt": "2026-11-04T05:09:51.808Z"
-    },
-    {
-      "id": "mock_test_1793768991807",
-      "userId": "usr_mock_test_1793768991807",
-      "examTitle": "SSC MTS Full Mock Test #1",
-      "session1Score": 90,
-      "session2Score": 115,
-      "totalScore": 205,
-      "totalMax": 270,
-      "percentage": 75.92,
-      "qualified": true,
-      "totalTimeSeconds": 5200,
-      "answers": {
-        "SSC-MTS-NUM-001": {
-          "selectedOption": "A",
-          "timeSpent": 25
-        }
-      },
-      "completedAt": "2026-11-04T05:09:51.807Z"
-    },
-    {
-      "id": "mock_A_1793768313138",
-      "userId": "usr_student_A_1793768313138",
-      "examTitle": "Student A Mock",
-      "session1Score": 100,
-      "session2Score": 120,
-      "totalScore": 220,
-      "totalMax": 270,
-      "percentage": 81.48,
-      "qualified": true,
-      "totalTimeSeconds": 4000,
-      "answers": {},
-      "completedAt": "2026-11-04T04:58:33.138Z"
-    },
-    {
-      "id": "mock_test_1793768313137",
-      "userId": "usr_mock_test_1793768313137",
-      "examTitle": "SSC MTS Full Mock Test #1",
-      "session1Score": 90,
-      "session2Score": 115,
-      "totalScore": 205,
-      "totalMax": 270,
-      "percentage": 75.92,
-      "qualified": true,
-      "totalTimeSeconds": 5200,
-      "answers": {
-        "SSC-MTS-NUM-001": {
-          "selectedOption": "A",
-          "timeSpent": 25
-        }
-      },
-      "completedAt": "2026-11-04T04:58:33.137Z"
-    },
-    {
-      "id": "mock_A_1793768286316",
-      "userId": "usr_student_A_1793768286316",
-      "examTitle": "Student A Mock",
-      "session1Score": 100,
-      "session2Score": 120,
-      "totalScore": 220,
-      "totalMax": 270,
-      "percentage": 81.48,
-      "qualified": true,
-      "totalTimeSeconds": 4000,
-      "answers": {},
-      "completedAt": "2026-11-04T04:58:06.316Z"
-    },
-    {
-      "id": "mock_test_1793768286315",
-      "userId": "usr_mock_test_1793768286315",
-      "examTitle": "SSC MTS Full Mock Test #1",
-      "session1Score": 90,
-      "session2Score": 115,
-      "totalScore": 205,
-      "totalMax": 270,
-      "percentage": 75.92,
-      "qualified": true,
-      "totalTimeSeconds": 5200,
-      "answers": {
-        "SSC-MTS-NUM-001": {
-          "selectedOption": "A",
-          "timeSpent": 25
-        }
-      },
-      "completedAt": "2026-11-04T04:58:06.315Z"
-    },
-    {
-      "id": "mock_A_1793768009775",
-      "userId": "usr_student_A_1793768009775",
-      "examTitle": "Student A Mock",
-      "session1Score": 100,
-      "session2Score": 120,
-      "totalScore": 220,
-      "totalMax": 270,
-      "percentage": 81.48,
-      "qualified": true,
-      "totalTimeSeconds": 4000,
-      "answers": {},
-      "completedAt": "2026-11-04T04:53:29.775Z"
-    },
-    {
-      "id": "mock_test_1793768009774",
-      "userId": "usr_mock_test_1793768009774",
-      "examTitle": "SSC MTS Full Mock Test #1",
-      "session1Score": 90,
-      "session2Score": 115,
-      "totalScore": 205,
-      "totalMax": 270,
-      "percentage": 75.92,
-      "qualified": true,
-      "totalTimeSeconds": 5200,
-      "answers": {
-        "SSC-MTS-NUM-001": {
-          "selectedOption": "A",
-          "timeSpent": 25
-        }
-      },
-      "completedAt": "2026-11-04T04:53:29.774Z"
+      "completedAt": "2026-11-04T07:18:23.450Z"
     },
     {
       "id": "mock_A_1793741531435",
@@ -1400,12 +972,12 @@
       "id": "rev_1792828772899",
       "userId": "usr_candidate_01",
       "questionId": "SSC-MTS-NUM-001",
-      "repetitions": 0,
+      "repetitions": 1,
       "intervalDays": 1,
-      "easinessFactor": 1.3,
-      "lastReviewedAt": "2026-11-02T08:06:53.362Z",
-      "nextReviewDue": "2026-11-03T08:06:53.362Z",
-      "masteryLevel": "Novice"
+      "easinessFactor": 1.4,
+      "lastReviewedAt": "2026-11-04T07:04:01.497Z",
+      "nextReviewDue": "2026-11-05T07:04:01.497Z",
+      "masteryLevel": "Learning"
     },
     {
       "id": "rev_1792857971698",
@@ -1424,9 +996,9 @@
       "questionId": "SSC-MTS-NUM-002",
       "repetitions": 0,
       "intervalDays": 1,
-      "easinessFactor": 1.96,
-      "lastReviewedAt": "2026-10-28T16:19:16.846Z",
-      "nextReviewDue": "2026-10-29T16:19:16.846Z",
+      "easinessFactor": 1.42,
+      "lastReviewedAt": "2026-11-04T07:04:54.530Z",
+      "nextReviewDue": "2026-11-05T07:04:54.530Z",
       "masteryLevel": "Novice"
     },
     {
@@ -1474,139 +1046,51 @@
       "masteryLevel": "Learning"
     },
     {
-      "id": "rev_1793768009771",
-      "userId": "usr_bkt_test_1793768009771",
+      "id": "rev_1793776703447",
+      "userId": "usr_bkt_test_1793776703446",
       "questionId": "SSC-MTS-NUM-001",
       "repetitions": 1,
       "intervalDays": 1,
       "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T04:53:29.771Z",
-      "nextReviewDue": "2026-11-05T04:53:29.771Z",
+      "lastReviewedAt": "2026-11-04T07:18:23.447Z",
+      "nextReviewDue": "2026-11-05T07:18:23.447Z",
       "masteryLevel": "Learning"
     },
     {
-      "id": "rev_1793768286312",
-      "userId": "usr_bkt_test_1793768286312",
+      "id": "rev_1793776743822",
+      "userId": "usr_bkt_test_1793776743822",
       "questionId": "SSC-MTS-NUM-001",
       "repetitions": 1,
       "intervalDays": 1,
       "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T04:58:06.312Z",
-      "nextReviewDue": "2026-11-05T04:58:06.312Z",
+      "lastReviewedAt": "2026-11-04T07:19:03.822Z",
+      "nextReviewDue": "2026-11-05T07:19:03.822Z",
       "masteryLevel": "Learning"
     },
     {
-      "id": "rev_1793768313134",
-      "userId": "usr_bkt_test_1793768313134",
+      "id": "rev_1793776772953",
+      "userId": "usr_bkt_test_1793776772953",
       "questionId": "SSC-MTS-NUM-001",
       "repetitions": 1,
       "intervalDays": 1,
       "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T04:58:33.134Z",
-      "nextReviewDue": "2026-11-05T04:58:33.134Z",
-      "masteryLevel": "Learning"
-    },
-    {
-      "id": "rev_1793768991804",
-      "userId": "usr_bkt_test_1793768991804",
-      "questionId": "SSC-MTS-NUM-001",
-      "repetitions": 1,
-      "intervalDays": 1,
-      "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T05:09:51.804Z",
-      "nextReviewDue": "2026-11-05T05:09:51.804Z",
-      "masteryLevel": "Learning"
-    },
-    {
-      "id": "rev_1793769014203",
-      "userId": "usr_bkt_test_1793769014203",
-      "questionId": "SSC-MTS-NUM-001",
-      "repetitions": 1,
-      "intervalDays": 1,
-      "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T05:10:14.203Z",
-      "nextReviewDue": "2026-11-05T05:10:14.203Z",
-      "masteryLevel": "Learning"
-    },
-    {
-      "id": "rev_1793769749208",
-      "userId": "usr_bkt_test_1793769749208",
-      "questionId": "SSC-MTS-NUM-001",
-      "repetitions": 1,
-      "intervalDays": 1,
-      "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T05:22:29.208Z",
-      "nextReviewDue": "2026-11-05T05:22:29.208Z",
-      "masteryLevel": "Learning"
-    },
-    {
-      "id": "rev_1793769800720",
-      "userId": "usr_bkt_test_1793769800720",
-      "questionId": "SSC-MTS-NUM-001",
-      "repetitions": 1,
-      "intervalDays": 1,
-      "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T05:23:20.720Z",
-      "nextReviewDue": "2026-11-05T05:23:20.720Z",
-      "masteryLevel": "Learning"
-    },
-    {
-      "id": "rev_1793772123923",
-      "userId": "usr_bkt_test_1793772123923",
-      "questionId": "SSC-MTS-NUM-001",
-      "repetitions": 1,
-      "intervalDays": 1,
-      "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T06:02:03.923Z",
-      "nextReviewDue": "2026-11-05T06:02:03.923Z",
-      "masteryLevel": "Learning"
-    },
-    {
-      "id": "rev_1793772151970",
-      "userId": "usr_bkt_test_1793772151970",
-      "questionId": "SSC-MTS-NUM-001",
-      "repetitions": 1,
-      "intervalDays": 1,
-      "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T06:02:31.970Z",
-      "nextReviewDue": "2026-11-05T06:02:31.970Z",
-      "masteryLevel": "Learning"
-    },
-    {
-      "id": "rev_1793772290710",
-      "userId": "usr_bkt_test_1793772290710",
-      "questionId": "SSC-MTS-NUM-001",
-      "repetitions": 1,
-      "intervalDays": 1,
-      "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T06:04:50.710Z",
-      "nextReviewDue": "2026-11-05T06:04:50.710Z",
-      "masteryLevel": "Learning"
-    },
-    {
-      "id": "rev_1793772417661",
-      "userId": "usr_bkt_test_1793772417661",
-      "questionId": "SSC-MTS-NUM-001",
-      "repetitions": 1,
-      "intervalDays": 1,
-      "easinessFactor": 2.6,
-      "lastReviewedAt": "2026-11-04T06:06:57.661Z",
-      "nextReviewDue": "2026-11-05T06:06:57.661Z",
+      "lastReviewedAt": "2026-11-04T07:19:32.953Z",
+      "nextReviewDue": "2026-11-05T07:19:32.953Z",
       "masteryLevel": "Learning"
     }
   ],
   "topicMastery": [
     {
-      "id": "mst_1792828772899_83k5",
+      "id": "mst_1793775894530_30ar",
       "userId": "usr_candidate_01",
       "subject": "Numerical and Mathematical Ability",
       "topic": "Number Systems",
-      "p_known": 0.929,
-      "masteryPercentage": 93,
+      "p_known": 0.886,
+      "masteryPercentage": 89,
       "tier": "Mastered",
-      "attemptsCount": 54,
-      "correctCount": 37,
-      "updatedAt": "2026-11-02T08:06:53.362Z"
+      "attemptsCount": 56,
+      "correctCount": 38,
+      "updatedAt": "2026-11-04T07:04:54.530Z"
     },
     {
       "id": "mst_1792857971698_0o5h",
@@ -1669,8 +1153,8 @@
       "updatedAt": "2026-11-03T21:32:11.432Z"
     },
     {
-      "id": "mst_1793768009771",
-      "userId": "usr_bkt_test_1793768009771",
+      "id": "mst_1793776703446",
+      "userId": "usr_bkt_test_1793776703446",
       "subject": "Numerical and Mathematical Ability",
       "topic": "Number Systems",
       "p_known": 0.632,
@@ -1678,11 +1162,11 @@
       "tier": "Developing",
       "attemptsCount": 1,
       "correctCount": 1,
-      "updatedAt": "2026-11-04T04:53:29.771Z"
+      "updatedAt": "2026-11-04T07:18:23.446Z"
     },
     {
-      "id": "mst_1793768286312",
-      "userId": "usr_bkt_test_1793768286312",
+      "id": "mst_1793776743822",
+      "userId": "usr_bkt_test_1793776743822",
       "subject": "Numerical and Mathematical Ability",
       "topic": "Number Systems",
       "p_known": 0.632,
@@ -1690,11 +1174,11 @@
       "tier": "Developing",
       "attemptsCount": 1,
       "correctCount": 1,
-      "updatedAt": "2026-11-04T04:58:06.312Z"
+      "updatedAt": "2026-11-04T07:19:03.822Z"
     },
     {
-      "id": "mst_1793768313134",
-      "userId": "usr_bkt_test_1793768313134",
+      "id": "mst_1793776772953",
+      "userId": "usr_bkt_test_1793776772953",
       "subject": "Numerical and Mathematical Ability",
       "topic": "Number Systems",
       "p_known": 0.632,
@@ -1702,103 +1186,7 @@
       "tier": "Developing",
       "attemptsCount": 1,
       "correctCount": 1,
-      "updatedAt": "2026-11-04T04:58:33.134Z"
-    },
-    {
-      "id": "mst_1793768991804",
-      "userId": "usr_bkt_test_1793768991804",
-      "subject": "Numerical and Mathematical Ability",
-      "topic": "Number Systems",
-      "p_known": 0.632,
-      "masteryPercentage": 63,
-      "tier": "Developing",
-      "attemptsCount": 1,
-      "correctCount": 1,
-      "updatedAt": "2026-11-04T05:09:51.804Z"
-    },
-    {
-      "id": "mst_1793769014203",
-      "userId": "usr_bkt_test_1793769014203",
-      "subject": "Numerical and Mathematical Ability",
-      "topic": "Number Systems",
-      "p_known": 0.632,
-      "masteryPercentage": 63,
-      "tier": "Developing",
-      "attemptsCount": 1,
-      "correctCount": 1,
-      "updatedAt": "2026-11-04T05:10:14.203Z"
-    },
-    {
-      "id": "mst_1793769749208",
-      "userId": "usr_bkt_test_1793769749208",
-      "subject": "Numerical and Mathematical Ability",
-      "topic": "Number Systems",
-      "p_known": 0.632,
-      "masteryPercentage": 63,
-      "tier": "Developing",
-      "attemptsCount": 1,
-      "correctCount": 1,
-      "updatedAt": "2026-11-04T05:22:29.208Z"
-    },
-    {
-      "id": "mst_1793769800720",
-      "userId": "usr_bkt_test_1793769800720",
-      "subject": "Numerical and Mathematical Ability",
-      "topic": "Number Systems",
-      "p_known": 0.632,
-      "masteryPercentage": 63,
-      "tier": "Developing",
-      "attemptsCount": 1,
-      "correctCount": 1,
-      "updatedAt": "2026-11-04T05:23:20.720Z"
-    },
-    {
-      "id": "mst_1793772123923",
-      "userId": "usr_bkt_test_1793772123923",
-      "subject": "Numerical and Mathematical Ability",
-      "topic": "Number Systems",
-      "p_known": 0.632,
-      "masteryPercentage": 63,
-      "tier": "Developing",
-      "attemptsCount": 1,
-      "correctCount": 1,
-      "updatedAt": "2026-11-04T06:02:03.923Z"
-    },
-    {
-      "id": "mst_1793772151970",
-      "userId": "usr_bkt_test_1793772151970",
-      "subject": "Numerical and Mathematical Ability",
-      "topic": "Number Systems",
-      "p_known": 0.632,
-      "masteryPercentage": 63,
-      "tier": "Developing",
-      "attemptsCount": 1,
-      "correctCount": 1,
-      "updatedAt": "2026-11-04T06:02:31.970Z"
-    },
-    {
-      "id": "mst_1793772290710",
-      "userId": "usr_bkt_test_1793772290710",
-      "subject": "Numerical and Mathematical Ability",
-      "topic": "Number Systems",
-      "p_known": 0.632,
-      "masteryPercentage": 63,
-      "tier": "Developing",
-      "attemptsCount": 1,
-      "correctCount": 1,
-      "updatedAt": "2026-11-04T06:04:50.710Z"
-    },
-    {
-      "id": "mst_1793772417661",
-      "userId": "usr_bkt_test_1793772417661",
-      "subject": "Numerical and Mathematical Ability",
-      "topic": "Number Systems",
-      "p_known": 0.632,
-      "masteryPercentage": 63,
-      "tier": "Developing",
-      "attemptsCount": 1,
-      "correctCount": 1,
-      "updatedAt": "2026-11-04T06:06:57.661Z"
+      "updatedAt": "2026-11-04T07:19:32.953Z"
     }
   ],
   "accessibilitySettings": {
@@ -1876,367 +1264,125 @@
   },
   "learningHistory": [
     {
-      "id": "hist_A_1793772417667",
-      "userId": "usr_student_A_1793772417667",
+      "id": "hist_A_1793776772960",
+      "userId": "usr_student_A_1793776772960",
       "type": "mock_exam",
       "title": "Student A Mock",
       "summary": "Private score",
       "score": 220,
       "maxScore": 270,
       "durationSeconds": 4000,
-      "timestamp": "2026-11-04T06:06:57.667Z"
+      "timestamp": "2026-11-04T07:19:32.960Z"
     },
     {
-      "id": "hist_1793772417665",
-      "userId": "usr_mock_test_1793772417665",
+      "id": "hist_1793776772958",
+      "userId": "usr_mock_test_1793776772958",
       "type": "mock_exam",
       "title": "SSC MTS Full Mock Test #1",
       "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
       "score": 205,
       "maxScore": 270,
       "durationSeconds": 5200,
-      "timestamp": "2026-11-04T06:06:57.665Z"
+      "timestamp": "2026-11-04T07:19:32.958Z"
     },
     {
-      "id": "hist_1793772417661",
-      "userId": "usr_bkt_test_1793772417661",
+      "id": "hist_1793776772953",
+      "userId": "usr_bkt_test_1793776772953",
       "type": "practice",
       "title": "Practice: Number Systems",
       "summary": "Q: What is the remainder when... Result: Correct",
       "score": 3,
       "maxScore": 3,
       "durationSeconds": 28,
-      "timestamp": "2026-11-04T06:06:57.661Z"
+      "timestamp": "2026-11-04T07:19:32.953Z"
     },
     {
-      "id": "hist_A_1793772290714",
-      "userId": "usr_student_A_1793772290714",
+      "id": "hist_A_1793776743829",
+      "userId": "usr_student_A_1793776743829",
       "type": "mock_exam",
       "title": "Student A Mock",
       "summary": "Private score",
       "score": 220,
       "maxScore": 270,
       "durationSeconds": 4000,
-      "timestamp": "2026-11-04T06:04:50.714Z"
+      "timestamp": "2026-11-04T07:19:03.829Z"
     },
     {
-      "id": "hist_1793772290713",
-      "userId": "usr_mock_test_1793772290713",
+      "id": "hist_1793776743827",
+      "userId": "usr_mock_test_1793776743827",
       "type": "mock_exam",
       "title": "SSC MTS Full Mock Test #1",
       "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
       "score": 205,
       "maxScore": 270,
       "durationSeconds": 5200,
-      "timestamp": "2026-11-04T06:04:50.713Z"
+      "timestamp": "2026-11-04T07:19:03.827Z"
     },
     {
-      "id": "hist_1793772290710",
-      "userId": "usr_bkt_test_1793772290710",
+      "id": "hist_1793776743822",
+      "userId": "usr_bkt_test_1793776743822",
       "type": "practice",
       "title": "Practice: Number Systems",
       "summary": "Q: What is the remainder when... Result: Correct",
       "score": 3,
       "maxScore": 3,
       "durationSeconds": 28,
-      "timestamp": "2026-11-04T06:04:50.710Z"
+      "timestamp": "2026-11-04T07:19:03.822Z"
     },
     {
-      "id": "hist_A_1793772151973",
-      "userId": "usr_student_A_1793772151973",
+      "id": "hist_A_1793776703451",
+      "userId": "usr_student_A_1793776703451",
       "type": "mock_exam",
       "title": "Student A Mock",
       "summary": "Private score",
       "score": 220,
       "maxScore": 270,
       "durationSeconds": 4000,
-      "timestamp": "2026-11-04T06:02:31.973Z"
+      "timestamp": "2026-11-04T07:18:23.451Z"
     },
     {
-      "id": "hist_1793772151972",
-      "userId": "usr_mock_test_1793772151972",
+      "id": "hist_1793776703450",
+      "userId": "usr_mock_test_1793776703450",
       "type": "mock_exam",
       "title": "SSC MTS Full Mock Test #1",
       "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
       "score": 205,
       "maxScore": 270,
       "durationSeconds": 5200,
-      "timestamp": "2026-11-04T06:02:31.972Z"
+      "timestamp": "2026-11-04T07:18:23.450Z"
     },
     {
-      "id": "hist_1793772151970",
-      "userId": "usr_bkt_test_1793772151970",
+      "id": "hist_1793776703447",
+      "userId": "usr_bkt_test_1793776703446",
       "type": "practice",
       "title": "Practice: Number Systems",
       "summary": "Q: What is the remainder when... Result: Correct",
       "score": 3,
       "maxScore": 3,
       "durationSeconds": 28,
-      "timestamp": "2026-11-04T06:02:31.970Z"
+      "timestamp": "2026-11-04T07:18:23.447Z"
     },
     {
-      "id": "hist_A_1793772123927",
-      "userId": "usr_student_A_1793772123927",
-      "type": "mock_exam",
-      "title": "Student A Mock",
-      "summary": "Private score",
-      "score": 220,
-      "maxScore": 270,
-      "durationSeconds": 4000,
-      "timestamp": "2026-11-04T06:02:03.927Z"
-    },
-    {
-      "id": "hist_1793772123926",
-      "userId": "usr_mock_test_1793772123926",
-      "type": "mock_exam",
-      "title": "SSC MTS Full Mock Test #1",
-      "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
-      "score": 205,
-      "maxScore": 270,
-      "durationSeconds": 5200,
-      "timestamp": "2026-11-04T06:02:03.926Z"
-    },
-    {
-      "id": "hist_1793772123923",
-      "userId": "usr_bkt_test_1793772123923",
+      "id": "hist_1793775894530",
+      "userId": "usr_candidate_01",
       "type": "practice",
       "title": "Practice: Number Systems",
-      "summary": "Q: What is the remainder when... Result: Correct",
-      "score": 3,
+      "summary": "Numerical and Mathematical Ability - Q: Find the unit digit in the product (2467... (Result: Incorrect)",
+      "score": 0,
       "maxScore": 3,
-      "durationSeconds": 28,
-      "timestamp": "2026-11-04T06:02:03.923Z"
+      "durationSeconds": 42,
+      "timestamp": "2026-11-04T07:04:54.530Z"
     },
     {
-      "id": "hist_A_1793769800726",
-      "userId": "usr_student_A_1793769800726",
-      "type": "mock_exam",
-      "title": "Student A Mock",
-      "summary": "Private score",
-      "score": 220,
-      "maxScore": 270,
-      "durationSeconds": 4000,
-      "timestamp": "2026-11-04T05:23:20.726Z"
-    },
-    {
-      "id": "hist_1793769800724",
-      "userId": "usr_mock_test_1793769800724",
-      "type": "mock_exam",
-      "title": "SSC MTS Full Mock Test #1",
-      "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
-      "score": 205,
-      "maxScore": 270,
-      "durationSeconds": 5200,
-      "timestamp": "2026-11-04T05:23:20.724Z"
-    },
-    {
-      "id": "hist_1793769800720",
-      "userId": "usr_bkt_test_1793769800720",
+      "id": "hist_1793775841497",
+      "userId": "usr_candidate_01",
       "type": "practice",
       "title": "Practice: Number Systems",
-      "summary": "Q: What is the remainder when... Result: Correct",
+      "summary": "Numerical and Mathematical Ability - Q: What is the least number which when divi... (Result: Correct)",
       "score": 3,
       "maxScore": 3,
-      "durationSeconds": 28,
-      "timestamp": "2026-11-04T05:23:20.720Z"
-    },
-    {
-      "id": "hist_A_1793769749211",
-      "userId": "usr_student_A_1793769749211",
-      "type": "mock_exam",
-      "title": "Student A Mock",
-      "summary": "Private score",
-      "score": 220,
-      "maxScore": 270,
-      "durationSeconds": 4000,
-      "timestamp": "2026-11-04T05:22:29.211Z"
-    },
-    {
-      "id": "hist_1793769749210",
-      "userId": "usr_mock_test_1793769749210",
-      "type": "mock_exam",
-      "title": "SSC MTS Full Mock Test #1",
-      "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
-      "score": 205,
-      "maxScore": 270,
-      "durationSeconds": 5200,
-      "timestamp": "2026-11-04T05:22:29.210Z"
-    },
-    {
-      "id": "hist_1793769749208",
-      "userId": "usr_bkt_test_1793769749208",
-      "type": "practice",
-      "title": "Practice: Number Systems",
-      "summary": "Q: What is the remainder when... Result: Correct",
-      "score": 3,
-      "maxScore": 3,
-      "durationSeconds": 28,
-      "timestamp": "2026-11-04T05:22:29.208Z"
-    },
-    {
-      "id": "hist_A_1793769014208",
-      "userId": "usr_student_A_1793769014208",
-      "type": "mock_exam",
-      "title": "Student A Mock",
-      "summary": "Private score",
-      "score": 220,
-      "maxScore": 270,
-      "durationSeconds": 4000,
-      "timestamp": "2026-11-04T05:10:14.208Z"
-    },
-    {
-      "id": "hist_1793769014206",
-      "userId": "usr_mock_test_1793769014206",
-      "type": "mock_exam",
-      "title": "SSC MTS Full Mock Test #1",
-      "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
-      "score": 205,
-      "maxScore": 270,
-      "durationSeconds": 5200,
-      "timestamp": "2026-11-04T05:10:14.206Z"
-    },
-    {
-      "id": "hist_1793769014203",
-      "userId": "usr_bkt_test_1793769014203",
-      "type": "practice",
-      "title": "Practice: Number Systems",
-      "summary": "Q: What is the remainder when... Result: Correct",
-      "score": 3,
-      "maxScore": 3,
-      "durationSeconds": 28,
-      "timestamp": "2026-11-04T05:10:14.203Z"
-    },
-    {
-      "id": "hist_A_1793768991808",
-      "userId": "usr_student_A_1793768991808",
-      "type": "mock_exam",
-      "title": "Student A Mock",
-      "summary": "Private score",
-      "score": 220,
-      "maxScore": 270,
-      "durationSeconds": 4000,
-      "timestamp": "2026-11-04T05:09:51.808Z"
-    },
-    {
-      "id": "hist_1793768991807",
-      "userId": "usr_mock_test_1793768991807",
-      "type": "mock_exam",
-      "title": "SSC MTS Full Mock Test #1",
-      "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
-      "score": 205,
-      "maxScore": 270,
-      "durationSeconds": 5200,
-      "timestamp": "2026-11-04T05:09:51.807Z"
-    },
-    {
-      "id": "hist_1793768991804",
-      "userId": "usr_bkt_test_1793768991804",
-      "type": "practice",
-      "title": "Practice: Number Systems",
-      "summary": "Q: What is the remainder when... Result: Correct",
-      "score": 3,
-      "maxScore": 3,
-      "durationSeconds": 28,
-      "timestamp": "2026-11-04T05:09:51.804Z"
-    },
-    {
-      "id": "hist_A_1793768313138",
-      "userId": "usr_student_A_1793768313138",
-      "type": "mock_exam",
-      "title": "Student A Mock",
-      "summary": "Private score",
-      "score": 220,
-      "maxScore": 270,
-      "durationSeconds": 4000,
-      "timestamp": "2026-11-04T04:58:33.138Z"
-    },
-    {
-      "id": "hist_1793768313137",
-      "userId": "usr_mock_test_1793768313137",
-      "type": "mock_exam",
-      "title": "SSC MTS Full Mock Test #1",
-      "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
-      "score": 205,
-      "maxScore": 270,
-      "durationSeconds": 5200,
-      "timestamp": "2026-11-04T04:58:33.137Z"
-    },
-    {
-      "id": "hist_1793768313134",
-      "userId": "usr_bkt_test_1793768313134",
-      "type": "practice",
-      "title": "Practice: Number Systems",
-      "summary": "Q: What is the remainder when... Result: Correct",
-      "score": 3,
-      "maxScore": 3,
-      "durationSeconds": 28,
-      "timestamp": "2026-11-04T04:58:33.134Z"
-    },
-    {
-      "id": "hist_A_1793768286316",
-      "userId": "usr_student_A_1793768286316",
-      "type": "mock_exam",
-      "title": "Student A Mock",
-      "summary": "Private score",
-      "score": 220,
-      "maxScore": 270,
-      "durationSeconds": 4000,
-      "timestamp": "2026-11-04T04:58:06.316Z"
-    },
-    {
-      "id": "hist_1793768286315",
-      "userId": "usr_mock_test_1793768286315",
-      "type": "mock_exam",
-      "title": "SSC MTS Full Mock Test #1",
-      "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
-      "score": 205,
-      "maxScore": 270,
-      "durationSeconds": 5200,
-      "timestamp": "2026-11-04T04:58:06.315Z"
-    },
-    {
-      "id": "hist_1793768286312",
-      "userId": "usr_bkt_test_1793768286312",
-      "type": "practice",
-      "title": "Practice: Number Systems",
-      "summary": "Q: What is the remainder when... Result: Correct",
-      "score": 3,
-      "maxScore": 3,
-      "durationSeconds": 28,
-      "timestamp": "2026-11-04T04:58:06.312Z"
-    },
-    {
-      "id": "hist_A_1793768009775",
-      "userId": "usr_student_A_1793768009775",
-      "type": "mock_exam",
-      "title": "Student A Mock",
-      "summary": "Private score",
-      "score": 220,
-      "maxScore": 270,
-      "durationSeconds": 4000,
-      "timestamp": "2026-11-04T04:53:29.775Z"
-    },
-    {
-      "id": "hist_1793768009774",
-      "userId": "usr_mock_test_1793768009774",
-      "type": "mock_exam",
-      "title": "SSC MTS Full Mock Test #1",
-      "summary": "Score: 205/270 (75.92%). Session-I: Qualified.",
-      "score": 205,
-      "maxScore": 270,
-      "durationSeconds": 5200,
-      "timestamp": "2026-11-04T04:53:29.774Z"
-    },
-    {
-      "id": "hist_1793768009771",
-      "userId": "usr_bkt_test_1793768009771",
-      "type": "practice",
-      "title": "Practice: Number Systems",
-      "summary": "Q: What is the remainder when... Result: Correct",
-      "score": 3,
-      "maxScore": 3,
-      "durationSeconds": 28,
-      "timestamp": "2026-11-04T04:53:29.771Z"
+      "durationSeconds": 27,
+      "timestamp": "2026-11-04T07:04:01.497Z"
     },
     {
       "id": "hist_tutor_1793767533425",
