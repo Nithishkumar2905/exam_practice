@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Student Dashboard - ACCESSPREP-X | SSC MTS Preparation Portal</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#565e74",
+            "on-tertiary-container": "#76eab6",
+            "on-tertiary-fixed-variant": "#005137",
+            "surface-tint": "#2151da",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#dae2fd",
+            "surface-container": "#e7eeff",
+            "on-secondary-fixed-variant": "#3f465c",
+            "primary-fixed-dim": "#b7c4ff",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d8e3fb",
+            "on-secondary-container": "#5c647a",
+            "on-error": "#ffffff",
+            "background": "#f9f9ff",
+            "inverse-on-surface": "#ecf1ff",
+            "outline": "#747686",
+            "outline-variant": "#c4c5d7",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-dim": "#cfdaf2",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "inverse-surface": "#263143",
+            "on-surface-variant": "#434655",
+            "on-primary-fixed": "#001551",
+            "on-primary-container": "#cad3ff",
+            "surface-container-high": "#dee8ff",
+            "error-container": "#ffdad6",
+            "on-surface": "#111c2d",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "primary": "#0037b0",
+            "tertiary-fixed-dim": "#68dba9",
+            "on-primary-fixed-variant": "#0039b5",
+            "tertiary": "#004f35",
+            "secondary-container": "#dae2fd",
+            "error": "#ba1a1a",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dce1ff",
+            "surface-variant": "#d8e3fb",
+            "tertiary-fixed": "#85f8c4",
+            "primary-container": "#1d4ed8",
+            "on-error-container": "#93000a",
+            "on-background": "#111c2d",
+            "inverse-primary": "#b7c4ff",
+            "surface-bright": "#f9f9ff",
+            "tertiary-container": "#006948"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1.5rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-xl": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-xl-mobile": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "label-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "700" }],
+            "headline-xl": ["36px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "body-sm": ["14px", { "lineHeight": "22px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+    :focus-visible {
+      outline: 3px solid #1d4ed8 !important;
+      outline-offset: 2px !important;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md selection:bg-primary selection:text-on-primary">
+<!-- Accessible Skip Navigation Link -->
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-1/2 focus:-translate-x-1/2 focus:z-50 focus:bg-inverse-surface focus:text-inverse-on-surface focus:px-space-lg focus:py-space-sm focus:rounded focus:border-2 focus:border-primary-fixed font-label-lg text-label-lg" href="#main-content">
+    Skip to Exam Dashboard Content (Press Enter)
+  </a>
+<!-- TopNavBar (Shared Component JSON Blueprint) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b-2 border-outline-variant dark:border-outline docked full-width top-0 z-30 sticky">
+<div class="max-w-7xl mx-auto px-margin flex items-center justify-between w-full h-16 min-h-[48px]">
+<!-- Brand Logo -->
+<div class="flex items-center gap-space-md">
+<a aria-label="ACCESSPREP-X Home Dashboard" class="text-headline-md font-headline-md font-bold tracking-tight text-primary dark:text-inverse-primary focus:outline-none focus:ring-4 focus:ring-primary dark:focus:ring-inverse-primary rounded p-space-xs" href="/">
+          ACCESSPREP-X
+        </a>
+<span class="inline-flex items-center px-space-xs py-0.5 rounded text-label-sm font-label-sm bg-surface-container text-on-surface-variant border border-outline-variant">
+          SSC MTS Prep
+        </span>
+</div>
+<!-- Navigation Links (Active: Dashboard) -->
+<nav aria-label="Main Ecosystem Navigation" class="hidden md:flex items-center space-x-space-lg">
+<!-- Dashboard (Active) -->
+<a aria-current="page" class="border-b-4 border-primary dark:border-inverse-primary text-primary dark:text-inverse-primary font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary" href="#">
+          Dashboard
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors focus:outline-none focus:ring-2 focus:ring-primary" href="#">
+          Practice &amp; Exams
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors focus:outline-none focus:ring-2 focus:ring-primary" href="#">
+          AI Tutor
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors focus:outline-none focus:ring-2 focus:ring-primary" href="#">
+          Revision
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors focus:outline-none focus:ring-2 focus:ring-primary" href="#">
+          Progress
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 hover:text-on-surface dark:hover:text-inverse-on-surface transition-colors focus:outline-none focus:ring-2 focus:ring-primary" href="#">
+          Admin Console
+        </a>
+</nav>
+<!-- Trailing Control Actions (WCAG Compliant Targets) -->
+<div class="flex items-center gap-space-sm">
+<!-- Voice Shortcut Button -->
+<button aria-label="Activate voice command mode" class="hidden sm:inline-flex items-center gap-space-xs px-space-md py-space-xs min-h-[48px] rounded border-2 border-outline-variant bg-surface-container-low text-on-surface hover:bg-surface-container text-label-md font-label-md transition-colors duration-150" title="Shortcut: Alt+V" type="button">
+<span class="material-symbols-outlined text-primary" data-icon="mic">mic</span>
+<span>Alt+V Voice Search</span>
+</button>
+<!-- Accessibility (Alt+A) -->
+<button aria-label="Open accessibility dialog" class="hidden lg:inline-flex items-center gap-space-xs px-space-md py-space-xs min-h-[48px] rounded border-2 border-primary text-primary hover:bg-primary hover:text-on-primary text-label-md font-label-md transition-colors duration-150" title="Accessibility preferences" type="button">
+<span class="material-symbols-outlined" data-icon="accessibility_new">accessibility_new</span>
+<span>Accessibility (Alt+A)</span>
+</button>
+<!-- Shortcuts (Alt+S) -->
+<button aria-label="View keyboard shortcuts" class="hidden lg:inline-flex items-center gap-space-xs px-space-md py-space-xs min-h-[48px] rounded border-2 border-outline text-on-surface hover:bg-surface-container text-label-md font-label-md transition-colors duration-150" title="Keyboard cheat sheet" type="button">
+<span class="material-symbols-outlined" data-icon="keyboard">keyboard</span>
+<span>Shortcuts (Alt+S)</span>
+</button>
+<!-- Audio Volume Icon Action -->
+<button aria-label="Audio reader output volume settings" class="min-w-[48px] min-h-[48px] flex items-center justify-center rounded text-on-surface hover:bg-surface-container transition-colors duration-150" type="button">
+<span class="material-symbols-outlined" data-icon="volume_up">volume_up</span>
+</button>
+<!-- Candidate Profile Avatar Menu -->
+<button aria-haspopup="true" aria-label="Candidate profile avatar menu" class="min-w-[48px] min-h-[48px] flex items-center justify-center rounded text-on-surface hover:bg-surface-container transition-colors duration-150" type="button">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 max-w-7xl mx-auto px-margin py-space-lg w-full space-y-space-lg" id="main-content">
+<!-- ARIA Live Audio Summary Announcement Banner -->
+<section aria-labelledby="briefing-heading" class="w-full bg-surface-container-low border-2 border-primary rounded-lg p-space-md shadow-none flex flex-col md:flex-row items-start md:items-center justify-between gap-space-md relative" role="region">
+<div class="flex items-start gap-space-md">
+<div aria-hidden="true" class="min-w-[48px] min-h-[48px] bg-primary text-on-primary rounded flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined" data-icon="campaign">campaign</span>
+</div>
+<div>
+<span class="inline-block text-label-sm font-label-sm uppercase tracking-wider text-primary mb-1">
+            Audio Status Announcement (ARIA Live Active)
+          </span>
+<h2 class="text-headline-sm font-headline-sm text-on-surface" id="briefing-heading">
+            Daily Study Briefing: You have 2 revisions due today and 1 scheduled General Awareness mock exam. Press Alt+P to resume practice.
+          </h2>
+</div>
+</div>
+<div class="flex items-center gap-space-sm shrink-0 w-full md:w-auto">
+<button aria-label="Read announcement aloud" class="w-full md:w-auto min-h-[48px] px-space-md bg-primary text-on-primary rounded font-label-md text-label-md flex items-center justify-center gap-space-xs hover:bg-primary-container transition-colors focus:ring-4 focus:ring-primary" type="button">
+<span class="material-symbols-outlined" data-icon="play_circle">play_circle</span>
+<span>Read Aloud</span>
+</button>
+<button aria-label="Dismiss audio banner" class="w-full md:w-auto min-h-[48px] px-space-md bg-surface-container-lowest border-2 border-outline-variant text-on-surface rounded font-label-md text-label-md flex items-center justify-center gap-space-xs hover:bg-surface-container transition-colors focus:ring-2 focus:ring-primary" type="button">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+<span>Dismiss</span>
+</button>
+</div>
+</section>
+<!-- Candidate Welcome & Metadata Strip -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-space-xs border-b border-outline-variant gap-space-sm">
+<div>
+<h1 class="text-headline-lg font-headline-lg text-on-surface tracking-tight">
+          Welcome Back, Candidate Rajesh Kumar
+        </h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+          SSC Multi-Tasking Staff (MTS) Non-Technical Assessment Stream | Screen Reader &amp; Audio Optimized View
+        </p>
+</div>
+<div class="flex items-center gap-space-xs bg-surface-container-highest px-space-sm py-1 rounded border border-outline-variant">
+<span aria-hidden="true" class="w-3 h-3 rounded-full bg-tertiary-container inline-block"></span>
+<span class="text-label-sm font-label-sm text-on-surface font-semibold">Tutor Audio Link: Operational (Latency 12ms)</span>
+</div>
+</div>
+<!-- Quick Action Voice Cards (High-Contrast, Tactile Touch & Keyboard Targets) -->
+<section aria-labelledby="quick-actions-heading" class="space-y-space-md">
+<div class="flex items-center justify-between">
+<h2 class="text-headline-md font-headline-md text-on-surface flex items-center gap-space-xs" id="quick-actions-heading">
+<span class="material-symbols-outlined text-primary" data-icon="bolt">bolt</span>
+          Priority Practice &amp; Voice Actions
+        </h2>
+<span class="text-label-sm font-label-sm text-on-surface-variant hidden sm:inline">Press assigned Alt-keys from anywhere to launch</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- Card 1: Resume Practice -->
+<article class="bg-surface-container-lowest border-2 border-primary rounded-lg p-space-md flex flex-col justify-between hover:bg-surface-container-low transition-colors duration-150 focus-within:ring-4 focus-within:ring-primary">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded text-label-sm font-label-sm bg-primary-fixed text-on-primary-fixed">
+                In-Progress Session
+              </span>
+<span class="material-symbols-outlined text-primary" data-icon="replay">replay</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Resume Last Practice Session</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">
+              Reasoning Ability: <strong class="text-on-surface">Coding-Decoding</strong>. Currently on Question 14 of 25.
+            </p>
+<div aria-label="Progress on Reasoning Ability session" aria-valuemax="100" aria-valuemin="0" aria-valuenow="56" class="w-full bg-surface-container-highest h-2.5 rounded-full overflow-hidden" role="progressbar">
+<div class="bg-primary h-full w-[56%]"></div>
+</div>
+</div>
+<div class="pt-space-md">
+<a aria-label="Resume Reasoning Coding-Decoding Practice (Shortcut: Alt+R)" class="w-full min-h-[48px] bg-primary text-on-primary rounded font-label-lg text-label-lg flex items-center justify-center gap-space-xs hover:bg-primary-container transition-colors focus:outline-none" href="#resume-practice">
+<span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
+<span>Continue (Alt+R)</span>
+</a>
+</div>
+</article>
+<!-- Card 2: Daily Timed Quiz -->
+<article class="bg-surface-container-lowest border-2 border-outline-variant rounded-lg p-space-md flex flex-col justify-between hover:bg-surface-container-low hover:border-primary transition-colors duration-150 focus-within:ring-4 focus-within:ring-primary">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded text-label-sm font-label-sm bg-secondary-container text-on-secondary-fixed">
+                Today's Benchmark
+              </span>
+<span class="material-symbols-outlined text-secondary" data-icon="timer">timer</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Start Daily Timed Quiz</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">
+              15 voice-first questions covering General Awareness and Quantitative basics. Full simulated speech recognition.
+            </p>
+<p class="text-body-sm font-body-sm text-on-surface font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-base" data-icon="schedule">schedule</span>
+              Time limit: 15 minutes (Double time extension available)
+            </p>
+</div>
+<div class="pt-space-md">
+<button aria-label="Start 15-question daily timed quiz (Shortcut: Alt+Q)" class="w-full min-h-[48px] bg-surface-container-lowest border-2 border-on-surface text-on-surface rounded font-label-lg text-label-lg flex items-center justify-center gap-space-xs hover:bg-on-surface hover:text-on-primary transition-colors focus:outline-none" type="button">
+<span class="material-symbols-outlined" data-icon="record_voice_over">record_voice_over</span>
+<span>Start Quiz (Alt+Q)</span>
+</button>
+</div>
+</article>
+<!-- Card 3: AI Doubt Clearing Tutor -->
+<article class="bg-surface-container-lowest border-2 border-outline-variant rounded-lg p-space-md flex flex-col justify-between hover:bg-surface-container-low hover:border-primary transition-colors duration-150 focus-within:ring-4 focus-within:ring-primary">
+<div class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="px-space-xs py-0.5 rounded text-label-sm font-label-sm bg-surface-container-highest text-on-surface">
+                Interactive Voice Assist
+              </span>
+<span class="material-symbols-outlined text-primary" data-icon="smart_toy">smart_toy</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Open AI Doubt Clearing Tutor</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">
+              Instant voice explanation with customized step-by-step mathematical reasoning and auditory formula narration.
+            </p>
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-tertiary">
+<span class="material-symbols-outlined text-base" data-icon="check_circle">check_circle</span>
+<span>Screen reader synchronized audio canvas</span>
+</div>
+</div>
+<div class="pt-space-md">
+<button aria-label="Open AI Doubt Clearing Tutor (Shortcut: Alt+T)" class="w-full min-h-[48px] bg-surface-container-lowest border-2 border-primary text-primary rounded font-label-lg text-label-lg flex items-center justify-center gap-space-xs hover:bg-primary hover:text-on-primary transition-colors focus:outline-none" type="button">
+<span class="material-symbols-outlined" data-icon="mic">mic</span>
+<span>Open Tutor (Alt+T)</span>
+</button>
+</div>
+</article>
+</div>
+</section>
+<!-- Study Progress & Subjects Overview (Linear Data Table & High-Contrast Cards) -->
+<section aria-labelledby="subjects-overview-heading" class="space-y-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div>
+<h2 class="text-headline-md font-headline-md text-on-surface flex items-center gap-space-xs" id="subjects-overview-heading">
+<span class="material-symbols-outlined text-primary" data-icon="school">school</span>
+            Study Progress &amp; Subject Mastery Overview
+          </h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+            Official SSC MTS Syllabus Coverage. Accurate linear table optimized for Jaws, NVDA, and VoiceOver.
+          </p>
+</div>
+<div class="flex items-center gap-space-xs">
+<button aria-label="Audibly speak overall syllabus completion stats" class="min-h-[48px] px-space-md border-2 border-outline-variant bg-surface-container-lowest text-on-surface rounded font-label-md text-label-md hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined align-middle mr-1" data-icon="volume_up">volume_up</span>
+            Speak Summary
+          </button>
+</div>
+</div>
+<!-- Linear Screen-Reader Standard Data Table -->
+<div class="overflow-x-auto border-2 border-outline-variant rounded-lg bg-surface-container-lowest">
+<table aria-label="SSC MTS Subject Progress Table" class="w-full text-left border-collapse">
+<caption class="sr-only">
+            Candidate curriculum progress showing topics completed, practice accuracy percentages, and recommended next study topics for each of the four exam modules.
+          </caption>
+<thead>
+<tr class="bg-surface-container-low border-b-2 border-outline-variant text-on-surface font-label-md text-label-md">
+<th class="py-space-md px-space-md border-r border-outline-variant" scope="col">Exam Subject Module</th>
+<th class="py-space-md px-space-md border-r border-outline-variant" scope="col">Topics Completed</th>
+<th class="py-space-md px-space-md border-r border-outline-variant" scope="col">Practice Accuracy</th>
+<th class="py-space-md px-space-md border-r border-outline-variant" scope="col">Next Recommended Topic</th>
+<th class="py-space-md px-space-md text-center" scope="col">Subject Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant text-body-md font-body-md">
+<!-- Row 1: Numerical Aptitude -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<th class="py-space-md px-space-md border-r border-outline-variant font-label-lg text-label-lg text-on-surface" scope="row">
+                Numerical Aptitude
+              </th>
+<td class="py-space-md px-space-md border-r border-outline-variant">
+<span class="font-bold text-on-surface">18 / 24</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">(75% of syllabus)</span>
+</td>
+<td class="py-space-md px-space-md border-r border-outline-variant">
+<div class="flex items-center gap-space-xs">
+<span class="inline-block px-2 py-0.5 rounded text-label-sm font-label-sm bg-surface-container text-on-surface border border-outline-variant">78%</span>
+<span class="text-body-sm font-body-sm text-secondary">Good Retention</span>
+</div>
+</td>
+<td class="py-space-md px-space-md border-r border-outline-variant text-on-surface">
+                Simple &amp; Compound Interest
+              </td>
+<td class="py-space-md px-space-md text-center">
+<button aria-label="Practice Numerical Aptitude: Simple &amp; Compound Interest" class="min-h-[48px] px-space-md bg-surface-container-low border-2 border-primary text-primary hover:bg-primary hover:text-on-primary rounded font-label-md text-label-md transition-colors" type="button">
+                  Practice Topic
+                </button>
+</td>
+</tr>
+<!-- Row 2: General English -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<th class="py-space-md px-space-md border-r border-outline-variant font-label-lg text-label-lg text-on-surface" scope="row">
+                General English
+              </th>
+<td class="py-space-md px-space-md border-r border-outline-variant">
+<span class="font-bold text-on-surface">22 / 26</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">(84% of syllabus)</span>
+</td>
+<td class="py-space-md px-space-md border-r border-outline-variant">
+<div class="flex items-center gap-space-xs">
+<span class="inline-block px-2 py-0.5 rounded text-label-sm font-label-sm bg-tertiary-container text-on-tertiary">84%</span>
+<span class="text-body-sm font-body-sm text-tertiary font-semibold">High Proficiency</span>
+</div>
+</td>
+<td class="py-space-md px-space-md border-r border-outline-variant text-on-surface">
+                Error Spotting &amp; Synonyms
+              </td>
+<td class="py-space-md px-space-md text-center">
+<button aria-label="Practice General English: Error Spotting &amp; Synonyms" class="min-h-[48px] px-space-md bg-surface-container-low border-2 border-primary text-primary hover:bg-primary hover:text-on-primary rounded font-label-md text-label-md transition-colors" type="button">
+                  Practice Topic
+                </button>
+</td>
+</tr>
+<!-- Row 3: General Intelligence & Reasoning -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<th class="py-space-md px-space-md border-r border-outline-variant font-label-lg text-label-lg text-on-surface" scope="row">
+                General Intelligence &amp; Reasoning
+              </th>
+<td class="py-space-md px-space-md border-r border-outline-variant">
+<span class="font-bold text-on-surface">20 / 22</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">(90% of syllabus)</span>
+</td>
+<td class="py-space-md px-space-md border-r border-outline-variant">
+<div class="flex items-center gap-space-xs">
+<span class="inline-block px-2 py-0.5 rounded text-label-sm font-label-sm bg-tertiary-container text-on-tertiary">91%</span>
+<span class="text-body-sm font-body-sm text-tertiary font-semibold">Target Mastered</span>
+</div>
+</td>
+<td class="py-space-md px-space-md border-r border-outline-variant text-on-surface">
+                Syllogism (Verbal Logic)
+              </td>
+<td class="py-space-md px-space-md text-center">
+<button aria-label="Practice Reasoning: Syllogism" class="min-h-[48px] px-space-md bg-surface-container-low border-2 border-primary text-primary hover:bg-primary hover:text-on-primary rounded font-label-md text-label-md transition-colors" type="button">
+                  Practice Topic
+                </button>
+</td>
+</tr>
+<!-- Row 4: General Awareness & Current Affairs -->
+<tr class="hover:bg-surface-container-low transition-colors">
+<th class="py-space-md px-space-md border-r border-outline-variant font-label-lg text-label-lg text-on-surface" scope="row">
+                General Awareness &amp; Current Affairs
+              </th>
+<td class="py-space-md px-space-md border-r border-outline-variant">
+<span class="font-bold text-on-surface">14 / 30</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">(46% of syllabus)</span>
+</td>
+<td class="py-space-md px-space-md border-r border-outline-variant">
+<div class="flex items-center gap-space-xs">
+<span class="inline-block px-2 py-0.5 rounded text-label-sm font-label-sm bg-error-container text-on-error-container border border-error">66%</span>
+<span class="text-body-sm font-body-sm text-error font-semibold">Needs Review</span>
+</div>
+</td>
+<td class="py-space-md px-space-md border-r border-outline-variant text-on-surface">
+                Indian Constitution &amp; Polity
+              </td>
+<td class="py-space-md px-space-md text-center">
+<button aria-label="Prioritize General Awareness: Indian Constitution &amp; Polity" class="min-h-[48px] px-space-md bg-primary text-on-primary hover:bg-primary-container rounded font-label-md text-label-md transition-colors" type="button">
+                  Review Topic
+                </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Two-Column Asymmetrical Grid: Revision Schedule & Activity Log -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- Column 1: Upcoming Revision Schedule (7 cols) -->
+<section aria-labelledby="revision-schedule-heading" class="lg:col-span-7 bg-surface-container-lowest border-2 border-outline-variant rounded-lg p-space-md space-y-space-md">
+<div class="flex items-center justify-between border-b border-outline-variant pb-space-xs">
+<h2 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-space-xs" id="revision-schedule-heading">
+<span class="material-symbols-outlined text-primary" data-icon="event_repeat">event_repeat</span>
+            Upcoming Spaced Repetition Schedule
+          </h2>
+<span class="px-space-xs py-0.5 rounded text-label-sm font-label-sm bg-surface-container-high text-on-surface">
+            2 Due Today
+          </span>
+</div>
+<ul aria-label="Scheduled revision topics list" class="space-y-space-sm" role="list">
+<!-- Item 1: Due Today -->
+<li class="p-space-sm border-2 border-primary bg-surface-container-low rounded flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="space-y-1">
+<div class="flex items-center gap-space-xs">
+<span class="px-1.5 py-0.5 rounded text-label-sm font-label-sm bg-primary text-on-primary font-bold">TODAY</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">04:30 PM (In 45 minutes)</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Ancient Indian Dynasties &amp; Architecture</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Subject: General Awareness | Spaced Interval: 3 days</p>
+</div>
+<button aria-label="Review Ancient Indian Dynasties Now" class="min-h-[48px] px-space-md bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary-container shrink-0 transition-colors" type="button">
+              Review Now
+            </button>
+</li>
+<!-- Item 2: Due Today -->
+<li class="p-space-sm border-2 border-outline-variant bg-surface-container-lowest rounded flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="space-y-1">
+<div class="flex items-center gap-space-xs">
+<span class="px-1.5 py-0.5 rounded text-label-sm font-label-sm bg-surface-container-highest text-on-surface font-semibold">TODAY</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">07:00 PM</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Percentages, Profit &amp; Loss Shortcuts</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Subject: Numerical Aptitude | Spaced Interval: 7 days</p>
+</div>
+<button aria-label="Review Percentages, Profit &amp; Loss Now" class="min-h-[48px] px-space-md border-2 border-on-surface text-on-surface hover:bg-on-surface hover:text-on-primary rounded font-label-md text-label-md shrink-0 transition-colors" type="button">
+              Review Now
+            </button>
+</li>
+<!-- Item 3: Tomorrow -->
+<li class="p-space-sm border-2 border-outline-variant bg-surface-container-lowest rounded flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="space-y-1">
+<div class="flex items-center gap-space-xs">
+<span class="px-1.5 py-0.5 rounded text-label-sm font-label-sm bg-surface-container-low text-on-surface-variant">TOMORROW</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">10:00 AM</span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Idioms, Phrases &amp; Prepositions</h3>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Subject: General English | Spaced Interval: 14 days</p>
+</div>
+<button aria-label="Preview Idioms, Phrases &amp; Prepositions" class="min-h-[48px] px-space-md border-2 border-outline-variant text-on-surface hover:bg-surface-container-high rounded font-label-md text-label-md shrink-0 transition-colors" type="button">
+              Preview
+            </button>
+</li>
+</ul>
+</section>
+<!-- Column 2: Recent Practice Activity Log (5 cols) -->
+<section aria-labelledby="activity-log-heading" class="lg:col-span-5 bg-surface-container-lowest border-2 border-outline-variant rounded-lg p-space-md space-y-space-md">
+<div class="flex items-center justify-between border-b border-outline-variant pb-space-xs">
+<h2 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-space-xs" id="activity-log-heading">
+<span class="material-symbols-outlined text-primary" data-icon="history">history</span>
+            Recent Practice Activity
+          </h2>
+<a class="text-label-sm font-label-sm text-primary hover:underline py-1" href="#full-activity">View Full Log</a>
+</div>
+<div aria-label="Recent exam activity entries" class="space-y-space-sm" role="feed">
+<!-- Entry 1 -->
+<article class="p-space-sm border border-outline-variant rounded bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm font-bold text-tertiary">Score: 23 / 25 (92%)</span>
+<time class="text-body-sm font-body-sm text-on-surface-variant" datetime="2025-05-12T09:15">Today, 09:15 AM</time>
+</div>
+<p class="text-body-md font-body-md text-on-surface font-semibold">General Intelligence: Syllogisms Drill #4</p>
+<div class="flex items-center justify-between pt-1">
+<span class="text-body-sm font-body-sm text-on-surface-variant">25 Questions | Voice-First Input</span>
+<a aria-label="Inspect Review for General Intelligence Syllogisms Drill 4" class="text-label-md font-label-md text-primary font-bold hover:underline focus:ring-2 focus:ring-primary inline-flex items-center gap-1" href="#review-syllogisms">
+<span>Inspect Review</span>
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</article>
+<!-- Entry 2 -->
+<article class="p-space-sm border border-outline-variant rounded bg-surface-container-lowest flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm font-bold text-on-surface">Score: 17 / 25 (68%)</span>
+<time class="text-body-sm font-body-sm text-on-surface-variant" datetime="2025-05-11T16:45">Yesterday, 04:45 PM</time>
+</div>
+<p class="text-body-md font-body-md text-on-surface font-semibold">General Awareness: Indian Geography &amp; Rivers</p>
+<div class="flex items-center justify-between pt-1">
+<span class="text-body-sm font-body-sm text-on-surface-variant">25 Questions | 8 Marked for Audio Re-check</span>
+<a aria-label="Inspect Review for Indian Geography and Rivers" class="text-label-md font-label-md text-primary font-bold hover:underline focus:ring-2 focus:ring-primary inline-flex items-center gap-1" href="#review-geography">
+<span>Inspect Review</span>
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</article>
+<!-- Entry 3 -->
+<article class="p-space-sm border border-outline-variant rounded bg-surface-container-lowest flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="text-label-sm font-label-sm font-bold text-tertiary">Score: 46 / 50 (92%)</span>
+<time class="text-body-sm font-body-sm text-on-surface-variant" datetime="2025-05-10T11:00">10 May 2025</time>
+</div>
+<p class="text-body-md font-body-md text-on-surface font-semibold">Full Mock Exam Tier-1 Simulation Session A</p>
+<div class="flex items-center justify-between pt-1">
+<span class="text-body-sm font-body-sm text-on-surface-variant">Time Used: 41 mins of 45 mins</span>
+<a aria-label="Inspect Review for Tier 1 Full Mock Exam Simulation" class="text-label-md font-label-md text-primary font-bold hover:underline focus:ring-2 focus:ring-primary inline-flex items-center gap-1" href="#review-mock">
+<span>Inspect Review</span>
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</a>
+</div>
+</article>
+</div>
+</section>
+</div>
+<!-- Live ARIA System Status Bar & Audio Assist Controls -->
+<div aria-live="polite" class="w-full bg-surface-container border-2 border-outline-variant rounded-lg p-space-md flex flex-col md:flex-row items-center justify-between gap-space-md" role="status">
+<div class="flex items-center gap-space-sm text-on-surface">
+<span class="material-symbols-outlined text-tertiary" data-icon="headphones">headphones</span>
+<span class="font-body-md text-body-md">
+<strong>Accessibility Engine Status:</strong> WCAG 2.2 AAA Profile Active • Speech Synthesizer: <em>Indian English - Voice #2</em> • Speed: <strong>1.25x</strong>
+</span>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button aria-label="Adjust voice playback rate" class="min-h-[48px] px-space-md border-2 border-outline-variant bg-surface-container-lowest text-on-surface rounded font-label-md text-label-md hover:bg-surface-container-high transition-colors" type="button">
+          Speech Rate (1.25x)
+        </button>
+<button aria-label="Toggle screen reader high audio pitch cues" class="min-h-[48px] px-space-md border-2 border-outline-variant bg-surface-container-lowest text-on-surface rounded font-label-md text-label-md hover:bg-surface-container-high transition-colors" type="button">
+          Sound Cues: On
+        </button>
+</div>
+</div>
+</main>
+<!-- Keyboard Navigation Hint Sticky Strip -->
+<div aria-label="Global hotkey shortcuts reference" class="bg-inverse-surface text-inverse-on-surface py-2 px-margin text-center text-body-sm font-body-sm border-t border-outline" role="complementary">
+<div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-x-space-lg gap-y-1">
+<span><kbd class="px-1.5 py-0.5 rounded bg-surface-variant text-on-surface font-mono font-bold text-xs">Alt+P</kbd> Resume Practice</span>
+<span><kbd class="px-1.5 py-0.5 rounded bg-surface-variant text-on-surface font-mono font-bold text-xs">Alt+Q</kbd> Daily Quiz</span>
+<span><kbd class="px-1.5 py-0.5 rounded bg-surface-variant text-on-surface font-mono font-bold text-xs">Alt+T</kbd> AI Tutor</span>
+<span><kbd class="px-1.5 py-0.5 rounded bg-surface-variant text-on-surface font-mono font-bold text-xs">Alt+V</kbd> Voice Search</span>
+<span><kbd class="px-1.5 py-0.5 rounded bg-surface-variant text-on-surface font-mono font-bold text-xs">Alt+S</kbd> Full Shortcut List</span>
+</div>
+</div>
+<!-- Footer (Shared Component JSON Blueprint) -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t-2 border-outline-variant dark:border-outline docked full-width bottom">
+<div class="max-w-7xl mx-auto px-margin py-space-lg flex flex-col md:flex-row justify-between items-center gap-space-md w-full">
+<!-- Brand & Standard Info -->
+<div class="space-y-1 text-center md:text-left">
+<p class="text-headline-sm font-headline-sm font-bold text-on-surface dark:text-inverse-on-surface">
+          ACCESSPREP-X
+        </p>
+<p class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm">
+          © 2025 ACCESSPREP-X. Accessible Civil Services Exam Portal. Compliant with WCAG 2.2 AAA Standards.
+        </p>
+</div>
+<!-- Footer Quick Links -->
+<nav aria-label="Accessibility &amp; Portal Help Links" class="flex flex-wrap items-center justify-center md:justify-end gap-x-space-md gap-y-2">
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary min-h-[48px] inline-flex items-center px-1" href="#audio-help">
+          Audio Help
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary min-h-[48px] inline-flex items-center px-1" href="#keyboard-guide">
+          Keyboard Guide
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary min-h-[48px] inline-flex items-center px-1" href="#report-barrier">
+          Report Barrier
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary min-h-[48px] inline-flex items-center px-1" href="#privacy">
+          Privacy &amp; Security
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary min-h-[48px] inline-flex items-center px-1" href="#screen-reader-support">
+          Screen Reader Support
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Micro-interaction Accessible Keyboard Shortcuts Script -->
+<script>
+    document.addEventListener('keydown', function(event) {
+      if (event.altKey) {
+        const key = event.key.toLowerCase();
+        if (key === 'p' || key === 'r') {
+          // Alt+P or Alt+R: Resume practice
+          event.preventDefault();
+          const resumeBtn = document.querySelector('a[href="#resume-practice"]');
+          if (resumeBtn) {
+            resumeBtn.focus();
+            announceLive("Focus shifted to Resume Last Practice Session: Coding and Decoding Question 14.");
+          }
+        } else if (key === 'q') {
+          // Alt+Q: Start Quiz
+          event.preventDefault();
+          const quizBtn = document.querySelector('button[aria-label*="daily timed quiz"]');
+          if (quizBtn) {
+            quizBtn.focus();
+            announceLive("Focus shifted to Daily Timed Quiz button.");
+          }
+        } else if (key === 't') {
+          // Alt+T: Open Tutor
+          event.preventDefault();
+          const tutorBtn = document.querySelector('button[aria-label*="AI Doubt Clearing Tutor"]');
+          if (tutorBtn) {
+            tutorBtn.focus();
+            announceLive("Focus shifted to Open AI Doubt Clearing Tutor.");
+          }
+        } else if (key === 'v') {
+          // Alt+V: Voice Search
+          event.preventDefault();
+          announceLive("Voice synthesis listener activated. Please speak your query or command.");
+        }
+      }
+    });
+
+    function announceLive(message) {
+      let liveRegion = document.getElementById('screen-reader-announcer');
+      if (!liveRegion) {
+        liveRegion = document.createElement('div');
+        liveRegion.id = 'screen-reader-announcer';
+        liveRegion.setAttribute('aria-live', 'assertive');
+        liveRegion.setAttribute('aria-atomic', 'true');
+        liveRegion.className = 'sr-only';
+        document.body.appendChild(liveRegion);
+      }
+      liveRegion.textContent = message;
+    }
+  </script>
+</body></html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>System &amp; Accessibility Configuration - ACCESSPREP-X</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#565e74",
+            "on-tertiary-container": "#76eab6",
+            "on-tertiary-fixed-variant": "#005137",
+            "surface-tint": "#2151da",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#dae2fd",
+            "surface-container": "#e7eeff",
+            "on-secondary-fixed-variant": "#3f465c",
+            "primary-fixed-dim": "#b7c4ff",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d8e3fb",
+            "on-secondary-container": "#5c647a",
+            "on-error": "#ffffff",
+            "background": "#f9f9ff",
+            "inverse-on-surface": "#ecf1ff",
+            "outline": "#747686",
+            "outline-variant": "#c4c5d7",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-dim": "#cfdaf2",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "inverse-surface": "#263143",
+            "on-surface-variant": "#434655",
+            "on-primary-fixed": "#001551",
+            "on-primary-container": "#cad3ff",
+            "surface-container-high": "#dee8ff",
+            "error-container": "#ffdad6",
+            "on-surface": "#111c2d",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "primary": "#0037b0",
+            "tertiary-fixed-dim": "#68dba9",
+            "on-primary-fixed-variant": "#0039b5",
+            "tertiary": "#004f35",
+            "secondary-container": "#dae2fd",
+            "error": "#ba1a1a",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dce1ff",
+            "surface-variant": "#d8e3fb",
+            "tertiary-fixed": "#85f8c4",
+            "primary-container": "#1d4ed8",
+            "on-error-container": "#93000a",
+            "on-background": "#111c2d",
+            "inverse-primary": "#b7c4ff",
+            "surface-bright": "#f9f9ff",
+            "tertiary-container": "#006948"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1.5rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-xl": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-xl-mobile": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "label-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "700" }],
+            "headline-xl": ["36px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "body-sm": ["14px", { "lineHeight": "22px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* WCAG 2.2 AAA Strict Focus Ring */
+    *:focus-visible {
+      outline: 3px solid #1d4ed8 !important;
+      outline-offset: 3px !important;
+    }
+    .skip-link:focus {
+      top: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased selection:bg-primary-container selection:text-on-primary">
+<!-- Skip Link for Screen Readers & Keyboard Navigation -->
+<a class="skip-link fixed -top-24 z-50 bg-inverse-surface text-inverse-on-surface px-space-md py-space-sm font-label-md text-label-md rounded border-2 border-primary focus:z-50 transition-all duration-150" href="#main-content">
+    Skip to main accessibility configuration (Press Enter)
+  </a>
+<!-- TopNavBar (Shared Component JSON Source) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b-2 border-outline-variant dark:border-outline docked full-width top-0 sticky z-40">
+<div class="max-w-7xl mx-auto px-margin flex items-center justify-between w-full h-16 min-h-[48px]">
+<!-- Brand Logo Anchor -->
+<div class="flex items-center gap-space-md">
+<a aria-label="ACCESSPREP-X Civil Services Assessment Portal Homepage" class="text-headline-md font-headline-md font-bold tracking-tight text-primary dark:text-inverse-primary focus:outline-none focus:ring-4 focus:ring-primary dark:focus:ring-inverse-primary" href="#dashboard">
+          ACCESSPREP-X
+        </a>
+<span class="hidden sm:inline-block px-2 py-0.5 bg-surface-container text-on-surface font-label-sm text-label-sm border border-outline-variant rounded">
+          Govt Exam Suite v4.2
+        </span>
+</div>
+<!-- Desktop Navigation Links -->
+<nav aria-label="Primary Portal Navigation" class="hidden md:flex items-center space-x-6">
+<!-- Dashboard -->
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150 ease-in-out active:bg-surface-container-high" href="#dashboard">
+          Dashboard
+        </a>
+<!-- Practice & Exams -->
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150 ease-in-out active:bg-surface-container-high" href="#practice">
+          Practice &amp; Exams
+        </a>
+<!-- AI Tutor -->
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150 ease-in-out active:bg-surface-container-high" href="#aitutor">
+          AI Tutor
+        </a>
+<!-- Revision -->
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150 ease-in-out active:bg-surface-container-high" href="#revision">
+          Revision
+        </a>
+<!-- Progress -->
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150 ease-in-out active:bg-surface-container-high" href="#progress">
+          Progress
+        </a>
+<!-- Admin Console (Active semantic match for Screen 13 Settings & Accessibility) -->
+<a aria-current="page" class="border-b-4 border-primary dark:border-inverse-primary text-primary dark:text-inverse-primary font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary" href="#admin">
+          Admin Console
+        </a>
+</nav>
+<!-- Trailing Action Buttons & Icons -->
+<div class="flex items-center gap-space-sm sm:gap-space-md">
+<!-- Accessibility (Alt+A) -->
+<button accesskey="a" aria-keyshortcuts="Alt+A" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 bg-primary-container text-on-primary font-label-md text-label-md rounded border-2 border-primary min-h-[48px] focus:outline-none focus:ring-4 focus:ring-primary active:bg-primary transition-colors" title="Quick Accessibility Panel (Alt+A)" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]">accessibility_new</span>
+<span>Accessibility (Alt+A)</span>
+</button>
+<!-- Shortcuts (Alt+S) -->
+<button accesskey="s" aria-keyshortcuts="Alt+S" class="hidden lg:inline-flex items-center gap-1 px-3 py-2 bg-surface-container-low text-on-surface font-label-md text-label-md rounded border-2 border-outline-variant min-h-[48px] hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary transition-colors" title="Shortcut Map (Alt+S)" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]">keyboard</span>
+<span>Shortcuts (Alt+S)</span>
+</button>
+<!-- Audio Volume Quick Icon -->
+<button aria-label="Audio Status: Normal Speech Enabled" class="w-12 h-12 flex items-center justify-center rounded border-2 border-outline-variant text-on-surface hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary" id="volume-toggle-btn" type="button">
+<span class="material-symbols-outlined" data-icon="volume_up">volume_up</span>
+</button>
+<!-- Profile Avatar Menu -->
+<button aria-label="Candidate profile avatar menu" class="w-12 h-12 flex items-center justify-center rounded border-2 border-outline-variant text-on-surface hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Live Announcement Status Region (WCAG Screen Reader Broadcast) -->
+<div aria-atomic="true" aria-live="polite" class="sr-only" id="live-announcer" role="status">
+    System &amp; Accessibility Configuration Screen loaded. Ready for voice synthesis adjustments.
+  </div>
+<!-- Primary Content Container -->
+<main class="flex-grow max-w-7xl w-full mx-auto px-margin-mobile md:px-margin py-space-xl" id="main-content" tabindex="-1">
+<!-- Breadcrumb & Status Tracker -->
+<nav aria-label="Breadcrumb" class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm mb-space-sm">
+<span>Portal Settings</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span>Module 13 of 16</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span aria-current="page" class="text-primary font-bold">Auditory &amp; Visual Assistive Suite</span>
+</nav>
+<!-- Header Section -->
+<div class="border-b-2 border-outline-variant pb-space-lg mb-space-lg flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
+<div class="max-w-3xl">
+<div class="flex items-center gap-3">
+<h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">
+            System &amp; Accessibility Configuration
+          </h1>
+<span class="hidden md:inline-flex items-center gap-1 px-2.5 py-1 bg-surface-container-high border-2 border-primary text-primary font-label-sm text-label-sm rounded" title="Compliance Badge">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]">verified_user</span>
+            WCAG 2.2 AAA
+          </span>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-space-xs leading-relaxed max-w-[75ch]">
+          Personalize auditory synthesis, contrast, font scaling, and navigation shortcuts across all 16 mock and learning modules. All settings sync instantly to your civil exam biometric seat profile.
+        </p>
+</div>
+<!-- Quick Audio Verification Callout Trigger -->
+<div class="flex-shrink-0">
+<button accesskey="t" aria-keyshortcuts="Alt+T" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-space-lg py-3.5 bg-primary text-on-primary font-label-lg text-label-lg rounded border-2 border-primary min-h-[48px] hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary shadow-none active:bg-on-primary-fixed-variant transition-all" id="btn-test-voice" type="button">
+<span aria-hidden="true" class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">spatial_audio</span>
+<span>Test Current Audio Configuration (Alt+T)</span>
+</button>
+</div>
+</div>
+<!-- Active Status Announcement Banner -->
+<section aria-label="System Audio Feedback Monitor" class="mb-space-lg bg-surface-container-lowest border-2 border-outline-variant border-l-[6px] border-l-tertiary-container p-space-md rounded flex items-start gap-space-md" role="region">
+<span aria-hidden="true" class="material-symbols-outlined text-tertiary-container text-[28px] mt-0.5">record_voice_over</span>
+<div class="flex-grow">
+<h2 class="font-label-lg text-label-lg text-on-surface">Auditory Engine Active &amp; Ready</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant" id="audio-status-description">
+          Current synthetic agent: <strong class="text-on-surface">Indian English - Voice #02 (Natural Neural)</strong> at <strong>1.25x</strong> rate. 3 earcon audio chimes configured.
+        </p>
+</div>
+<div class="hidden sm:flex items-center gap-2 bg-surface-container px-3 py-1.5 border border-outline-variant rounded">
+<span aria-hidden="true" class="w-3 h-3 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">LATENCY 42ms</span>
+</div>
+</section>
+<!-- Main Asymmetric Bento Configuration Matrix -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- ==========================================
+           SECTION 1: Speech Synthesis & Voice Engine 
+           (7 Cols Desktop)
+           ========================================== -->
+<section aria-labelledby="heading-speech-engine" class="lg:col-span-7 bg-surface-container-lowest border-2 border-outline-variant rounded-lg p-space-lg flex flex-col justify-between">
+<div>
+<!-- Section Title -->
+<div class="flex items-center gap-space-sm pb-space-sm border-b-2 border-outline-variant mb-space-md">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[28px]">graphic_eq</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="heading-speech-engine">
+              1. Speech Synthesis &amp; Voice Engine
+            </h2>
+</div>
+<!-- Form Fields Grid -->
+<div class="space-y-space-md">
+<!-- Voice Synthesizer Select -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="voice-synthesizer">
+                Primary Voice Synthesizer &amp; Accent
+              </label>
+<div class="relative">
+<select class="w-full min-h-[48px] px-space-md py-2.5 bg-surface-container-lowest text-on-surface font-body-md text-body-md border-2 border-outline rounded focus:border-primary focus:ring-4 focus:ring-primary appearance-none cursor-pointer" id="voice-synthesizer">
+<option selected="" value="in-02">Indian English - Voice #02 (Natural Neural)</option>
+<option value="hi-01">Hindi - Voice #01</option>
+<option value="uk-04">British English - Voice #04</option>
+<option value="us-01">US English - Voice #01</option>
+</select>
+<span aria-hidden="true" class="material-symbols-outlined absolute right-3 top-3 pointer-events-none text-on-surface-variant">arrow_drop_down</span>
+</div>
+<span class="block mt-1.5 font-body-sm text-body-sm text-on-surface-variant">Recommended for UPSC &amp; SSC CGL questions containing regional statutory nomenclature.</span>
+</div>
+<!-- Speech Rate Radio Pill Grid -->
+<fieldset class="pt-2">
+<legend class="font-label-md text-label-md text-on-surface mb-2">
+                Speech Rate Calibration (WPM Multiplier)
+              </legend>
+<div aria-label="Speech Rate Options" class="grid grid-cols-2 sm:grid-cols-5 gap-2" role="radiogroup">
+<!-- 0.75x -->
+<label class="flex flex-col items-center justify-center p-2.5 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low transition-colors min-h-[48px] text-center has-[:checked]:border-primary has-[:checked]:bg-surface-container has-[:checked]:ring-2 has-[:checked]:ring-primary">
+<input class="sr-only" name="speech-rate" type="radio" value="0.75"/>
+<span class="font-label-md text-label-md text-on-surface font-bold">0.75x</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Relaxed</span>
+</label>
+<!-- 1.0x -->
+<label class="flex flex-col items-center justify-center p-2.5 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low transition-colors min-h-[48px] text-center has-[:checked]:border-primary has-[:checked]:bg-surface-container has-[:checked]:ring-2 has-[:checked]:ring-primary">
+<input class="sr-only" name="speech-rate" type="radio" value="1.0"/>
+<span class="font-label-md text-label-md text-on-surface font-bold">1.0x</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Standard</span>
+</label>
+<!-- 1.25x (Selected) -->
+<label class="flex flex-col items-center justify-center p-2.5 border-2 border-primary bg-surface-container rounded cursor-pointer ring-2 ring-primary min-h-[48px] text-center has-[:checked]:border-primary has-[:checked]:bg-surface-container">
+<input checked="" class="sr-only" name="speech-rate" type="radio" value="1.25"/>
+<span class="font-label-md text-label-md text-primary font-bold">1.25x</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Brisk</span>
+</label>
+<!-- 1.5x -->
+<label class="flex flex-col items-center justify-center p-2.5 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low transition-colors min-h-[48px] text-center has-[:checked]:border-primary has-[:checked]:bg-surface-container has-[:checked]:ring-2 has-[:checked]:ring-primary">
+<input class="sr-only" name="speech-rate" type="radio" value="1.5"/>
+<span class="font-label-md text-label-md text-on-surface font-bold">1.5x</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Fast</span>
+</label>
+<!-- 2.0x -->
+<label class="flex flex-col items-center justify-center p-2.5 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low transition-colors min-h-[48px] text-center col-span-2 sm:col-span-1 has-[:checked]:border-primary has-[:checked]:bg-surface-container has-[:checked]:ring-2 has-[:checked]:ring-primary">
+<input class="sr-only" name="speech-rate" type="radio" value="2.0"/>
+<span class="font-label-md text-label-md text-on-surface font-bold">2.0x</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Power User</span>
+</label>
+</div>
+</fieldset>
+<!-- Pitch & Volume Sliders with Feedback Values -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md pt-2">
+<!-- Pitch -->
+<div class="bg-surface-container-low p-space-md rounded border border-outline-variant">
+<div class="flex justify-between items-center mb-1">
+<label class="font-label-md text-label-md text-on-surface" for="pitch-slider">Voice Pitch</label>
+<span class="font-label-sm text-label-sm px-2 py-0.5 bg-surface-container text-primary font-bold border border-outline-variant rounded" id="pitch-val">50 (Medium)</span>
+</div>
+<input aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" aria-valuetext="50 percent pitch level" class="w-full h-3 bg-outline-variant rounded-lg appearance-none cursor-pointer accent-primary focus:outline-none focus:ring-4 focus:ring-primary" id="pitch-slider" max="100" min="0" type="range" value="50"/>
+<div class="flex justify-between text-on-surface-variant font-label-sm text-label-sm mt-1">
+<span>Deep (Bass)</span>
+<span>High (Treble)</span>
+</div>
+</div>
+<!-- Volume -->
+<div class="bg-surface-container-low p-space-md rounded border border-outline-variant">
+<div class="flex justify-between items-center mb-1">
+<label class="font-label-md text-label-md text-on-surface" for="volume-slider">Synthetic Volume</label>
+<span class="font-label-sm text-label-sm px-2 py-0.5 bg-surface-container text-primary font-bold border border-outline-variant rounded" id="volume-val">85% Gain</span>
+</div>
+<input aria-valuemax="100" aria-valuemin="0" aria-valuenow="85" aria-valuetext="85 percent volume gain" class="w-full h-3 bg-outline-variant rounded-lg appearance-none cursor-pointer accent-primary focus:outline-none focus:ring-4 focus:ring-primary" id="volume-slider" max="100" min="0" type="range" value="85"/>
+<div class="flex justify-between text-on-surface-variant font-label-sm text-label-sm mt-1">
+<span>Quiet</span>
+<span>Loud (Booster)</span>
+</div>
+</div>
+</div>
+<!-- Automatic Read-Aloud Checkbox Stack -->
+<fieldset class="pt-space-sm border-t border-outline-variant">
+<legend class="font-label-md text-label-md text-on-surface mb-space-sm">
+                Automatic Question Delivery Preferences
+              </legend>
+<div class="space-y-3">
+<!-- Option 1 -->
+<label class="flex items-start gap-3 p-3 bg-surface-container-low hover:bg-surface-container border-2 border-outline-variant rounded cursor-pointer transition-colors">
+<input checked="" class="w-6 h-6 text-primary rounded border-2 border-outline focus:ring-primary mt-0.5 cursor-pointer" type="checkbox"/>
+<div>
+<span class="block font-label-md text-label-md text-on-surface">Auto-read questions upon loading</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Synthesizer starts speaking immediately when entering question view or navigating next question.</span>
+</div>
+</label>
+<!-- Option 2 -->
+<label class="flex items-start gap-3 p-3 bg-surface-container-low hover:bg-surface-container border-2 border-outline-variant rounded cursor-pointer transition-colors">
+<input checked="" class="w-6 h-6 text-primary rounded border-2 border-outline focus:ring-primary mt-0.5 cursor-pointer" type="checkbox"/>
+<div>
+<span class="block font-label-md text-label-md text-on-surface">Auto-read answer options</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Sequentially reads choices A, B, C, and D following question prompt completion without requiring manual triggers.</span>
+</div>
+</label>
+<!-- Option 3 -->
+<label class="flex items-start gap-3 p-3 bg-surface-container-low hover:bg-surface-container border-2 border-outline-variant rounded cursor-pointer transition-colors">
+<input checked="" class="w-6 h-6 text-primary rounded border-2 border-outline focus:ring-primary mt-0.5 cursor-pointer" type="checkbox"/>
+<div>
+<span class="block font-label-md text-label-md text-on-surface">Play subtle audio earcon on correct answer</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Generates a pleasant 520Hz ascending tone during practice drills when an accurate option is selected.</span>
+</div>
+</label>
+</div>
+</fieldset>
+</div>
+</div>
+</section>
+<!-- ==========================================
+           SECTION 2: Visual Display & Contrast Settings 
+           (5 Cols Desktop)
+           ========================================== -->
+<section aria-labelledby="heading-visual-display" class="lg:col-span-5 bg-surface-container-lowest border-2 border-outline-variant rounded-lg p-space-lg flex flex-col justify-between">
+<div>
+<!-- Section Title -->
+<div class="flex items-center gap-space-sm pb-space-sm border-b-2 border-outline-variant mb-space-md">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[28px]">contrast</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="heading-visual-display">
+              2. Visual Display &amp; Contrast Settings
+            </h2>
+</div>
+<!-- High-Contrast Theme Selectors -->
+<fieldset class="mb-space-md">
+<legend class="font-label-md text-label-md text-on-surface mb-2">High-Contrast Color Theme</legend>
+<div aria-label="Contrast Modes" class="space-y-2" role="radiogroup">
+<!-- Light Theme (Active) -->
+<label class="flex items-center justify-between p-3 border-2 border-primary bg-surface-container rounded cursor-pointer min-h-[48px]">
+<div class="flex items-center gap-3">
+<input checked="" class="w-5 h-5 text-primary border-2 border-outline focus:ring-primary" name="contrast-theme" type="radio" value="light-aaa"/>
+<span class="font-label-md text-label-md text-on-surface font-bold">Default Accessible Light (10:1 contrast)</span>
+</div>
+<span aria-hidden="true" class="w-6 h-6 rounded bg-surface-container-lowest border-2 border-outline-variant"></span>
+</label>
+<!-- Pure High-Contrast Yellow on Black -->
+<label class="flex items-center justify-between p-3 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low min-h-[48px] transition-colors">
+<div class="flex items-center gap-3">
+<input class="w-5 h-5 text-primary border-2 border-outline focus:ring-primary" name="contrast-theme" type="radio" value="yellow-black"/>
+<span class="font-label-md text-label-md text-on-surface">Pure High-Contrast Yellow on Black (AAA)</span>
+</div>
+<span aria-hidden="true" class="w-6 h-6 rounded bg-black border-2 border-yellow-400 flex items-center justify-center text-[10px] text-yellow-400 font-bold">Y</span>
+</label>
+<!-- Dark Canvas -->
+<label class="flex items-center justify-between p-3 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low min-h-[48px] transition-colors">
+<div class="flex items-center gap-3">
+<input class="w-5 h-5 text-primary border-2 border-outline focus:ring-primary" name="contrast-theme" type="radio" value="dark-slate"/>
+<span class="font-label-md text-label-md text-on-surface">Dark Canvas (Soft White on Slate)</span>
+</div>
+<span aria-hidden="true" class="w-6 h-6 rounded bg-inverse-surface border-2 border-outline"></span>
+</label>
+<!-- Custom Tint -->
+<label class="flex items-center justify-between p-3 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low min-h-[48px] transition-colors">
+<div class="flex items-center gap-3">
+<input class="w-5 h-5 text-primary border-2 border-outline focus:ring-primary" name="contrast-theme" type="radio" value="custom-tint"/>
+<span class="font-label-md text-label-md text-on-surface">Custom Tint (Warm Amber Sepia)</span>
+</div>
+<span aria-hidden="true" class="w-6 h-6 rounded bg-[#fff8e7] border-2 border-[#b58900]"></span>
+</label>
+</div>
+</fieldset>
+<!-- Text Size Scaling -->
+<fieldset class="mb-space-md">
+<legend class="font-label-md text-label-md text-on-surface mb-2">Text Size Scaling (Low Vision)</legend>
+<div aria-label="Text Scaling Options" class="grid grid-cols-2 gap-2" role="radiogroup">
+<label class="flex items-center gap-2 p-2.5 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low min-h-[48px]">
+<input class="w-5 h-5 text-primary border-2 border-outline focus:ring-primary" name="text-scale" type="radio" value="100"/>
+<span class="font-label-sm text-label-sm text-on-surface">100% (Standard)</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 border-2 border-primary bg-surface-container rounded cursor-pointer min-h-[48px]">
+<input checked="" class="w-5 h-5 text-primary border-2 border-outline focus:ring-primary" name="text-scale" type="radio" value="125"/>
+<span class="font-label-sm text-label-sm text-primary font-bold">125% (Large)</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low min-h-[48px]">
+<input class="w-5 h-5 text-primary border-2 border-outline focus:ring-primary" name="text-scale" type="radio" value="150"/>
+<span class="font-label-sm text-label-sm text-on-surface">150% (Extra Large)</span>
+</label>
+<label class="flex items-center gap-2 p-2.5 border-2 border-outline rounded cursor-pointer hover:bg-surface-container-low min-h-[48px]">
+<input class="w-5 h-5 text-primary border-2 border-outline focus:ring-primary" name="text-scale" type="radio" value="200"/>
+<span class="font-label-sm text-label-sm text-on-surface">200% (Max Scale)</span>
+</label>
+</div>
+</fieldset>
+<!-- Font Typeface & Motion Controls -->
+<div class="space-y-space-md pt-2 border-t border-outline-variant">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5" for="font-family-select">
+                Font Typeface
+              </label>
+<select class="w-full min-h-[48px] px-space-md py-2.5 bg-surface-container-lowest text-on-surface font-body-md text-body-md border-2 border-outline rounded focus:border-primary focus:ring-4 focus:ring-primary" id="font-family-select">
+<option selected="" value="atkinson">Atkinson Hyperlegible / Inter Accessible</option>
+<option value="system-sans">High-Legibility System Sans-Serif</option>
+<option value="open-dyslexic">OpenDyslexic Mono (High Character Distinction)</option>
+</select>
+</div>
+<!-- Motion & Animation Toggle -->
+<label class="flex items-start gap-3 p-3 bg-surface-container-low border-2 border-outline-variant rounded cursor-pointer">
+<input checked="" class="w-6 h-6 text-primary rounded border-2 border-outline focus:ring-primary mt-0.5 cursor-pointer" type="checkbox"/>
+<div>
+<span class="block font-label-md text-label-md text-on-surface font-bold">Disable all non-essential transitions</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">System flag 'Prefers Reduced Motion' is currently active to prevent vestibular disorientation during question paging.</span>
+</div>
+</label>
+</div>
+</div>
+</section>
+<!-- ==========================================
+           SECTION 3: Keyboard Navigation & Mapping 
+           (7 Cols Desktop)
+           ========================================== -->
+<section aria-labelledby="heading-keyboard-nav" class="lg:col-span-7 bg-surface-container-lowest border-2 border-outline-variant rounded-lg p-space-lg flex flex-col justify-between">
+<div>
+<!-- Section Title -->
+<div class="flex items-center justify-between pb-space-sm border-b-2 border-outline-variant mb-space-md">
+<div class="flex items-center gap-space-sm">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[28px]">keyboard</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="heading-keyboard-nav">
+                3. Keyboard Navigation &amp; Short-Key Mapping
+              </h2>
+</div>
+</div>
+<!-- Shortcut Profile Segmented Control -->
+<div class="mb-space-md">
+<span class="block font-label-md text-label-md text-on-surface mb-2">Active Keyboard Shortcut Profile</span>
+<div aria-label="Preset Profiles" class="inline-flex rounded border-2 border-outline p-1 bg-surface-container-low w-full sm:w-auto" role="radiogroup">
+<button aria-checked="true" class="flex-1 sm:flex-none px-4 py-2 font-label-md text-label-md bg-primary text-on-primary rounded font-bold focus:outline-none focus:ring-2 focus:ring-primary shadow-none" role="radio" type="button">
+                Standard MTS Accessible Profile
+              </button>
+<button aria-checked="false" class="flex-1 sm:flex-none px-4 py-2 font-label-md text-label-md text-on-surface hover:bg-surface-container rounded transition-colors focus:outline-none focus:ring-2 focus:ring-primary" role="radio" type="button">
+                Custom Screen Reader Profile
+              </button>
+</div>
+</div>
+<!-- Structured Accessible Table for Key Mappings -->
+<div class="overflow-x-auto border-2 border-outline-variant rounded">
+<table aria-describedby="shortcut-table-caption" class="w-full text-left border-collapse">
+<caption class="sr-only" id="shortcut-table-caption">Assigned access keys and rebind triggers for exam functions</caption>
+<thead class="bg-surface-container border-b-2 border-outline-variant">
+<tr>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface" scope="col">Command Action</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface" scope="col">Assigned Access Key</th>
+<th class="py-3 px-4 font-label-md text-label-md text-on-surface text-right" scope="col">Rebind Trigger</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low">
+<th class="py-3.5 px-4 font-body-md text-body-md text-on-surface font-medium" scope="row">Read Current Question Prompt</th>
+<td class="py-3.5 px-4">
+<kbd class="px-2.5 py-1 bg-surface-container-high border-2 border-outline text-on-surface font-label-sm text-label-sm font-bold rounded">Alt + Q</kbd>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1.5 bg-surface-container-lowest text-primary hover:bg-surface-container border-2 border-outline-variant rounded font-label-sm text-label-sm min-h-[36px] focus:ring-2 focus:ring-primary" type="button">
+                      Rebind Shortcut
+                    </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low">
+<th class="py-3.5 px-4 font-body-md text-body-md text-on-surface font-medium" scope="row">Record Voice Answer / Dictate</th>
+<td class="py-3.5 px-4">
+<kbd class="px-2.5 py-1 bg-surface-container-high border-2 border-outline text-on-surface font-label-sm text-label-sm font-bold rounded">Alt + M</kbd>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1.5 bg-surface-container-lowest text-primary hover:bg-surface-container border-2 border-outline-variant rounded font-label-sm text-label-sm min-h-[36px] focus:ring-2 focus:ring-primary" type="button">
+                      Rebind Shortcut
+                    </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low">
+<th class="py-3.5 px-4 font-body-md text-body-md text-on-surface font-medium" scope="row">Submit Response &amp; Proceed</th>
+<td class="py-3.5 px-4">
+<kbd class="px-2.5 py-1 bg-surface-container-high border-2 border-outline text-on-surface font-label-sm text-label-sm font-bold rounded">Alt + Enter</kbd>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1.5 bg-surface-container-lowest text-primary hover:bg-surface-container border-2 border-outline-variant rounded font-label-sm text-label-sm min-h-[36px] focus:ring-2 focus:ring-primary" type="button">
+                      Rebind Shortcut
+                    </button>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low">
+<th class="py-3.5 px-4 font-body-md text-body-md text-on-surface font-medium" scope="row">Flag for Review / Marking</th>
+<td class="py-3.5 px-4">
+<kbd class="px-2.5 py-1 bg-surface-container-high border-2 border-outline text-on-surface font-label-sm text-label-sm font-bold rounded">Alt + F</kbd>
+</td>
+<td class="py-3.5 px-4 text-right">
+<button class="px-3 py-1.5 bg-surface-container-lowest text-primary hover:bg-surface-container border-2 border-outline-variant rounded font-label-sm text-label-sm min-h-[36px] focus:ring-2 focus:ring-primary" type="button">
+                      Rebind Shortcut
+                    </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- ==========================================
+           SECTION 4: Audio Earcons & Tactile Cues 
+           (5 Cols Desktop)
+           ========================================== -->
+<section aria-labelledby="heading-audio-earcons" class="lg:col-span-5 bg-surface-container-lowest border-2 border-outline-variant rounded-lg p-space-lg flex flex-col justify-between">
+<div>
+<!-- Section Title -->
+<div class="flex items-center gap-space-sm pb-space-sm border-b-2 border-outline-variant mb-space-md">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[28px]">notifications_active</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface" id="heading-audio-earcons">
+              4. Audio Earcons &amp; Tactile Cues
+            </h2>
+</div>
+<div class="space-y-space-md">
+<!-- Timer Ticking Tone Select -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-2" for="timer-alert-setting">
+                Exam Countdown Audio Alerts
+              </label>
+<select class="w-full min-h-[48px] px-space-md py-2.5 bg-surface-container-lowest text-on-surface font-body-md text-body-md border-2 border-outline rounded focus:border-primary focus:ring-4 focus:ring-primary" id="timer-alert-setting">
+<option value="5-min">5-Minute Warning Earcon Only</option>
+<option selected="" value="1-min">1-Minute Urgent Pulsing Countdown</option>
+<option value="off">Off (Silent Countdown)</option>
+</select>
+<span class="block mt-1 font-body-sm text-body-sm text-on-surface-variant">Plays distinct soft dual chimes without interrupting voice synthesis during active exams.</span>
+</div>
+<!-- Voice Recognition Chime Toggle -->
+<div class="p-3 bg-surface-container-low border-2 border-outline-variant rounded space-y-2">
+<label class="flex items-start gap-3 cursor-pointer">
+<input checked="" class="w-6 h-6 text-primary rounded border-2 border-outline focus:ring-primary mt-0.5 cursor-pointer" type="checkbox"/>
+<div>
+<span class="block font-label-md text-label-md text-on-surface font-bold">Audio chime on successful speech recognition</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Confirms that your spoken civil service response was transcribed without requiring visual check of input box.</span>
+</div>
+</label>
+<button class="inline-flex items-center gap-1.5 px-3 py-1.5 text-primary bg-surface-container-lowest hover:bg-surface-container border border-outline-variant rounded font-label-sm text-label-sm focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]">play_arrow</span>
+                Audition Chime Tone
+              </button>
+</div>
+<!-- Haptic Vibration Feedback (For Touch / Assistive Stylus) -->
+<label class="flex items-start gap-3 p-3 bg-surface-container-low border-2 border-outline-variant rounded cursor-pointer">
+<input checked="" class="w-6 h-6 text-primary rounded border-2 border-outline focus:ring-primary mt-0.5 cursor-pointer" type="checkbox"/>
+<div>
+<span class="block font-label-md text-label-md text-on-surface font-bold">Tactile confirmation on option tap</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Triggers brief device haptic buzz when answer card changes to selected state.</span>
+</div>
+</label>
+</div>
+</div>
+</section>
+</div>
+<!-- Persistent Global Footer Actions (WCAG 48px Target Strict) -->
+<section aria-label="Configuration Actions" class="mt-space-xl p-space-lg bg-surface-container-lowest border-2 border-primary rounded-lg flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex items-center gap-3">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[32px]">sync_saved_locally</span>
+<div>
+<span class="block font-label-lg text-label-lg text-on-surface font-bold">Profile Auto-Sync Enabled</span>
+<span class="block font-body-sm text-body-sm text-on-surface-variant">Changes will instantly apply to Mock 13 and all following test sessions.</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center gap-space-sm w-full md:w-auto">
+<!-- Reset Button -->
+<button class="flex-1 md:flex-none px-space-md py-3 bg-surface-container-lowest text-on-surface border-2 border-outline hover:bg-surface-container font-label-md text-label-md rounded min-h-[48px] focus:outline-none focus:ring-4 focus:ring-primary transition-colors" id="btn-reset-defaults" type="button">
+          Reset to Accessible Defaults
+        </button>
+<!-- Export JSON Button -->
+<button class="flex-1 md:flex-none inline-flex items-center justify-center gap-1.5 px-space-md py-3 bg-surface-container-lowest text-on-surface border-2 border-outline hover:bg-surface-container font-label-md text-label-md rounded min-h-[48px] focus:outline-none focus:ring-4 focus:ring-primary transition-colors" id="btn-export-json" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">file_download</span>
+<span>Export Settings File (.json)</span>
+</button>
+<!-- Save Profile Button (Primary) -->
+<button accesskey="s" aria-keyshortcuts="Alt+S" class="w-full md:w-auto inline-flex items-center justify-center gap-2 px-space-lg py-3 bg-primary text-on-primary border-2 border-primary hover:bg-primary-container font-label-lg text-label-lg rounded min-h-[48px] focus:outline-none focus:ring-4 focus:ring-primary shadow-none active:bg-on-primary-fixed-variant transition-colors" id="btn-save-profile" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]">cloud_done</span>
+<span>Save Preferences to Cloud Profile (Alt+S)</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component JSON Source) -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t-2 border-outline-variant dark:border-outline docked full-width bottom mt-space-xl">
+<div class="max-w-7xl mx-auto px-margin py-space-lg flex flex-col md:flex-row justify-between items-center gap-space-md w-full">
+<!-- Brand & Standard Compliance Notice -->
+<div class="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface dark:text-inverse-on-surface">
+          ACCESSPREP-X
+        </span>
+<span aria-hidden="true" class="hidden sm:inline text-outline">|</span>
+<p class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm">
+          © 2025 ACCESSPREP-X. Accessible Civil Services Exam Portal. Compliant with WCAG 2.2 AAA Standards.
+        </p>
+</div>
+<!-- Footer Accessible Links -->
+<nav aria-label="Accessibility &amp; Support Links" class="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-150" href="#audio-help">
+          Audio Help
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-150" href="#keyboard-guide">
+          Keyboard Guide
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-150" href="#report-barrier">
+          Report Barrier
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-150" href="#privacy">
+          Privacy &amp; Security
+        </a>
+<a class="text-primary dark:text-inverse-primary underline font-label-sm hover:underline focus:outline-none focus:ring-2 focus:ring-primary transition-colors duration-150" href="#screen-reader-support">
+          Screen Reader Support
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Interactive Script for Instant Verbal Accessibility Feedback -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const announcer = document.getElementById('live-announcer');
+      const testVoiceBtn = document.getElementById('btn-test-voice');
+      const pitchSlider = document.getElementById('pitch-slider');
+      const pitchVal = document.getElementById('pitch-val');
+      const volumeSlider = document.getElementById('volume-slider');
+      const volumeVal = document.getElementById('volume-val');
+      const saveBtn = document.getElementById('btn-save-profile');
+      const exportBtn = document.getElementById('btn-export-json');
+      const resetBtn = document.getElementById('btn-reset-defaults');
+
+      function announce(text) {
+        if (!announcer) return;
+        announcer.textContent = '';
+        setTimeout(() => {
+          announcer.textContent = text;
+        }, 50);
+      }
+
+      // Voice test trigger simulation
+      if (testVoiceBtn) {
+        testVoiceBtn.addEventListener('click', () => {
+          const synth = window.speechSynthesis;
+          const sampleText = "Auditory synthesizer check complete. You are listening to ACCESSPREP-X Indian English Voice 02 at current calibrated pitch and speed.";
+          if (synth) {
+            synth.cancel();
+            const utterance = new SpeechSynthesisUtterance(sampleText);
+            utterance.rate = 1.25;
+            synth.speak(utterance);
+          }
+          announce("Playing speech test: " + sampleText);
+          testVoiceBtn.classList.add('bg-tertiary-container', 'text-on-tertiary');
+          setTimeout(() => {
+            testVoiceBtn.classList.remove('bg-tertiary-container', 'text-on-tertiary');
+          }, 2000);
+        });
+      }
+
+      // Pitch updates
+      if (pitchSlider && pitchVal) {
+        pitchSlider.addEventListener('input', (e) => {
+          const v = e.target.value;
+          let label = "Medium";
+          if (v < 35) label = "Deep";
+          if (v > 65) label = "High";
+          pitchVal.textContent = `${v} (${label})`;
+        });
+        pitchSlider.addEventListener('change', (e) => {
+          announce(`Voice pitch adjusted to ${e.target.value} percent.`);
+        });
+      }
+
+      // Volume updates
+      if (volumeSlider && volumeVal) {
+        volumeSlider.addEventListener('input', (e) => {
+          volumeVal.textContent = `${e.target.value}% Gain`;
+        });
+        volumeSlider.addEventListener('change', (e) => {
+          announce(`Synthetic speech gain set to ${e.target.value} percent.`);
+        });
+      }
+
+      // Save confirmation
+      if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+          announce("Preferences successfully saved and synchronized to candidate exam profile.");
+          alert("Preferences successfully saved and synchronized to candidate exam profile.");
+        });
+      }
+
+      // Export JSON
+      if (exportBtn) {
+        exportBtn.addEventListener('click', () => {
+          announce("Accessibility configuration package prepared and exported as JSON file.");
+        });
+      }
+
+      // Reset
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          announce("All accessibility parameters reset to standard WCAG 2.2 AAA exam defaults.");
+        });
+      }
+    });
+  </script>
+</body></html>

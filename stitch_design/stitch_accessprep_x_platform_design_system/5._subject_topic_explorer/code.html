@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SSC MTS Curriculum &amp; Topic Explorer - ACCESSPREP-X</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#565e74",
+            "on-tertiary-container": "#76eab6",
+            "on-tertiary-fixed-variant": "#005137",
+            "surface-tint": "#2151da",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#dae2fd",
+            "surface-container": "#e7eeff",
+            "on-secondary-fixed-variant": "#3f465c",
+            "primary-fixed-dim": "#b7c4ff",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d8e3fb",
+            "on-secondary-container": "#5c647a",
+            "on-error": "#ffffff",
+            "background": "#f9f9ff",
+            "inverse-on-surface": "#ecf1ff",
+            "outline": "#747686",
+            "outline-variant": "#c4c5d7",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-dim": "#cfdaf2",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "inverse-surface": "#263143",
+            "on-surface-variant": "#434655",
+            "on-primary-fixed": "#001551",
+            "on-primary-container": "#cad3ff",
+            "surface-container-high": "#dee8ff",
+            "error-container": "#ffdad6",
+            "on-surface": "#111c2d",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "primary": "#0037b0",
+            "tertiary-fixed-dim": "#68dba9",
+            "on-primary-fixed-variant": "#0039b5",
+            "tertiary": "#004f35",
+            "secondary-container": "#dae2fd",
+            "error": "#ba1a1a",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dce1ff",
+            "surface-variant": "#d8e3fb",
+            "tertiary-fixed": "#85f8c4",
+            "primary-container": "#1d4ed8",
+            "on-error-container": "#93000a",
+            "on-background": "#111c2d",
+            "inverse-primary": "#b7c4ff",
+            "surface-bright": "#f9f9ff",
+            "tertiary-container": "#006948"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1.5rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-xl": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-xl-mobile": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "label-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "700" }],
+            "headline-xl": ["36px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "body-sm": ["14px", { "lineHeight": "22px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+    :focus-visible {
+      outline: 3px solid #0037b0 !important;
+      outline-offset: 2px !important;
+    }
+    .skip-link:focus {
+      position: static !important;
+      width: auto !important;
+      height: auto !important;
+      clip: auto !important;
+      overflow: visible !important;
+      z-index: 9999 !important;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary">
+<!-- Accessibility Skip Navigation -->
+<a class="skip-link sr-only focus:not-sr-only inline-block px-space-md py-space-sm bg-inverse-surface text-inverse-on-surface font-label-md text-label-md rounded-lg" href="#main-content">
+    Skip to Main Content (Press Enter)
+  </a>
+<a class="skip-link sr-only focus:not-sr-only inline-block px-space-md py-space-sm bg-inverse-surface text-inverse-on-surface font-label-md text-label-md rounded-lg ml-2" href="#audio-toolbar">
+    Skip to Audio Tools (Alt+O)
+  </a>
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b-2 border-outline-variant dark:border-outline docked full-width top-0 z-50">
+<div class="max-w-7xl mx-auto px-margin flex items-center justify-between w-full h-16 min-h-[48px]">
+<!-- Brand Logo Anchor -->
+<div class="flex items-center gap-space-lg">
+<a aria-label="ACCESSPREP-X Home Dashboard" class="text-headline-md font-headline-md font-bold tracking-tight text-primary dark:text-inverse-primary focus:outline-none focus:ring-4 focus:ring-primary dark:focus:ring-inverse-primary" href="#dashboard">
+          ACCESSPREP-X
+        </a>
+<span aria-label="Portal Standard Status" class="hidden lg:inline-flex items-center px-2 py-0.5 rounded border border-outline-variant font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low">
+          WCAG 2.2 AAA
+        </span>
+</div>
+<!-- Navigation Links Cluster -->
+<nav aria-label="Primary Global Navigation" class="hidden md:flex items-center space-x-6">
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container dark:hover:bg-surface-dim hover:text-on-surface transition-colors duration-150" href="#dashboard">
+          Dashboard
+        </a>
+<!-- Active Nav: Practice & Exams -->
+<a aria-current="page" class="border-b-4 border-primary dark:border-inverse-primary text-primary dark:text-inverse-primary font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary" href="#practice">
+          Practice &amp; Exams
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container dark:hover:bg-surface-dim hover:text-on-surface transition-colors duration-150" href="#tutor">
+          AI Tutor
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container dark:hover:bg-surface-dim hover:text-on-surface transition-colors duration-150" href="#revision">
+          Revision
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container dark:hover:bg-surface-dim hover:text-on-surface transition-colors duration-150" href="#progress">
+          Progress
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container dark:hover:bg-surface-dim hover:text-on-surface transition-colors duration-150" href="#admin">
+          Admin Console
+        </a>
+</nav>
+<!-- Trailing Control Actions & Profile -->
+<div class="flex items-center gap-space-sm">
+<button accesskey="a" aria-label="Open Accessibility Panel, Shortcut Alt plus A" class="h-10 px-3 flex items-center gap-1.5 rounded border-2 border-outline-variant bg-surface-container-low text-primary font-label-md text-label-md hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-primary">settings_accessibility</span>
+<span class="hidden sm:inline">Accessibility (Alt+A)</span>
+</button>
+<button accesskey="s" aria-label="Open Keyboard Shortcuts Modal, Shortcut Alt plus S" class="h-10 px-3 hidden lg:flex items-center gap-1.5 rounded border-2 border-outline-variant bg-surface-container-low text-on-surface font-label-md text-label-md hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined">keyboard</span>
+<span>Shortcuts (Alt+S)</span>
+</button>
+<button aria-label="Audio narration toggle" class="h-10 w-10 flex items-center justify-center rounded border-2 border-outline-variant text-on-surface hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined">volume_up</span>
+</button>
+<a aria-label="Candidate profile avatar menu" class="h-10 w-10 flex items-center justify-center rounded border-2 border-outline-variant text-on-surface hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary" href="#profile">
+<span aria-hidden="true" class="material-symbols-outlined">account_circle</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Live Announcer Region for Screen Readers -->
+<div aria-live="polite" class="sr-only" id="screen-reader-live-region" role="status">
+    Viewing SSC MTS Topic Explorer. Numerical Aptitude selected. 6 topics available.
+  </div>
+<!-- Primary Page Body Container -->
+<div class="max-w-7xl mx-auto px-margin-mobile md:px-margin py-space-lg w-full flex-grow">
+<!-- Linear Breadcrumbs -->
+<nav aria-label="Breadcrumb" class="mb-space-md">
+<ol class="flex flex-wrap items-center gap-2 font-label-sm text-label-sm text-on-surface-variant">
+<li>
+<a class="hover:underline hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary py-1 inline-flex items-center" href="#home">
+            Home
+          </a>
+</li>
+<li aria-hidden="true" class="select-none text-outline">/</li>
+<li>
+<a class="hover:underline hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary py-1 inline-flex items-center" href="#ssc-mts">
+            SSC MTS Curriculum
+          </a>
+</li>
+<li aria-hidden="true" class="select-none text-outline">/</li>
+<li aria-current="page" class="font-bold text-primary">
+          Subject &amp; Topic Explorer
+        </li>
+</ol>
+</nav>
+<!-- Page Header Section with Audio Narration and Topic Filter Bar -->
+<section class="bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-space-md md:p-space-lg mb-space-lg">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md pb-space-md border-b border-outline-variant">
+<div>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider block mb-1">Civil Services Commission Exam Syllabus</span>
+<h1 class="font-headline-lg-mobile md:font-headline-xl text-headline-lg-mobile md:text-headline-xl text-on-surface font-bold tracking-tight">
+            SSC MTS Curriculum &amp; Topic Explorer
+          </h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1 max-w-2xl">
+            Fully screen-reader optimized modular syllabus. Select any subject category below or use designated keyboard shortcuts <kbd class="px-1.5 py-0.5 bg-surface-container border border-outline rounded text-xs font-mono font-bold">Alt + 1..6</kbd> to launch targeted practice modules.
+          </p>
+</div>
+<!-- Outline Audio Control -->
+<div class="flex-shrink-0" id="audio-toolbar">
+<button accesskey="o" aria-label="Listen to Subject Outline, Shortcut Alt plus O" class="w-full sm:w-auto h-12 px-space-md flex items-center justify-center gap-2 bg-primary text-on-primary font-label-md text-label-md rounded border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary transition-colors" type="button">
+<span aria-hidden="true" class="material-symbols-outlined">hearing</span>
+<span>Listen to Subject Outline (Alt+O)</span>
+</button>
+</div>
+</div>
+<!-- Live Search & Voice Filter -->
+<div class="mt-space-md">
+<label class="block font-label-md text-label-md text-on-surface font-semibold mb-2" for="topic-search-input">
+          Filter topics by voice or keyword (Alt+F)
+        </label>
+<div class="relative flex items-center">
+<span aria-hidden="true" class="material-symbols-outlined absolute left-3 text-secondary pointer-events-none">search</span>
+<input accesskey="f" aria-describedby="search-hint" class="w-full h-12 pl-11 pr-28 bg-surface-container-lowest border-2 border-outline text-on-surface font-body-md text-body-md rounded focus:border-primary focus:ring-2 focus:ring-primary transition-colors placeholder:text-on-surface-variant" id="topic-search-input" placeholder="Search topics (e.g., Number System, Profit &amp; Loss, Ratio)..." type="search"/>
+<div class="absolute right-2 flex items-center gap-1">
+<button aria-label="Activate voice topic search" class="h-9 px-2.5 flex items-center gap-1 bg-surface-container text-on-surface font-label-sm text-label-sm rounded border border-outline hover:bg-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">mic</span>
+<span class="hidden sm:inline">Voice</span>
+</button>
+<button aria-label="Clear topic filter (Press Escape)" class="h-9 px-2 text-on-surface-variant hover:text-error focus:outline-none focus:ring-2 focus:ring-primary" id="clear-search" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1.5" id="search-hint">
+          Type to instantly narrow topics across all subjects. Press <kbd class="px-1 py-0.5 bg-surface-container border border-outline rounded text-xs font-mono">Esc</kbd> to reset.
+        </p>
+</div>
+</section>
+<!-- Main Content Workspace: Two Columns (75% / 25%) -->
+<main class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start" id="main-content">
+<!-- LEFT COLUMN: Subject Tabs & Topic List (8 cols) -->
+<section aria-label="Curriculum Topics List" class="lg:col-span-8 flex flex-col gap-space-md">
+<!-- ARIA Tablist for Subjects -->
+<div aria-label="SSC MTS Subject Categories" class="bg-surface-container-low border-2 border-outline-variant rounded-xl p-space-xs" role="tablist">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-1.5">
+<!-- Tab 1: Numerical Aptitude (ACTIVE) -->
+<button aria-controls="panel-numerical" aria-selected="true" class="flex flex-col items-start p-3 bg-surface-container-lowest text-primary border-2 border-primary rounded-lg text-left shadow-sm focus:outline-none focus:ring-4 focus:ring-primary transition-all" id="tab-numerical" role="tab" tabindex="0">
+<div class="flex items-center gap-1.5 mb-1 w-full justify-between">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[20px]">calculate</span>
+<span class="font-label-sm text-label-sm px-1.5 py-0.2 bg-primary-fixed text-on-primary-fixed rounded">Active</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">1. Numerical Aptitude</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">6 Topics • 675 Qs</span>
+</button>
+<!-- Tab 2: General Intelligence -->
+<button aria-controls="panel-reasoning" aria-selected="false" class="flex flex-col items-start p-3 bg-transparent text-on-surface border border-outline-variant rounded-lg text-left hover:bg-surface-container focus:outline-none focus:ring-2 focus:ring-primary transition-all" id="tab-reasoning" role="tab" tabindex="-1">
+<div class="flex items-center gap-1.5 mb-1">
+<span aria-hidden="true" class="material-symbols-outlined text-secondary text-[20px]">psychology</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">2. GI &amp; Reasoning</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">8 Topics • 720 Qs</span>
+</button>
+<!-- Tab 3: General English -->
+<button aria-controls="panel-english" aria-selected="false" class="flex flex-col items-start p-3 bg-transparent text-on-surface border border-outline-variant rounded-lg text-left hover:bg-surface-container focus:outline-none focus:ring-2 focus:ring-primary transition-all" id="tab-english" role="tab" tabindex="-1">
+<div class="flex items-center gap-1.5 mb-1">
+<span aria-hidden="true" class="material-symbols-outlined text-secondary text-[20px]">spellcheck</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">3. General English</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">7 Topics • 610 Qs</span>
+</button>
+<!-- Tab 4: General Awareness -->
+<button aria-controls="panel-awareness" aria-selected="false" class="flex flex-col items-start p-3 bg-transparent text-on-surface border border-outline-variant rounded-lg text-left hover:bg-surface-container focus:outline-none focus:ring-2 focus:ring-primary transition-all" id="tab-awareness" role="tab" tabindex="-1">
+<div class="flex items-center gap-1.5 mb-1">
+<span aria-hidden="true" class="material-symbols-outlined text-secondary text-[20px]">public</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">4. General Awareness</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">9 Topics • 890 Qs</span>
+</button>
+</div>
+</div>
+<!-- Subject Overview Summary Bar -->
+<div aria-label="Subject Statistics" class="p-space-md bg-surface-container-lowest border-2 border-outline-variant rounded-xl flex flex-wrap items-center justify-between gap-space-sm" role="region">
+<div class="flex items-center gap-space-sm">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-2xl">analytics</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Numerical Aptitude Mastery Overview</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Overall readiness score across 6 syllabus units: <strong class="text-on-surface">71% (Exam Ready)</strong></p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm bg-surface-container-high px-2 py-1 rounded text-on-surface font-mono">Exam Weightage: 25 Marks</span>
+</div>
+</div>
+<!-- Tabpanel: Numerical Aptitude Topics List -->
+<div aria-labelledby="tab-numerical" class="space-y-space-md" id="panel-numerical" role="tabpanel">
+<!-- TOPIC 1 -->
+<article aria-labelledby="topic-1-heading" class="bg-surface-container-lowest border-2 border-outline-variant hover:border-primary rounded-xl p-space-md transition-all relative">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-2 max-w-xl">
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container text-primary font-mono font-bold text-xs rounded border border-outline-variant">Unit 1.01</span>
+<span class="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm rounded font-bold">Mastery: 85% - Advanced</span>
+<span class="text-on-surface-variant font-body-sm text-body-sm flex items-center gap-1">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]">history</span> Last practiced: Yesterday
+                  </span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold" id="topic-1-heading">
+                  Number Systems &amp; Simplification
+                </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                  Divisibility rules, fractions, decimals, surds, square roots, and BODMAS calculation rules with verbal math breakdown.
+                </p>
+<!-- High-Contrast Linear Progress Bar -->
+<div aria-label="Mastery level for Number Systems: 85 percent" aria-valuemax="100" aria-valuemin="0" aria-valuenow="85" class="w-full bg-surface-container-high h-3 rounded border border-outline-variant overflow-hidden" role="progressbar">
+<div class="bg-tertiary-container h-full rounded-r" style="width: 85%;"></div>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px] text-primary">quiz</span> 140 Questions Available
+                  </span>
+<span class="inline-flex items-center gap-1">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">record_voice_over</span> Audio walkthroughs available
+                  </span>
+</div>
+</div>
+<!-- Topic Action Trigger -->
+<div class="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
+<button accesskey="1" aria-label="Practice Topic 1: Number Systems &amp; Simplification, Shortcut Alt plus 1" class="h-12 px-space-md bg-primary text-on-primary font-label-md text-label-md rounded border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center justify-center gap-2" type="button">
+<span aria-hidden="true" class="material-symbols-outlined">play_arrow</span>
+<span>Practice Topic (Alt+1)</span>
+</button>
+<button aria-label="Listen to audio overview for Number Systems" class="h-10 px-3 bg-surface-container-low text-on-surface font-label-sm text-label-sm rounded border border-outline-variant hover:bg-surface-container flex items-center justify-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">volume_up</span>
+<span>Audio Overview</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TOPIC 2 -->
+<article aria-labelledby="topic-2-heading" class="bg-surface-container-lowest border-2 border-outline-variant hover:border-primary rounded-xl p-space-md transition-all relative">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-2 max-w-xl">
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container text-primary font-mono font-bold text-xs rounded border border-outline-variant">Unit 1.02</span>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded font-bold">Mastery: 72% - Proficient</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold" id="topic-2-heading">
+                  Percentages, Profit &amp; Loss
+                </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                  Discounts, successive markups, cost-price ratios, sales margins, and real-world commercial calculation frameworks.
+                </p>
+<!-- High-Contrast Linear Progress Bar -->
+<div aria-label="Mastery level for Percentages, Profit and Loss: 72 percent" aria-valuemax="100" aria-valuemin="0" aria-valuenow="72" class="w-full bg-surface-container-high h-3 rounded border border-outline-variant overflow-hidden" role="progressbar">
+<div class="bg-primary-container h-full rounded-r" style="width: 72%;"></div>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px] text-primary">quiz</span> 185 Questions Available
+                  </span>
+<span class="inline-flex items-center gap-1">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">description</span> Step-by-step descriptive solutions
+                  </span>
+</div>
+</div>
+<!-- Topic Action Trigger -->
+<div class="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
+<button accesskey="2" aria-label="Practice Topic 2: Percentages, Profit &amp; Loss, Shortcut Alt plus 2" class="h-12 px-space-md bg-primary text-on-primary font-label-md text-label-md rounded border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center justify-center gap-2" type="button">
+<span aria-hidden="true" class="material-symbols-outlined">play_arrow</span>
+<span>Practice Topic (Alt+2)</span>
+</button>
+<button aria-label="Listen to audio overview for Profit and Loss" class="h-10 px-3 bg-surface-container-low text-on-surface font-label-sm text-label-sm rounded border border-outline-variant hover:bg-surface-container flex items-center justify-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">volume_up</span>
+<span>Audio Overview</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TOPIC 3 -->
+<article aria-labelledby="topic-3-heading" class="bg-surface-container-lowest border-2 border-outline-variant hover:border-primary rounded-xl p-space-md transition-all relative">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-2 max-w-xl">
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container text-primary font-mono font-bold text-xs rounded border border-outline-variant">Unit 1.03</span>
+<span class="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm rounded font-bold">Mastery: 90% - Mastered</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold" id="topic-3-heading">
+                  Ratio, Proportion &amp; Averages
+                </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                  Mean proportional, compound ratios, weighted averages, age word problems, and partnership shares.
+                </p>
+<!-- High-Contrast Linear Progress Bar -->
+<div aria-label="Mastery level for Ratio and Proportion: 90 percent" aria-valuemax="100" aria-valuemin="0" aria-valuenow="90" class="w-full bg-surface-container-high h-3 rounded border border-outline-variant overflow-hidden" role="progressbar">
+<div class="bg-tertiary-container h-full rounded-r" style="width: 90%;"></div>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px] text-primary">quiz</span> 95 Questions Available
+                  </span>
+<span class="inline-flex items-center gap-1 text-tertiary font-bold">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">check_circle</span> Ready for final assessment
+                  </span>
+</div>
+</div>
+<!-- Topic Action Trigger -->
+<div class="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
+<button accesskey="3" aria-label="Practice Topic 3: Ratio, Proportion &amp; Averages, Shortcut Alt plus 3" class="h-12 px-space-md bg-primary text-on-primary font-label-md text-label-md rounded border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center justify-center gap-2" type="button">
+<span aria-hidden="true" class="material-symbols-outlined">play_arrow</span>
+<span>Practice Topic (Alt+3)</span>
+</button>
+<button aria-label="Listen to audio overview for Ratio and Proportion" class="h-10 px-3 bg-surface-container-low text-on-surface font-label-sm text-label-sm rounded border border-outline-variant hover:bg-surface-container flex items-center justify-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">volume_up</span>
+<span>Audio Overview</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TOPIC 4 (WITH AUDIO NOTE CALLOUT) -->
+<article aria-labelledby="topic-4-heading" class="bg-surface-container-lowest border-2 border-outline-variant hover:border-primary rounded-xl p-space-md transition-all relative">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-2 max-w-xl">
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container text-primary font-mono font-bold text-xs rounded border border-outline-variant">Unit 1.04</span>
+<span class="px-2 py-0.5 bg-error-container text-on-error-container font-label-sm text-label-sm rounded font-bold">Mastery: 54% - Needs Practice</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold" id="topic-4-heading">
+                  Time, Speed &amp; Distance
+                </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                  Relative speed, trains crossing platforms, upstream/downstream boat problems, and circular race tracks.
+                </p>
+<!-- Audio Accessibility Callout Note -->
+<div class="p-space-sm bg-surface-container-low border-l-4 border-primary rounded flex items-start gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[20px] mt-0.5">graphic_eq</span>
+<p class="font-body-sm text-body-sm text-on-surface">
+<strong>Audio Note:</strong> Formulas explained with verbal audio walkthroughs and non-visual mental spatial shortcuts.
+                  </p>
+</div>
+<!-- High-Contrast Linear Progress Bar -->
+<div aria-label="Mastery level for Time Speed and Distance: 54 percent" aria-valuemax="100" aria-valuemin="0" aria-valuenow="54" class="w-full bg-surface-container-high h-3 rounded border border-outline-variant overflow-hidden" role="progressbar">
+<div class="bg-secondary h-full rounded-r" style="width: 54%;"></div>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px] text-primary">quiz</span> 110 Questions Available
+                  </span>
+<span class="inline-flex items-center gap-1 text-primary">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">mic</span> 12 Audio lessons
+                  </span>
+</div>
+</div>
+<!-- Topic Action Trigger -->
+<div class="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
+<button accesskey="4" aria-label="Practice Topic 4: Time, Speed &amp; Distance, Shortcut Alt plus 4" class="h-12 px-space-md bg-primary text-on-primary font-label-md text-label-md rounded border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center justify-center gap-2" type="button">
+<span aria-hidden="true" class="material-symbols-outlined">play_arrow</span>
+<span>Practice Topic (Alt+4)</span>
+</button>
+<button aria-label="Play formula walkthrough for Time and Distance" class="h-10 px-3 bg-surface-container-low text-on-surface font-label-sm text-label-sm rounded border border-outline-variant hover:bg-surface-container flex items-center justify-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">play_circle</span>
+<span>Listen to Formulas</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TOPIC 5 -->
+<article aria-labelledby="topic-5-heading" class="bg-surface-container-lowest border-2 border-outline-variant hover:border-primary rounded-xl p-space-md transition-all relative">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-2 max-w-xl">
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container text-primary font-mono font-bold text-xs rounded border border-outline-variant">Unit 1.05</span>
+<span class="px-2 py-0.5 bg-surface-container-high text-on-surface font-label-sm text-label-sm rounded font-bold border border-outline">Mastery: 42% - Beginner</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold" id="topic-5-heading">
+                  Simple &amp; Compound Interest
+                </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                  Annual vs semi-annual compounding, difference between CI and SI, installment calculations, and interest amortizations.
+                </p>
+<!-- High-Contrast Linear Progress Bar -->
+<div aria-label="Mastery level for Simple and Compound Interest: 42 percent" aria-valuemax="100" aria-valuemin="0" aria-valuenow="42" class="w-full bg-surface-container-high h-3 rounded border border-outline-variant overflow-hidden" role="progressbar">
+<div class="bg-secondary h-full rounded-r" style="width: 42%;"></div>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px] text-primary">quiz</span> 80 Questions Available
+                  </span>
+<span class="inline-flex items-center gap-1">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">school</span> Foundation tutorials included
+                  </span>
+</div>
+</div>
+<!-- Topic Action Trigger -->
+<div class="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
+<button accesskey="5" aria-label="Practice Topic 5: Simple &amp; Compound Interest, Shortcut Alt plus 5" class="h-12 px-space-md bg-primary text-on-primary font-label-md text-label-md rounded border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center justify-center gap-2" type="button">
+<span aria-hidden="true" class="material-symbols-outlined">play_arrow</span>
+<span>Practice Topic (Alt+5)</span>
+</button>
+<button aria-label="Listen to audio overview for Simple Interest" class="h-10 px-3 bg-surface-container-low text-on-surface font-label-sm text-label-sm rounded border border-outline-variant hover:bg-surface-container flex items-center justify-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">volume_up</span>
+<span>Audio Overview</span>
+</button>
+</div>
+</div>
+</article>
+<!-- TOPIC 6 (ACCESSIBLE FORMAT GUARANTEE) -->
+<article aria-labelledby="topic-6-heading" class="bg-surface-container-lowest border-2 border-outline-variant hover:border-primary rounded-xl p-space-md transition-all relative">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-2 max-w-xl">
+<div class="flex flex-wrap items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container text-primary font-mono font-bold text-xs rounded border border-outline-variant">Unit 1.06</span>
+<span class="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm rounded font-bold">Auditory Grid Ready</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold" id="topic-6-heading">
+                  Data Interpretation &amp; Table Analysis
+                </h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                  Tabular charts, linear data breakdowns, bar graphs converted to audio-described structures, and percentage distribution analysis.
+                </p>
+<!-- Screen Reader Guarantee Tag -->
+<div class="p-space-sm bg-surface-container-high border border-outline-variant rounded flex items-start gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-tertiary text-[20px] mt-0.5">verified_user</span>
+<p class="font-body-sm text-body-sm text-on-surface font-medium">
+<strong>Accessible Format Guarantee:</strong> All visual tables and graphs are fully transformed into linear ARIA tabular data grids with auditory cell navigation.
+                  </p>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant font-label-sm text-label-sm">
+<span class="inline-flex items-center gap-1 font-semibold text-on-surface">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px] text-primary">quiz</span> 65 Questions Available
+                  </span>
+<span class="inline-flex items-center gap-1">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">table_chart</span> Linear ARIA Navigation
+                  </span>
+</div>
+</div>
+<!-- Topic Action Trigger -->
+<div class="flex flex-col sm:flex-row md:flex-col gap-2 shrink-0">
+<button accesskey="6" aria-label="Practice Topic 6: Data Interpretation &amp; Table Analysis, Shortcut Alt plus 6" class="h-12 px-space-md bg-primary text-on-primary font-label-md text-label-md rounded border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center justify-center gap-2" type="button">
+<span aria-hidden="true" class="material-symbols-outlined">play_arrow</span>
+<span>Practice Topic (Alt+6)</span>
+</button>
+<button aria-label="Listen to data interpretation grid navigation sample" class="h-10 px-3 bg-surface-container-low text-on-surface font-label-sm text-label-sm rounded border border-outline-variant hover:bg-surface-container flex items-center justify-center gap-1 focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">surround_sound</span>
+<span>Audio Preview</span>
+</button>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- RIGHT COLUMN: Sidebar & Quick Action Panel (4 cols) -->
+<aside aria-label="Practice Tools and Quick Actions" class="lg:col-span-4 flex flex-col gap-space-lg">
+<!-- Primary Action Card: Launch Mock -->
+<div class="bg-surface-container-lowest border-2 border-primary rounded-xl p-space-md space-y-space-md">
+<div class="flex items-center gap-2 text-primary">
+<span aria-hidden="true" class="material-symbols-outlined text-3xl">timer</span>
+<span class="font-label-sm text-label-sm uppercase tracking-wider font-bold">Standard Simulation</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Full Mock Exam Session</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+              90-minute timed mixed simulation mirroring official SSC MTS Staff Selection Commission guidelines. Includes real-time screen reader shortcuts and auditory alerts.
+            </p>
+</div>
+<button accesskey="m" aria-label="Launch Mixed Subject Mock Exam, Shortcut Alt plus M" class="w-full h-14 bg-primary text-on-primary font-label-lg text-label-lg rounded border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center justify-center gap-2 transition-colors" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-2xl">rocket_launch</span>
+<span>Launch Mixed Subject Mock (Alt+M)</span>
+</button>
+</div>
+<!-- Linear Accessible Syllabus Weightage Table -->
+<div aria-label="Official Exam Mark Distribution Table" class="bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-space-md space-y-space-sm" role="region">
+<div class="flex items-center justify-between pb-2 border-b border-outline-variant">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-1.5">
+<span aria-hidden="true" class="material-symbols-outlined text-primary">table_chart</span>
+<span>Syllabus Weightage Table</span>
+</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Official tier-1 examination distribution for SSC MTS Multi-Tasking Staff.
+          </p>
+<!-- Fully Semantic Table for Screen Readers -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse border border-outline-variant font-body-sm text-body-sm">
+<caption class="sr-only">SSC MTS Tier-1 Subject Question and Marks Distribution</caption>
+<thead class="bg-surface-container-low">
+<tr>
+<th class="border border-outline-variant p-2 font-bold text-on-surface" scope="col">Subject Module</th>
+<th class="border border-outline-variant p-2 font-bold text-on-surface text-center" scope="col">Questions</th>
+<th class="border border-outline-variant p-2 font-bold text-on-surface text-center" scope="col">Max Marks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low">
+<th class="border border-outline-variant p-2 font-medium text-on-surface" scope="row">1. Numerical Aptitude</th>
+<td class="border border-outline-variant p-2 text-center text-on-surface-variant">25 Qs</td>
+<td class="border border-outline-variant p-2 text-center font-bold text-on-surface">25</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low">
+<th class="border border-outline-variant p-2 font-medium text-on-surface" scope="row">2. Reasoning Ability</th>
+<td class="border border-outline-variant p-2 text-center text-on-surface-variant">25 Qs</td>
+<td class="border border-outline-variant p-2 text-center font-bold text-on-surface">25</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low">
+<th class="border border-outline-variant p-2 font-medium text-on-surface" scope="row">3. General English</th>
+<td class="border border-outline-variant p-2 text-center text-on-surface-variant">25 Qs</td>
+<td class="border border-outline-variant p-2 text-center font-bold text-on-surface">25</td>
+</tr>
+<tr class="bg-surface-container-lowest hover:bg-surface-container-low">
+<th class="border border-outline-variant p-2 font-medium text-on-surface" scope="row">4. General Awareness</th>
+<td class="border border-outline-variant p-2 text-center text-on-surface-variant">25 Qs</td>
+<td class="border border-outline-variant p-2 text-center font-bold text-on-surface">25</td>
+</tr>
+</tbody>
+<tfoot class="bg-surface-container font-bold text-on-surface">
+<tr>
+<th class="border border-outline-variant p-2" scope="row">Total Exam Tier-1</th>
+<td class="border border-outline-variant p-2 text-center">100 Qs</td>
+<td class="border border-outline-variant p-2 text-center">100 Marks</td>
+</tr>
+</tfoot>
+</table>
+</div>
+</div>
+<!-- Download Audio Syllabus Booklet (.mp3 / DAISY) -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-space-md space-y-3">
+<div class="flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-primary">download_for_offline</span>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Audio Syllabus Booklet</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Full comprehensive spoken audio breakdown containing chapter formulas and test pattern descriptions.
+          </p>
+<div class="flex flex-col gap-2 pt-1">
+<a aria-label="Download Audio Syllabus Booklet in MP3 Format, File size 45 Megabytes" class="h-11 px-3 bg-surface-container text-on-surface font-label-md text-label-md rounded border border-outline hover:bg-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary flex items-center justify-between" href="#download-mp3">
+<span class="flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-secondary">audio_file</span>
+<span>Download MP3 Audio Book</span>
+</span>
+<span class="font-mono text-xs text-on-surface-variant">45 MB</span>
+</a>
+<a aria-label="Download DAISY Accessible Talking Book Format for Blind Readers" class="h-11 px-3 bg-surface-container text-on-surface font-label-md text-label-md rounded border border-outline hover:bg-surface-container-high focus:outline-none focus:ring-2 focus:ring-primary flex items-center justify-between" href="#download-daisy">
+<span class="flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-secondary">folder_zip</span>
+<span>Download DAISY Format</span>
+</span>
+<span class="font-mono text-xs text-on-surface-variant">DAISY 2.02</span>
+</a>
+</div>
+</div>
+<!-- Keyboard Shortcuts Reference Box -->
+<div aria-label="Keyboard Shortcuts Quick Reference" class="bg-surface-container-low border-2 border-outline-variant rounded-xl p-space-md" role="region">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface flex items-center gap-2 mb-2">
+<span aria-hidden="true" class="material-symbols-outlined text-primary">keyboard</span>
+<span>Keyboard Quick Commands</span>
+</h2>
+<ul class="font-body-sm text-body-sm text-on-surface space-y-2 list-none p-0">
+<li class="flex items-center justify-between pb-1 border-b border-outline-variant">
+<span>Quick jump to topic practice</span>
+<kbd class="px-2 py-0.5 bg-surface-container-lowest border border-outline rounded font-mono font-bold text-xs">Alt + 1..6</kbd>
+</li>
+<li class="flex items-center justify-between pb-1 border-b border-outline-variant">
+<span>Listen to Subject Outline</span>
+<kbd class="px-2 py-0.5 bg-surface-container-lowest border border-outline rounded font-mono font-bold text-xs">Alt + O</kbd>
+</li>
+<li class="flex items-center justify-between pb-1 border-b border-outline-variant">
+<span>Filter topics by keyword</span>
+<kbd class="px-2 py-0.5 bg-surface-container-lowest border border-outline rounded font-mono font-bold text-xs">Alt + F</kbd>
+</li>
+<li class="flex items-center justify-between pb-1 border-b border-outline-variant">
+<span>Launch mixed mock exam</span>
+<kbd class="px-2 py-0.5 bg-surface-container-lowest border border-outline rounded font-mono font-bold text-xs">Alt + M</kbd>
+</li>
+<li class="flex items-center justify-between pb-1 border-b border-outline-variant">
+<span>Open Accessibility Settings</span>
+<kbd class="px-2 py-0.5 bg-surface-container-lowest border border-outline rounded font-mono font-bold text-xs">Alt + A</kbd>
+</li>
+<li class="flex items-center justify-between">
+<span>Clear active filter</span>
+<kbd class="px-2 py-0.5 bg-surface-container-lowest border border-outline rounded font-mono font-bold text-xs">Escape</kbd>
+</li>
+</ul>
+</div>
+</aside>
+</main>
+</div>
+<!-- Footer (Shared Component) -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t-2 border-outline-variant dark:border-outline docked full-width bottom mt-auto">
+<div class="max-w-7xl mx-auto px-margin py-space-lg flex flex-col md:flex-row justify-between items-center gap-space-md w-full">
+<!-- Brand & Compliance Legal Text -->
+<div class="flex flex-col items-center md:items-start text-center md:text-left gap-1">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface dark:text-inverse-on-surface">
+          ACCESSPREP-X
+        </span>
+<p class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm">
+          © 2025 ACCESSPREP-X. Accessible Civil Services Exam Portal. Compliant with WCAG 2.2 AAA Standards.
+        </p>
+</div>
+<!-- Footer Accessible Links -->
+<nav aria-label="Footer Accessibility and Help Resources" class="flex flex-wrap items-center justify-center gap-space-md">
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#audio-help">
+          Audio Help
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#keyboard-guide">
+          Keyboard Guide
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#report-barrier">
+          Report Barrier
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#privacy">
+          Privacy &amp; Security
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#screen-reader-support">
+          Screen Reader Support
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Light Vanilla Script for Accessible Live Filtering & Keyboard Interactivity -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchInput = document.getElementById('topic-search-input');
+      const clearBtn = document.getElementById('clear-search');
+      const liveRegion = document.getElementById('screen-reader-live-region');
+      const topicCards = document.querySelectorAll('#panel-numerical article');
+
+      function announce(msg) {
+        if (liveRegion) {
+          liveRegion.textContent = msg;
+        }
+      }
+
+      function filterTopics(query) {
+        const term = query.toLowerCase().trim();
+        let matchCount = 0;
+
+        topicCards.forEach(card => {
+          const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
+          const body = card.querySelector('p')?.textContent.toLowerCase() || '';
+          const isMatch = title.includes(term) || body.includes(term);
+
+          if (isMatch) {
+            card.classList.remove('hidden');
+            matchCount++;
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+
+        if (term.length > 0) {
+          announce(`Filter applied for "${term}". ${matchCount} topics found.`);
+        } else {
+          announce('Filter cleared. Displaying all 6 topics in Numerical Aptitude.');
+        }
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+          filterTopics(e.target.value);
+        });
+
+        searchInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            searchInput.value = '';
+            filterTopics('');
+            searchInput.blur();
+          }
+        });
+      }
+
+      if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+          if (searchInput) {
+            searchInput.value = '';
+            filterTopics('');
+            searchInput.focus();
+          }
+        });
+      }
+
+      // Keyboard Esc Global Handler for search clear
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.activeElement === searchInput) {
+          searchInput.value = '';
+          filterTopics('');
+        }
+      });
+    });
+  </script>
+</body></html>

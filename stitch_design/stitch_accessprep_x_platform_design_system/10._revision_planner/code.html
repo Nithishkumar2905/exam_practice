@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACCESSPREP-X | Adaptive Memory &amp; Revision Schedule</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#565e74",
+            "on-tertiary-container": "#76eab6",
+            "on-tertiary-fixed-variant": "#005137",
+            "surface-tint": "#2151da",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#dae2fd",
+            "surface-container": "#e7eeff",
+            "on-secondary-fixed-variant": "#3f465c",
+            "primary-fixed-dim": "#b7c4ff",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d8e3fb",
+            "on-secondary-container": "#5c647a",
+            "on-error": "#ffffff",
+            "background": "#f9f9ff",
+            "inverse-on-surface": "#ecf1ff",
+            "outline": "#747686",
+            "outline-variant": "#c4c5d7",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-dim": "#cfdaf2",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "inverse-surface": "#263143",
+            "on-surface-variant": "#434655",
+            "on-primary-fixed": "#001551",
+            "on-primary-container": "#cad3ff",
+            "surface-container-high": "#dee8ff",
+            "error-container": "#ffdad6",
+            "on-surface": "#111c2d",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "primary": "#0037b0",
+            "tertiary-fixed-dim": "#68dba9",
+            "on-primary-fixed-variant": "#0039b5",
+            "tertiary": "#004f35",
+            "secondary-container": "#dae2fd",
+            "error": "#ba1a1a",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dce1ff",
+            "surface-variant": "#d8e3fb",
+            "tertiary-fixed": "#85f8c4",
+            "primary-container": "#1d4ed8",
+            "on-error-container": "#93000a",
+            "on-background": "#111c2d",
+            "inverse-primary": "#b7c4ff",
+            "surface-bright": "#f9f9ff",
+            "tertiary-container": "#006948"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1.5rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-xl": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-xl-mobile": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "label-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "700" }],
+            "headline-xl": ["36px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "body-sm": ["14px", { "lineHeight": "22px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    :focus-visible {
+      outline: 3px solid #1D4ED8 !important;
+      outline-offset: 2px !important;
+    }
+    .skip-link:focus {
+      position: absolute;
+      top: 0.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: #111C2D;
+      color: #FFFFFF;
+      padding: 0.75rem 1.5rem;
+      font-weight: 700;
+      border: 2px solid #FFFFFF;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md min-h-screen flex flex-col selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- Skip Navigation for Assistive Technology -->
+<a class="sr-only skip-link focus:not-sr-only" href="#main-content">Skip to Primary Content (Alt+C)</a>
+<!-- Live Announcer Region for Screen Readers -->
+<div aria-atomic="true" aria-live="polite" class="sr-only" id="sr-announcer"></div>
+<!-- TopNavBar (Shared Component Anchor) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b-2 border-outline-variant dark:border-outline docked full-width top-0 sticky z-40">
+<div class="max-w-7xl mx-auto px-margin flex items-center justify-between w-full h-16 min-h-[48px]">
+<!-- Brand Logo / Product Name -->
+<div class="flex items-center gap-space-md">
+<a class="text-headline-md font-headline-md font-bold tracking-tight text-primary dark:text-inverse-primary focus:outline-none focus:ring-4 focus:ring-primary dark:focus:ring-inverse-primary p-1" href="#dashboard">
+          ACCESSPREP-X
+        </a>
+<span class="hidden lg:inline-block px-2 py-0.5 bg-surface-container text-on-secondary-container text-label-sm font-label-sm rounded border border-outline-variant">
+          SSC MTS Exam Portal
+        </span>
+</div>
+<!-- Desktop Navigation Links -->
+<nav aria-label="Global Portal Navigation" class="hidden md:flex items-center gap-space-lg h-full">
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#dashboard">
+          Dashboard
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#practice">
+          Practice &amp; Exams
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#tutor">
+          AI Tutor
+        </a>
+<!-- ACTIVE NAVIGATION: Revision -->
+<a aria-current="page" class="border-b-4 border-primary dark:border-inverse-primary text-primary dark:text-inverse-primary font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary font-bold" href="#revision">
+          Revision
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#progress">
+          Progress
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:bg-surface-container hover:text-on-surface transition-colors duration-150" href="#admin">
+          Admin Console
+        </a>
+</nav>
+<!-- Trailing Controls -->
+<div class="flex items-center gap-space-sm">
+<button aria-keyshortcuts="Alt+A" class="hidden sm:inline-flex items-center px-3 py-2 bg-surface-container-low text-on-surface border border-outline-variant rounded font-label-sm text-label-sm hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span class="material-symbols-outlined mr-1 text-primary">accessibility</span>
+          Accessibility (Alt+A)
+        </button>
+<button aria-keyshortcuts="Alt+S" class="hidden lg:inline-flex items-center px-3 py-2 bg-surface-container-low text-on-surface border border-outline-variant rounded font-label-sm text-label-sm hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+          Shortcuts (Alt+S)
+        </button>
+<button aria-label="Audio Readout Options" class="min-w-[48px] min-h-[48px] p-2 text-primary hover:bg-surface-container rounded focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span class="material-symbols-outlined" data-icon="volume_up">volume_up</span>
+</button>
+<button aria-label="Candidate profile avatar menu" class="min-w-[48px] min-h-[48px] p-2 text-primary hover:bg-surface-container rounded focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Container -->
+<main class="flex-grow max-w-7xl w-full mx-auto px-margin py-space-lg focus:outline-none" id="main-content" tabindex="-1">
+<!-- Screen Reader Quick Instructions Banner -->
+<div aria-label="Keyboard Assistance" class="mb-space-md p-space-md bg-surface-container-low border-l-4 border-primary rounded border border-outline-variant" role="region">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary mt-0.5">info</span>
+<div>
+<p class="text-body-sm font-body-sm text-on-surface">
+<strong>Screen reader instructions:</strong> Use <kbd class="px-1.5 py-0.5 bg-surface-container border border-outline rounded text-label-sm font-label-sm">Tab</kbd> to navigate through revision cards. Press <kbd class="px-1.5 py-0.5 bg-surface-container border border-outline rounded text-label-sm font-label-sm">Alt+number</kbd> to immediately launch practice. Use <kbd class="px-1.5 py-0.5 bg-surface-container border border-outline rounded text-label-sm font-label-sm">Alt+P</kbd> to listen to today’s entire audio plan.
+          </p>
+</div>
+</div>
+</div>
+<!-- Header Section with Audio Action -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-space-md pb-space-md border-b-2 border-outline-variant mb-space-lg">
+<div class="max-w-2xl">
+<p class="text-label-md font-label-md text-primary font-bold uppercase tracking-wider mb-1">
+          ACCESSPREP-X Spaced-Repetition Revision Planner
+        </p>
+<h1 class="text-headline-xl font-headline-xl text-on-surface">
+          Adaptive Memory &amp; Revision Schedule
+        </h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">
+          Cognitive reinforcement protocol for SSC MTS (Multi-Tasking Staff). Voice-synthesized intervals calibrated to your retention curves.
+        </p>
+</div>
+<div class="flex-shrink-0">
+<button aria-keyshortcuts="Alt+P" class="w-full md:w-auto min-h-[48px] px-6 py-3 bg-primary text-on-primary rounded font-label-lg text-label-lg flex items-center justify-center gap-space-sm border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary shadow-none active:bg-primary-fixed-dim" id="listen-plan-btn" type="button">
+<span class="material-symbols-outlined" data-icon="volume_up">volume_up</span>
+<span>Listen to Today's Revision Plan (Alt+P)</span>
+</button>
+</div>
+</div>
+<!-- Quick Stats Bar (Accessible Text Cards / Bento Metric Tiles) -->
+<section aria-labelledby="quick-stats-heading" class="mb-space-xl">
+<h2 class="sr-only" id="quick-stats-heading">Today's Revision Status Summary</h2>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md">
+<!-- Metric 1: Urgent Revisions -->
+<div class="bg-surface-container-lowest border-2 border-error p-space-md rounded flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-full bg-error-container text-error flex items-center justify-center flex-shrink-0 border border-error">
+<span class="material-symbols-outlined text-headline-sm" data-icon="priority_high">priority_high</span>
+</div>
+<div>
+<div class="text-headline-lg font-headline-lg text-error">4</div>
+<div class="text-label-md font-label-md text-on-surface font-bold">Revisions Due Today</div>
+<div class="text-body-sm font-body-sm text-error font-semibold">(Urgent • Memory decay threshold reached)</div>
+</div>
+</div>
+<!-- Metric 2: Scheduled This Week -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-space-md rounded flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-full bg-surface-container-high text-primary flex items-center justify-center flex-shrink-0 border border-outline">
+<span class="material-symbols-outlined text-headline-sm" data-icon="calendar_month">calendar_month</span>
+</div>
+<div>
+<div class="text-headline-lg font-headline-lg text-on-surface">6</div>
+<div class="text-label-md font-label-md text-on-surface font-bold">Scheduled This Week</div>
+<div class="text-body-sm font-body-sm text-on-surface-variant">Optimal 3-to-7 day intervals</div>
+</div>
+</div>
+<!-- Metric 3: Retention Rate -->
+<div class="bg-surface-container-lowest border-2 border-tertiary p-space-md rounded flex items-center gap-space-md">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant flex items-center justify-center flex-shrink-0 border border-tertiary">
+<span class="material-symbols-outlined text-headline-sm" data-icon="verified">verified</span>
+</div>
+<div>
+<div class="text-headline-lg font-headline-lg text-tertiary">94%</div>
+<div class="text-label-md font-label-md text-on-surface font-bold">Retention on Completed</div>
+<div class="text-body-sm font-body-sm text-tertiary font-semibold">Across 42 mastered modules</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Workspace Layout: 12-Column Asymmetric Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- Primary Revision Queue Column (8 cols desktop) -->
+<div class="lg:col-span-8 flex flex-col gap-space-lg">
+<!-- Filter & Grouping Controls (Keyboard Tablist) -->
+<section aria-label="Revision Queue Organization" class="bg-surface-container-lowest border-2 border-outline-variant p-space-sm rounded">
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm">
+<span class="text-label-md font-label-md text-on-surface px-space-xs font-bold" id="group-label">
+              Group by:
+            </span>
+<div aria-labelledby="group-label" class="flex flex-wrap gap-2 w-full sm:w-auto" role="tablist">
+<button aria-controls="panel-revisions" aria-selected="true" class="min-h-[48px] px-4 py-2 bg-primary text-on-primary rounded font-label-md text-label-md border-2 border-primary focus:outline-none focus:ring-4 focus:ring-primary flex items-center gap-1.5 font-bold" id="tab-due" role="tab">
+<span class="material-symbols-outlined" data-icon="event_upcoming">event_upcoming</span>
+                Due Date (Chronological)
+              </button>
+<button aria-controls="panel-revisions" aria-selected="false" class="min-h-[48px] px-4 py-2 bg-surface-container-low text-on-surface hover:bg-surface-container rounded font-label-md text-label-md border-2 border-outline-variant focus:outline-none focus:ring-4 focus:ring-primary flex items-center gap-1.5" id="tab-subject" role="tab">
+<span class="material-symbols-outlined" data-icon="subject">subject</span>
+                By Subject
+              </button>
+<button aria-controls="panel-revisions" aria-selected="false" class="min-h-[48px] px-4 py-2 bg-surface-container-low text-on-surface hover:bg-surface-container rounded font-label-md text-label-md border-2 border-outline-variant focus:outline-none focus:ring-4 focus:ring-primary flex items-center gap-1.5" id="tab-priority" role="tab">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+                By Priority (Weakest Topics First)
+              </button>
+</div>
+</div>
+</section>
+<!-- Revision Queue Section -->
+<section aria-labelledby="tab-due" class="flex flex-col gap-space-lg" id="panel-revisions" role="tabpanel">
+<div class="flex items-center justify-between border-b-2 border-outline-variant pb-2">
+<h2 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="format_list_bulleted">format_list_bulleted</span>
+              Daily Action Queue (3 of 4 Remaining)
+            </h2>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-medium">Sorted by: Due Date</span>
+</div>
+<!-- Card 1: Due Today - High Priority -->
+<article aria-labelledby="card-1-heading" class="bg-surface-container-lowest border-2 border-error p-space-lg rounded shadow-none flex flex-col gap-space-md focus-within:ring-4 focus-within:ring-primary">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-error text-on-error text-label-sm font-label-sm rounded font-bold uppercase">
+                    Due Today • High Priority
+                  </span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-semibold">
+                    Subject: General English
+                  </span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mt-1" id="card-1-heading">
+                  Topic: Idioms and Phrases (Set 03: Animal Idioms)
+                </h3>
+</div>
+<div class="text-right sm:flex-shrink-0">
+<span class="inline-flex items-center gap-1 text-label-md font-label-md bg-surface-container px-3 py-1.5 rounded border border-outline-variant font-bold text-primary">
+<span class="material-symbols-outlined" data-icon="repeat">repeat</span>
+                  Review 3 of 4 (Interval: 7 days)
+                </span>
+</div>
+</div>
+<div class="p-space-sm bg-surface-container-low rounded border border-outline-variant flex items-center gap-space-md">
+<span class="material-symbols-outlined text-headline-sm text-primary" data-icon="record_voice_over">record_voice_over</span>
+<div>
+<p class="text-body-sm font-body-sm text-on-surface font-semibold">
+                  Contains 25 voice-first prompt cards with high-frequency SSC MTS question patterns.
+                </p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                  Last reviewed 7 days ago. Retention probability dropping under 65%.
+                </p>
+</div>
+</div>
+<!-- Card Actions Bar -->
+<div class="flex flex-wrap items-center gap-space-sm pt-space-xs border-t border-outline-variant">
+<button aria-keyshortcuts="Alt+1" class="min-h-[48px] px-5 py-2.5 bg-primary text-on-primary rounded font-label-md text-label-md border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center gap-2 font-bold" type="button">
+<span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
+                Start Voice Flashcards (Alt+1)
+              </button>
+<button aria-keyshortcuts="Alt+S" class="min-h-[48px] px-4 py-2.5 bg-surface-container-lowest text-on-surface rounded font-label-md text-label-md border-2 border-outline hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center gap-2" type="button">
+<span class="material-symbols-outlined" data-icon="snooze">snooze</span>
+                Reschedule by 1 Day (Alt+S)
+              </button>
+<button class="min-h-[48px] px-4 py-2.5 bg-surface-container-lowest text-tertiary rounded font-label-md text-label-md border-2 border-tertiary hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-tertiary flex items-center gap-2 ml-auto" type="button">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                Mark as Mastered
+              </button>
+</div>
+</article>
+<!-- Card 2: Due Today - Medium Priority -->
+<article aria-labelledby="card-2-heading" class="bg-surface-container-lowest border-2 border-outline-variant p-space-lg rounded shadow-none flex flex-col gap-space-md focus-within:ring-4 focus-within:ring-primary">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-surface-container-high text-on-surface text-label-sm font-label-sm rounded font-bold uppercase border border-outline">
+                    Due Today • Medium Priority
+                  </span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-semibold">
+                    Subject: Numerical Aptitude
+                  </span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mt-1" id="card-2-heading">
+                  Topic: Work &amp; Wages Verbal Formulations
+                </h3>
+</div>
+<div class="text-right sm:flex-shrink-0">
+<span class="inline-flex items-center gap-1 text-label-md font-label-md bg-surface-container-low px-3 py-1.5 rounded border border-outline-variant text-on-surface font-semibold">
+<span class="material-symbols-outlined" data-icon="update">update</span>
+                  Review 2 of 4 (Interval: 3 days)
+                </span>
+</div>
+</div>
+<div class="p-space-sm bg-surface-container-low rounded border border-outline-variant flex items-center gap-space-md">
+<span class="material-symbols-outlined text-headline-sm text-secondary" data-icon="headphones">headphones</span>
+<div>
+<p class="text-body-sm font-body-sm text-on-surface font-semibold">
+                  Audio Formula Summary available: 4 minutes narration before flashcards.
+                </p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                  Focus: Shortcut formulas for efficiency-to-wage ratios.
+                </p>
+</div>
+</div>
+<!-- Card Actions Bar -->
+<div class="flex flex-wrap items-center gap-space-sm pt-space-xs border-t border-outline-variant">
+<button aria-keyshortcuts="Alt+2" class="min-h-[48px] px-5 py-2.5 bg-primary text-on-primary rounded font-label-md text-label-md border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center gap-2 font-bold" type="button">
+<span class="material-symbols-outlined" data-icon="play_arrow">play_arrow</span>
+                Start Voice Flashcards (Alt+2)
+              </button>
+<button class="min-h-[48px] px-4 py-2.5 bg-surface-container-lowest text-on-surface rounded font-label-md text-label-md border-2 border-outline hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center gap-2" type="button">
+<span class="material-symbols-outlined" data-icon="event_repeat">event_repeat</span>
+                Reschedule
+              </button>
+</div>
+</article>
+<!-- Card 3: Completed Today -->
+<article aria-labelledby="card-3-heading" class="bg-surface-container-low border-2 border-outline-variant p-space-lg rounded shadow-none flex flex-col gap-space-md opacity-90 focus-within:ring-4 focus-within:ring-primary">
+<div class="flex flex-col sm:flex-row sm:items-start justify-between gap-space-sm">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 bg-tertiary-fixed text-on-tertiary-fixed font-bold text-label-sm font-label-sm rounded uppercase flex items-center gap-1 border border-tertiary">
+<span class="material-symbols-outlined text-sm" data-icon="check_circle">check_circle</span>
+                    Completed Today
+                  </span>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-semibold">
+                    Subject: General Intelligence
+                  </span>
+</div>
+<h3 class="text-headline-sm font-headline-sm text-on-surface mt-1" id="card-3-heading">
+                  Topic: Number Series &amp; Analogies
+                </h3>
+</div>
+<div class="text-right sm:flex-shrink-0">
+<span class="inline-flex items-center gap-1 text-label-sm font-label-sm bg-surface-container-lowest px-2.5 py-1 rounded border border-outline-variant text-on-surface">
+                  Next review scheduled for: 14 days later
+                </span>
+</div>
+</div>
+<div class="p-space-sm bg-surface-container-lowest rounded border border-outline-variant flex items-center gap-space-md">
+<span class="material-symbols-outlined text-headline-sm text-tertiary" data-icon="task_alt">task_alt</span>
+<div>
+<p class="text-body-sm font-body-sm text-on-surface font-semibold">
+                  Completed at 09:30 AM • 23/25 Correct (Accuracy 92%)
+                </p>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+                  Memory strength increased to 95%. Spaced interval lengthened to Phase 4.
+                </p>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs border-t border-outline-variant">
+<button class="min-h-[48px] px-4 py-2 text-primary font-label-md text-label-md underline hover:text-on-surface focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+                Review Voice Transcript &amp; Mistakes
+              </button>
+<button class="min-h-[48px] px-4 py-2 text-on-surface-variant font-label-sm text-label-sm hover:underline focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+                Undo Completion
+              </button>
+</div>
+</article>
+</section>
+<!-- Semantic Linear Data Table: Upcoming Schedule -->
+<section aria-labelledby="table-schedule-title" class="bg-surface-container-lowest border-2 border-outline-variant p-space-lg rounded">
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-2" id="table-schedule-title">
+            Weekly Spaced Repetition Overview
+          </h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-space-md">
+            Linear reading schedule compliant with braille displays and screen readers.
+          </p>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse border border-outline-variant" role="table">
+<caption class="sr-only">Detailed breakdown of upcoming revisions for this week</caption>
+<thead>
+<tr class="bg-surface-container border-b-2 border-outline-variant text-on-surface font-label-md text-label-md">
+<th class="p-3 border-r border-outline-variant" scope="col">Date Due</th>
+<th class="p-3 border-r border-outline-variant" scope="col">Subject</th>
+<th class="p-3 border-r border-outline-variant" scope="col">Topic</th>
+<th class="p-3 border-r border-outline-variant" scope="col">Current Cycle</th>
+<th class="p-3" scope="col">Target</th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-body-sm divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-low">
+<th class="p-3 font-semibold border-r border-outline-variant" scope="row">Tomorrow</th>
+<td class="p-3 border-r border-outline-variant">General Awareness</td>
+<td class="p-3 border-r border-outline-variant">Indian Constitution: Fundamental Rights</td>
+<td class="p-3 border-r border-outline-variant">Review 1 of 4</td>
+<td class="p-3">15 Cards</td>
+</tr>
+<tr class="hover:bg-surface-container-low">
+<th class="p-3 font-semibold border-r border-outline-variant" scope="row">In 2 Days</th>
+<td class="p-3 border-r border-outline-variant">Numerical Aptitude</td>
+<td class="p-3 border-r border-outline-variant">Speed, Distance &amp; Time Formulas</td>
+<td class="p-3 border-r border-outline-variant">Review 3 of 4</td>
+<td class="p-3">20 Cards</td>
+</tr>
+<tr class="hover:bg-surface-container-low">
+<th class="p-3 font-semibold border-r border-outline-variant" scope="row">In 3 Days</th>
+<td class="p-3 border-r border-outline-variant">General English</td>
+<td class="p-3 border-r border-outline-variant">One Word Substitutions (Set 05)</td>
+<td class="p-3 border-r border-outline-variant">Review 2 of 4</td>
+<td class="p-3">30 Cards</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Accessible Form Sidebar (4 cols desktop) -->
+<aside aria-labelledby="form-custom-topic" class="lg:col-span-4">
+<div class="bg-surface-container-lowest border-2 border-outline-variant p-space-lg rounded sticky top-20 shadow-none">
+<div class="border-b-2 border-outline-variant pb-3 mb-space-md">
+<h2 class="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2" id="form-custom-topic">
+<span class="material-symbols-outlined text-primary" data-icon="add_circle">add_circle</span>
+              Add Topic to Revision Planner
+            </h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant mt-1">
+              Insert a syllabus area directly into Leitner spacing algorithms.
+            </p>
+</div>
+<form action="#" class="flex flex-col gap-space-md" method="POST" onsubmit="event.preventDefault(); announceTopicAdded();">
+<!-- Subject Dropdown -->
+<div class="flex flex-col gap-1">
+<label class="text-label-md font-label-md text-on-surface font-bold" for="revision-subject">
+                1. Subject <span aria-hidden="true" class="text-error">*</span>
+</label>
+<select class="w-full min-h-[48px] px-3 py-2 bg-surface-container-lowest border-2 border-outline rounded text-body-md font-body-md text-on-surface focus:outline-none focus:ring-4 focus:ring-primary" id="revision-subject" required="">
+<option value="">Select an SSC MTS subject</option>
+<option value="eng">General English</option>
+<option value="math">Numerical and Mathematical Ability</option>
+<option value="reasoning">General Intelligence and Reasoning</option>
+<option value="gk">General Awareness &amp; Static GK</option>
+</select>
+</div>
+<!-- Topic Search & Name -->
+<div class="flex flex-col gap-1">
+<label class="text-label-md font-label-md text-on-surface font-bold" for="revision-topic">
+                2. Topic / Subtopic Title <span aria-hidden="true" class="text-error">*</span>
+</label>
+<input class="w-full min-h-[48px] px-3 py-2 bg-surface-container-lowest border-2 border-outline rounded text-body-md font-body-md text-on-surface focus:outline-none focus:ring-4 focus:ring-primary" id="revision-topic" placeholder="e.g., Simple Interest Word Problems" required="" type="text"/>
+<span class="text-body-sm font-body-sm text-on-surface-variant">Audio flashcards will automatically generate from syllabus notes.</span>
+</div>
+<!-- Repetition Cadence Options (Radios with ARIA role) -->
+<fieldset class="flex flex-col gap-2 pt-2 border-t border-outline-variant">
+<legend class="text-label-md font-label-md text-on-surface font-bold mb-1">
+                3. Repetition Cadence <span aria-hidden="true" class="text-error">*</span>
+</legend>
+<label class="flex items-start gap-3 p-2.5 rounded border-2 border-outline-variant hover:bg-surface-container-low cursor-pointer focus-within:border-primary">
+<input checked="" class="mt-1 w-5 h-5 text-primary focus:ring-primary border-outline" name="cadence" type="radio" value="leitner"/>
+<div>
+<span class="font-label-md text-label-md text-on-surface block font-bold">Standard Leitner (Recommended)</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">1 day, 3 days, 7 days, 14 days intervals</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-2.5 rounded border-2 border-outline-variant hover:bg-surface-container-low cursor-pointer focus-within:border-primary">
+<input class="mt-1 w-5 h-5 text-primary focus:ring-primary border-outline" name="cadence" type="radio" value="intensive"/>
+<div>
+<span class="font-label-md text-label-md text-on-surface block font-bold">Intensive 2-Day Cycle</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">Every 48 hours until 90% accuracy attained</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-2.5 rounded border-2 border-outline-variant hover:bg-surface-container-low cursor-pointer focus-within:border-primary">
+<input class="mt-1 w-5 h-5 text-primary focus:ring-primary border-outline" name="cadence" type="radio" value="custom"/>
+<div>
+<span class="font-label-md text-label-md text-on-surface block font-bold">Custom Spaced Model</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant block">Manual interval configuration</span>
+</div>
+</label>
+</fieldset>
+<!-- Reminder Method -->
+<div class="flex flex-col gap-1 pt-2 border-t border-outline-variant">
+<label class="text-label-md font-label-md text-on-surface font-bold" for="reminder-method">
+                4. Primary Reminder Method
+              </label>
+<select class="w-full min-h-[48px] px-3 py-2 bg-surface-container-lowest border-2 border-outline rounded text-body-md font-body-md text-on-surface focus:outline-none focus:ring-4 focus:ring-primary" id="reminder-method">
+<option value="audio-chime">Audio chime and voice summary upon login</option>
+<option value="sms">SMS Notification to registered mobile</option>
+<option value="both">Both Audio Chime and SMS Alert</option>
+</select>
+</div>
+<!-- Submit Button -->
+<div class="pt-space-sm">
+<button class="w-full min-h-[48px] px-6 py-3 bg-primary text-on-primary rounded font-label-lg text-label-lg border-2 border-primary hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary flex items-center justify-center gap-2 font-bold" type="submit">
+<span class="material-symbols-outlined" data-icon="bookmark_add">bookmark_add</span>
+                Schedule Topic Revision
+              </button>
+</div>
+</form>
+</div>
+</aside>
+</div>
+</main>
+<!-- Footer (Shared Component Anchor) -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t-2 border-outline-variant dark:border-outline docked full-width bottom mt-space-xl">
+<div class="max-w-7xl mx-auto px-margin py-space-lg flex flex-col md:flex-row justify-between items-center gap-space-md w-full">
+<!-- Brand & Copyright -->
+<div class="flex flex-col items-center md:items-start gap-1">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface dark:text-inverse-on-surface">
+          ACCESSPREP-X
+        </span>
+<p class="text-body-sm font-body-sm text-on-surface-variant dark:text-inverse-on-surface text-center md:text-left">
+          © 2025 ACCESSPREP-X. Accessible Civil Services Exam Portal. Compliant with WCAG 2.2 AAA Standards.
+        </p>
+</div>
+<!-- Footer Navigation Links -->
+<nav aria-label="Support &amp; Policy Links" class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2">
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#audio-help">
+          Audio Help
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#keyboard-guide">
+          Keyboard Guide
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#report-barrier">
+          Report Barrier
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#privacy">
+          Privacy &amp; Security
+        </a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#screen-reader">
+          Screen Reader Support
+        </a>
+</nav>
+</div>
+</footer>
+<!-- Inline Script for Accessible Micro-Interactions & Audio Keyboard Shortcuts -->
+<script>
+    function announce(message) {
+      const announcer = document.getElementById('sr-announcer');
+      if (announcer) {
+        announcer.textContent = message;
+      }
+    }
+
+    function announceTopicAdded() {
+      const topic = document.getElementById('revision-topic').value || 'New Topic';
+      announce(`Topic '${topic}' successfully added to your Leitner Spaced-Repetition Schedule.`);
+      alert(`Success: '${topic}' has been scheduled. First voice review set for tomorrow.`);
+      document.getElementById('revision-topic').value = '';
+    }
+
+    // Keyboard Shortcuts Handler
+    document.addEventListener('keydown', function(e) {
+      if (e.altKey && (e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        const msg = "Reading plan aloud: You have 4 revisions due today. First is General English: Animal Idioms with 25 prompt cards. Second is Numerical Aptitude: Work and Wages verbal formulations. To start, press Alt+1 or Alt+2.";
+        announce(msg);
+        alert(msg);
+      } else if (e.altKey && e.key === '1') {
+        e.preventDefault();
+        announce("Launching Voice Flashcards for General English Animal Idioms.");
+        alert("Launching Voice Practice: Idioms & Phrases (Set 03: Animal Idioms)...");
+      } else if (e.altKey && e.key === '2') {
+        e.preventDefault();
+        announce("Launching Voice Flashcards for Numerical Aptitude Work and Wages.");
+        alert("Launching Voice Practice: Work & Wages Verbal Formulations...");
+      } else if (e.altKey && (e.key === 's' || e.key === 'S')) {
+        e.preventDefault();
+        announce("Card 1 rescheduled by 1 day. New review due tomorrow morning.");
+        alert("Card 1 rescheduled by 24 hours.");
+      }
+    });
+
+    // Listen Button Click
+    const listenBtn = document.getElementById('listen-plan-btn');
+    if (listenBtn) {
+      listenBtn.addEventListener('click', function() {
+        const msg = "Audio plan triggered: You have 4 revisions due today. Priority 1 is Idioms and Phrases. Priority 2 is Work and Wages. 1 module was already completed this morning.";
+        announce(msg);
+        alert(msg);
+      });
+    }
+
+    // Accessible Tablist selection
+    const tabs = document.querySelectorAll('[role="tab"]');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.setAttribute('aria-selected', 'false');
+          t.classList.remove('bg-primary', 'text-on-primary', 'font-bold');
+          t.classList.add('bg-surface-container-low', 'text-on-surface');
+        });
+        tab.setAttribute('aria-selected', 'true');
+        tab.classList.add('bg-primary', 'text-on-primary', 'font-bold');
+        tab.classList.remove('bg-surface-container-low', 'text-on-surface');
+        announce(`Queue filtered by ${tab.innerText.trim()}`);
+      });
+    });
+  </script>
+</body></html>

@@ -1,0 +1,7 @@
+{
+  "name": "ACCESSPREP-X Accessible SSC MTS Portal",
+  "description": "Accessible, voice-first Staff Selection Commission (MTS) exam preparation platform featuring curated question datasets, pattern-recognition ML subject classification, Whisper voice workflows, and WCAG AAA compliance.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+

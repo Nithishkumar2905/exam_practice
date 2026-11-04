@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>New Candidate Registration - ACCESSPREP-X</title>
+<!-- Material Symbols Outlined font -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#565e74",
+            "on-tertiary-container": "#76eab6",
+            "on-tertiary-fixed-variant": "#005137",
+            "surface-tint": "#2151da",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#dae2fd",
+            "surface-container": "#e7eeff",
+            "on-secondary-fixed-variant": "#3f465c",
+            "primary-fixed-dim": "#b7c4ff",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d8e3fb",
+            "on-secondary-container": "#5c647a",
+            "on-error": "#ffffff",
+            "background": "#f9f9ff",
+            "inverse-on-surface": "#ecf1ff",
+            "outline": "#747686",
+            "outline-variant": "#c4c5d7",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-dim": "#cfdaf2",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "inverse-surface": "#263143",
+            "on-surface-variant": "#434655",
+            "on-primary-fixed": "#001551",
+            "on-primary-container": "#cad3ff",
+            "surface-container-high": "#dee8ff",
+            "error-container": "#ffdad6",
+            "on-surface": "#111c2d",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "primary": "#0037b0",
+            "tertiary-fixed-dim": "#68dba9",
+            "on-primary-fixed-variant": "#0039b5",
+            "tertiary": "#004f35",
+            "secondary-container": "#dae2fd",
+            "error": "#ba1a1a",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dce1ff",
+            "surface-variant": "#d8e3fb",
+            "tertiary-fixed": "#85f8c4",
+            "primary-container": "#1d4ed8",
+            "on-error-container": "#93000a",
+            "on-background": "#111c2d",
+            "inverse-primary": "#b7c4ff",
+            "surface-bright": "#f9f9ff",
+            "tertiary-container": "#006948"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1.5rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-xl": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-xl-mobile": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "label-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "700" }],
+            "headline-xl": ["36px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "body-sm": ["14px", { "lineHeight": "22px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-feature-settings: 'liga';
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    /* Strict Accessible High Contrast Focus Indicator */
+    *:focus-visible {
+      outline: 3px solid #1d4ed8 !important;
+      outline-offset: 2px !important;
+    }
+  </style>
+</head>
+<body class="min-h-full flex flex-col bg-background text-on-surface antialiased font-body-md text-body-md selection:bg-primary selection:text-on-primary">
+<!-- Skip Navigation Accessible Link -->
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-1/2 focus:-translate-x-1/2 focus:z-50 focus:px-space-md focus:py-space-sm focus:bg-inverse-surface focus:text-inverse-on-surface focus:font-label-lg focus:text-label-lg focus:ring-4 focus:ring-primary focus:rounded-lg" href="#main-content">
+    Skip directly to Registration Form (Press Enter)
+  </a>
+<!-- TopNavBar (Derived from Shared Component JSON) -->
+<header class="bg-surface-container-lowest border-b-2 border-outline-variant w-full sticky top-0 z-40">
+<div class="max-w-7xl mx-auto px-margin flex items-center justify-between w-full h-16 min-h-[48px]">
+<!-- Brand Logo / Identity -->
+<div class="flex items-center gap-space-sm">
+<a aria-label="ACCESSPREP-X Home" class="text-headline-md font-headline-md font-bold tracking-tight text-primary flex items-center gap-2 focus:outline-none focus:ring-4 focus:ring-primary rounded" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="accessibility_new">accessibility_new</span>
+<span>ACCESSPREP-X</span>
+</a>
+<span class="hidden sm:inline-block px-2 py-0.5 ml-2 bg-surface-container text-on-surface-variant font-label-sm text-label-sm rounded border border-outline-variant">
+          SSC MTS PwBD Portal
+        </span>
+</div>
+<!-- Action Cluster: Accessibility & Shortcut Triggers -->
+<div class="flex items-center gap-space-sm sm:gap-space-md">
+<button accesskey="a" aria-label="Accessibility settings panel (Access key Alt plus A)" class="inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md rounded border border-outline-variant transition-colors min-h-[48px] focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span class="material-symbols-outlined text-primary" data-icon="settings_accessibility">settings_accessibility</span>
+<span class="hidden md:inline">Accessibility (Alt+A)</span>
+</button>
+<button accesskey="s" aria-label="Keyboard shortcuts guide (Access key Alt plus S)" class="inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md rounded border border-outline-variant transition-colors min-h-[48px] focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span class="material-symbols-outlined text-primary" data-icon="keyboard">keyboard</span>
+<span class="hidden md:inline">Shortcuts (Alt+S)</span>
+</button>
+<button aria-label="Audio reader controls" class="p-2 text-on-surface-variant hover:text-primary rounded-full min-h-[48px] min-w-[48px] flex items-center justify-center focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span class="material-symbols-outlined" data-icon="volume_up">volume_up</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Live Announcer Region for Screen Readers -->
+<div aria-live="assertive" class="sr-only" id="sr-announcer" role="status"></div>
+<!-- Main Content Layout Container -->
+<main class="flex-grow max-w-5xl mx-auto px-margin-mobile sm:px-margin py-space-xl w-full" id="main-content">
+<!-- Registration Header and Multi-Step Progress Tracker -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-space-md sm:p-space-lg mb-space-lg">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-md border-b border-outline-variant">
+<div>
+<span class="text-label-sm font-label-sm text-primary tracking-wider uppercase">Staff Selection Commission — MTS Examination 2025</span>
+<h1 class="text-headline-lg font-headline-lg text-on-surface mt-1">
+            New Candidate Registration
+          </h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-1">
+            Step 1 of 2: Basic Profile &amp; Accessibility Accommodations
+          </p>
+</div>
+<!-- Accessible Audio Guide Trigger -->
+<button accesskey="g" aria-label="Read registration instructions aloud (Access key Alt plus G)" class="inline-flex items-center justify-center gap-2 px-4 py-3 bg-secondary-container text-on-secondary-fixed hover:bg-secondary-fixed rounded-lg border-2 border-primary font-label-md text-label-md min-h-[48px] transition-colors focus:ring-4 focus:ring-primary" id="audio-guide-btn" onclick="speakGuidance()" type="button">
+<span class="material-symbols-outlined text-primary" data-icon="volume_up">volume_up</span>
+<span>Read Registration Guidance Aloud (Alt + G)</span>
+</button>
+</div>
+<!-- Linear Step Visual & Structural Indicator -->
+<div aria-label="Progress steps" class="mt-space-md">
+<div class="flex items-center justify-between font-label-sm text-label-sm text-on-surface-variant mb-2">
+<span class="font-bold text-primary flex items-center gap-1.5">
+<span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-on-primary text-xs">1</span>
+            Step 1: Profile &amp; Accommodations (Active)
+          </span>
+<span class="flex items-center gap-1.5 opacity-75">
+<span class="flex items-center justify-center w-6 h-6 rounded-full bg-surface-container-highest text-on-surface text-xs">2</span>
+            Step 2: Certificate Upload &amp; Verification
+          </span>
+</div>
+<div aria-label="Registration Progress: 50 percent completed" aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" class="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden" role="progressbar">
+<div class="bg-primary h-full w-1/2 rounded-full transition-all duration-300"></div>
+</div>
+</div>
+</div>
+<!-- Screen Reader & Assistive Technology Instructions Alert Box -->
+<section aria-label="Screen reader navigation instructions" class="mb-space-lg p-space-md bg-surface-container-low border-l-8 border-primary rounded-r-lg border-y border-r border-outline-variant" role="region">
+<div class="flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-2xl mt-0.5" data-icon="info">info</span>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Screen Reader &amp; Keyboard Notice</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+            This registration portal is compliant with WCAG 2.2 AAA. You may use standard arrow keys within radio groups, press <kbd class="px-1.5 py-0.5 bg-surface-container-highest rounded border border-outline font-mono text-xs">Tab</kbd> to move forward, and <kbd class="px-1.5 py-0.5 bg-surface-container-highest rounded border border-outline font-mono text-xs">Shift + Tab</kbd> to move backward. If any validation errors occur, focus will automatically transfer to the first erroneous input with an announcement.
+          </p>
+</div>
+</div>
+</section>
+<!-- Main Multi-Section Form -->
+<form action="#" class="space-y-space-xl" id="registration-form" method="POST" novalidate="">
+<!-- ================= FIELDSET 1: BASIC INFORMATION ================= -->
+<fieldset class="bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-space-md sm:p-space-lg">
+<legend class="px-3 text-headline-sm font-headline-sm text-primary font-bold flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+          Section 1: Basic Information
+        </legend>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-space-md mt-1">
+          Provide your candidate credentials. Ensure the name matches your Class 10 (Matriculation) Board Certificate exactly.
+        </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md sm:gap-space-lg">
+<!-- Full Name -->
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-1.5" for="full-name">
+              Full Name (as per Matriculation Certificate) <span aria-hidden="true" class="text-error">*</span>
+</label>
+<input aria-describedby="full-name-hint full-name-error" aria-required="true" autocomplete="name" class="w-full min-h-[48px] px-3.5 py-2.5 bg-surface-container-lowest border-2 border-outline rounded-lg text-body-md font-body-md focus:border-primary focus:ring-4 focus:ring-primary" id="full-name" name="full-name" placeholder="e.g. Ramesh Kumar Verma" required="" type="text"/>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1" id="full-name-hint">
+              Do not use honorific titles such as Shri, Mr., or Dr.
+            </span>
+<span class="hidden text-label-sm font-label-sm text-error mt-1" id="full-name-error" role="alert">
+              Please enter your full name as recorded in your Class 10 Certificate.
+            </span>
+</div>
+<!-- Email Address -->
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-1.5" for="email-address">
+              Email Address <span aria-hidden="true" class="text-error">*</span>
+</label>
+<input aria-describedby="email-hint email-error" aria-required="true" autocomplete="email" class="w-full min-h-[48px] px-3.5 py-2.5 bg-surface-container-lowest border-2 border-outline rounded-lg text-body-md font-body-md focus:border-primary focus:ring-4 focus:ring-primary" id="email-address" name="email-address" placeholder="candidate@example.org" required="" type="email"/>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1" id="email-hint">
+              Test credentials, admit alerts, and audio digests will be sent here.
+            </span>
+<span class="hidden text-label-sm font-label-sm text-error mt-1" id="email-error" role="alert">
+              Please enter a valid, accessible email address.
+            </span>
+</div>
+<!-- Mobile Number -->
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-1.5" for="mobile-number">
+              Mobile Number (for OTP and Voice SMS) <span aria-hidden="true" class="text-error">*</span>
+</label>
+<input aria-describedby="mobile-hint mobile-error" aria-required="true" autocomplete="tel" class="w-full min-h-[48px] px-3.5 py-2.5 bg-surface-container-lowest border-2 border-outline rounded-lg text-body-md font-body-md focus:border-primary focus:ring-4 focus:ring-primary" id="mobile-number" name="mobile-number" pattern="[0-9]{10}" placeholder="10-digit mobile number" required="" type="tel"/>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1" id="mobile-hint">
+              Supports automated Voice-IVR OTP verification for non-screen candidates.
+            </span>
+<span class="hidden text-label-sm font-label-sm text-error mt-1" id="mobile-error" role="alert">
+              Please enter a valid 10-digit Indian mobile number.
+            </span>
+</div>
+<!-- SSC MTS Roll / Reg Number (Optional) -->
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-1.5" for="ssc-roll">
+              SSC MTS Roll / Registration Number <span class="text-on-surface-variant font-normal">(Optional)</span>
+</label>
+<input aria-describedby="ssc-roll-hint" class="w-full min-h-[48px] px-3.5 py-2.5 bg-surface-container-lowest border-2 border-outline rounded-lg text-body-md font-body-md focus:border-primary focus:ring-4 focus:ring-primary" id="ssc-roll" name="ssc-roll" placeholder="e.g. 2201019842" type="text"/>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1" id="ssc-roll-hint">
+              Leave blank if preparing before receipt of official admit card.
+            </span>
+</div>
+</div>
+</fieldset>
+<!-- ================= FIELDSET 2: ACCESSIBILITY ACCOMMODATIONS & CATEGORY ================= -->
+<fieldset class="bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-space-md sm:p-space-lg">
+<legend class="px-3 text-headline-sm font-headline-sm text-primary font-bold flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="accessible">accessible</span>
+          Section 2: Accessibility Accommodations &amp; Exam Category
+        </legend>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-space-md mt-1">
+          Specify your benchmark disability preferences to optimize adaptive mock exam simulators and compensatory time timers.
+        </p>
+<!-- Benchmark Disability Category Radio Options -->
+<div aria-labelledby="disability-legend" aria-required="true" class="mb-space-lg" role="radiogroup">
+<span class="block font-label-md text-label-md text-on-surface mb-space-sm font-bold" id="disability-legend">
+            Disability Category (PwBD) <span aria-hidden="true" class="text-error">*</span>
+</span>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+<label class="flex items-start gap-3 p-3.5 bg-surface-container-low hover:bg-surface-container border-2 border-outline-variant rounded-lg cursor-pointer transition-colors has-[:checked]:border-primary has-[:checked]:bg-surface-container-high has-[:focus-within]:ring-4 has-[:focus-within]:ring-primary min-h-[48px]">
+<input checked="" class="mt-1 w-5 h-5 text-primary focus:ring-0" name="disability_cat" type="radio" value="blindness"/>
+<div>
+<span class="font-label-md text-label-md text-on-surface block">Blindness (Complete Visual Impairment)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Default: Screen Reader &amp; Voice Synthesis mode</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-3.5 bg-surface-container-low hover:bg-surface-container border-2 border-outline-variant rounded-lg cursor-pointer transition-colors has-[:checked]:border-primary has-[:checked]:bg-surface-container-high has-[:focus-within]:ring-4 has-[:focus-within]:ring-primary min-h-[48px]">
+<input class="mt-1 w-5 h-5 text-primary focus:ring-0" name="disability_cat" type="radio" value="low_vision"/>
+<div>
+<span class="font-label-md text-label-md text-on-surface block">Low Vision</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Default: 200% High Contrast Zoom &amp; Tint filters</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-3.5 bg-surface-container-low hover:bg-surface-container border-2 border-outline-variant rounded-lg cursor-pointer transition-colors has-[:checked]:border-primary has-[:checked]:bg-surface-container-high has-[:focus-within]:ring-4 has-[:focus-within]:ring-primary min-h-[48px]">
+<input class="mt-1 w-5 h-5 text-primary focus:ring-0" name="disability_cat" type="radio" value="locomotor_vision"/>
+<div>
+<span class="font-label-md text-label-md text-on-surface block">Locomotor + Vision Impairment</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Default: Single Switch Access &amp; Voice input</span>
+</div>
+</label>
+<label class="flex items-start gap-3 p-3.5 bg-surface-container-low hover:bg-surface-container border-2 border-outline-variant rounded-lg cursor-pointer transition-colors has-[:checked]:border-primary has-[:checked]:bg-surface-container-high has-[:focus-within]:ring-4 has-[:focus-within]:ring-primary min-h-[48px]">
+<input class="mt-1 w-5 h-5 text-primary focus:ring-0" name="disability_cat" type="radio" value="other"/>
+<div>
+<span class="font-label-md text-label-md text-on-surface block">Other Recognised PwBD Benchmark</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Configurable accessibility parameters</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Scribe Requirement & Compensatory Time Details -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg mb-space-lg">
+<!-- Scribe Requirement Status -->
+<div aria-labelledby="scribe-status-label" role="radiogroup">
+<span class="block font-label-md text-label-md text-on-surface mb-2 font-bold" id="scribe-status-label">
+              Scribe Requirement Status <span aria-hidden="true" class="text-error">*</span>
+</span>
+<div class="space-y-2">
+<label class="flex items-center gap-3 p-3 bg-surface-container-lowest border-2 border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container min-h-[48px] has-[:checked]:border-primary has-[:checked]:bg-surface-container-low">
+<input checked="" class="w-5 h-5 text-primary" name="scribe_status" type="radio" value="yes"/>
+<span class="font-label-md text-label-md text-on-surface">Yes (I require a designated Scribe)</span>
+</label>
+<label class="flex items-center gap-3 p-3 bg-surface-container-lowest border-2 border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container min-h-[48px] has-[:checked]:border-primary has-[:checked]:bg-surface-container-low">
+<input class="w-5 h-5 text-primary" name="scribe_status" type="radio" value="no"/>
+<span class="font-label-md text-label-md text-on-surface">No (Self-operating candidate)</span>
+</label>
+<label class="flex items-center gap-3 p-3 bg-surface-container-lowest border-2 border-outline-variant rounded-lg cursor-pointer hover:bg-surface-container min-h-[48px] has-[:checked]:border-primary has-[:checked]:bg-surface-container-low">
+<input class="w-5 h-5 text-primary" name="scribe_status" type="radio" value="pending"/>
+<span class="font-label-md text-label-md text-on-surface">Pending Decision / Applying for SSC Scribe</span>
+</label>
+</div>
+</div>
+<!-- Compensatory Time Accommodation Tracker -->
+<div class="flex flex-col justify-between p-space-md bg-surface-container-low border-2 border-outline-variant rounded-xl">
+<div>
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+<span class="font-label-lg text-label-lg">Compensatory Time Allowance</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2">
+                As per SSC OM rules, PwBD candidates are entitled to <strong>20 minutes additional time per hour</strong> of examination.
+              </p>
+</div>
+<div class="mt-4 p-3 bg-surface-container-lowest border border-outline rounded-lg flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface">MTS Exam (90 min test):</span>
+<span class="font-label-lg text-label-lg text-primary font-bold bg-secondary-container px-2.5 py-1 rounded">
+                +30 min = 120 Total min
+              </span>
+</div>
+</div>
+</div>
+<!-- Preferred Primary Interaction Mode -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-1.5 font-bold" for="primary-interaction">
+            Preferred Primary Interaction Mode <span aria-hidden="true" class="text-error">*</span>
+</label>
+<select aria-describedby="interaction-hint" class="w-full min-h-[48px] px-3.5 py-2.5 bg-surface-container-lowest border-2 border-outline rounded-lg text-body-md font-body-md focus:border-primary focus:ring-4 focus:ring-primary" id="primary-interaction" name="primary-interaction">
+<option selected="" value="screen-reader">Screen Reader (Optimized for NVDA, JAWS, VoiceOver &amp; TalkBack)</option>
+<option value="speech-synth">Speech Synthesizer (Built-in Voice-First Audio Engine)</option>
+<option value="high-contrast">High Contrast Keyboard Navigation (Custom Palette + Zoom)</option>
+<option value="braille-display">Refreshable Braille Terminal Emulation</option>
+</select>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1.5 block" id="interaction-hint">
+            This calibrates question read-outs, timer chimes, and automatic verbal descriptions in mocks.
+          </span>
+</div>
+</fieldset>
+<!-- ================= FIELDSET 3: PASSWORD & SECURITY ================= -->
+<fieldset class="bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-space-md sm:p-space-lg">
+<legend class="px-3 text-headline-sm font-headline-sm text-primary font-bold flex items-center gap-2">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+          Section 3: Password &amp; Account Security
+        </legend>
+<p class="text-body-sm font-body-sm text-on-surface-variant mb-space-md mt-1">
+          Create a secure password. Live validation indicators will announce criteria completion to assistive technologies.
+        </p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+<!-- Password Input -->
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-1.5 font-bold" for="password-input">
+              Create Password <span aria-hidden="true" class="text-error">*</span>
+</label>
+<div class="relative">
+<input aria-describedby="pwd-rules" aria-required="true" class="w-full min-h-[48px] px-3.5 pr-12 py-2.5 bg-surface-container-lowest border-2 border-outline rounded-lg text-body-md font-body-md focus:border-primary focus:ring-4 focus:ring-primary" id="password-input" name="password" oninput="validatePassword(this.value)" required="" type="password"/>
+<button aria-label="Show or hide password in plain text" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant hover:text-primary min-w-[44px] min-h-[44px] flex items-center justify-center rounded" onclick="togglePasswordVisibility('password-input', 'pwd-toggle-icon')" type="button">
+<span class="material-symbols-outlined" data-icon="visibility" id="pwd-toggle-icon">visibility</span>
+</button>
+</div>
+<!-- Password Live Accessibility Checklist -->
+<ul aria-label="Password complexity status" class="mt-3 space-y-1.5 p-3 bg-surface-container-low border border-outline-variant rounded-lg" id="pwd-rules">
+<li class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant" id="rule-length">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="radio_button_unchecked" id="icon-length">radio_button_unchecked</span>
+<span id="text-length">At least 8 characters in length</span>
+</li>
+<li class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant" id="rule-number">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="radio_button_unchecked" id="icon-number">radio_button_unchecked</span>
+<span id="text-number">At least 1 numeric digit (0-9)</span>
+</li>
+<li class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant" id="rule-special">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="radio_button_unchecked" id="icon-special">radio_button_unchecked</span>
+<span id="text-special">At least 1 special character (!@#$%^&amp;*)</span>
+</li>
+</ul>
+</div>
+<!-- Confirm Password -->
+<div class="flex flex-col">
+<label class="font-label-md text-label-md text-on-surface mb-1.5 font-bold" for="confirm-password-input">
+              Confirm Password <span aria-hidden="true" class="text-error">*</span>
+</label>
+<div class="relative">
+<input aria-describedby="match-status" aria-required="true" class="w-full min-h-[48px] px-3.5 pr-12 py-2.5 bg-surface-container-lowest border-2 border-outline rounded-lg text-body-md font-body-md focus:border-primary focus:ring-4 focus:ring-primary" id="confirm-password-input" name="confirm_password" oninput="checkPasswordMatch()" required="" type="password"/>
+<button aria-label="Show or hide confirm password in plain text" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-on-surface-variant hover:text-primary min-w-[44px] min-h-[44px] flex items-center justify-center rounded" onclick="togglePasswordVisibility('confirm-password-input', 'confirm-pwd-toggle-icon')" type="button">
+<span class="material-symbols-outlined" data-icon="visibility" id="confirm-pwd-toggle-icon">visibility</span>
+</button>
+</div>
+<!-- Password Match Announcement Container -->
+<div aria-live="polite" class="mt-3 p-3 bg-surface-container-low border border-outline-variant rounded-lg text-label-sm font-label-sm text-on-surface-variant flex items-center gap-2" id="match-status">
+<span class="material-symbols-outlined text-outline text-lg" data-icon="sync" id="match-icon">sync</span>
+<span id="match-text">Passwords must match identically.</span>
+</div>
+</div>
+</div>
+</fieldset>
+<!-- ================= TERMS & CONSENT CHECKBOX ================= -->
+<div class="bg-surface-container-lowest border-2 border-outline-variant rounded-xl p-space-md sm:p-space-lg">
+<label class="flex items-start gap-3 cursor-pointer">
+<input aria-required="true" class="mt-1 w-6 h-6 rounded border-2 border-outline text-primary focus:ring-4 focus:ring-primary" id="terms-consent" name="terms_consent" required="" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface">
+            I certify that the information declared is authentic. I agree to the 
+            <button class="text-primary underline font-bold hover:text-primary-container focus:ring-2 focus:ring-primary p-0.5 rounded" onclick="openAccessibleTermsModal()" type="button">
+              Terms of Service and Accessibility Privacy Framework
+            </button> 
+            for civil service candidate evaluation.
+          </span>
+</label>
+<span class="hidden text-label-sm font-label-sm text-error mt-2 block" id="terms-error" role="alert">
+          You must accept the terms of service and candidate consent to proceed.
+        </span>
+</div>
+<!-- ================= ACTION BUTTONS CLUSTER ================= -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-md pt-space-md">
+<button accesskey="s" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-primary text-on-primary hover:bg-primary-container font-label-lg text-label-lg rounded-lg border-2 border-primary min-h-[48px] shadow-sm transition-colors focus:ring-4 focus:ring-primary focus:outline-none" type="submit">
+<span class="material-symbols-outlined" data-icon="how_to_reg">how_to_reg</span>
+<span>Create Candidate Account (Alt + S)</span>
+</button>
+<a class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-lg text-label-lg rounded-lg border-2 border-outline min-h-[48px] transition-colors focus:ring-4 focus:ring-primary" href="#sign-in-screen">
+<span class="material-symbols-outlined text-secondary" data-icon="login">login</span>
+<span>Already have an account? Sign In</span>
+</a>
+</div>
+</form>
+</main>
+<!-- ================= ACCESSIBLE MODAL: TERMS & PRIVACY ================= -->
+<div aria-labelledby="modal-title" aria-modal="true" class="hidden fixed inset-0 z-50 overflow-y-auto bg-inverse-surface/80 flex items-center justify-center p-4" id="terms-modal" role="dialog">
+<div class="bg-surface-container-lowest border-4 border-primary rounded-xl max-w-2xl w-full p-6 shadow-2xl relative">
+<div class="flex items-center justify-between pb-4 border-b border-outline-variant">
+<h2 class="font-headline-md text-headline-md text-primary font-bold flex items-center gap-2" id="modal-title">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+          Accessible Candidate Privacy Policy
+        </h2>
+<button aria-label="Close dialog" class="p-2 text-on-surface hover:text-error rounded-lg focus:ring-4 focus:ring-primary min-w-[48px] min-h-[48px] flex items-center justify-center" onclick="closeAccessibleTermsModal()" type="button">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<div class="py-4 space-y-3 max-h-96 overflow-y-auto font-body-sm text-body-sm text-on-surface">
+<p>
+          1. <strong>PwBD Data Protection:</strong> All medical certificate identifiers and accommodation preferences recorded in ACCESSPREP-X are encrypted at rest with AES-256 and used solely for timing accommodation and interface personalization.
+        </p>
+<p>
+          2. <strong>Evaluation Rights:</strong> Scribe details and adaptive audio logs are stored to benchmark practice tests against actual SSC examination environment standards.
+        </p>
+<p>
+          3. <strong>Zero Biometric Barrier:</strong> Voice SMS alerts and accessibility keys are provided free of cost to registered benchmark candidates.
+        </p>
+</div>
+<div class="pt-4 border-t border-outline-variant flex justify-end">
+<button class="px-6 py-2.5 bg-primary text-on-primary font-label-md text-label-md rounded-lg focus:ring-4 focus:ring-primary min-h-[48px]" onclick="closeAccessibleTermsModal()" type="button">
+          I Understand &amp; Close (Escape)
+        </button>
+</div>
+</div>
+</div>
+<!-- Footer (Derived from Shared Component JSON) -->
+<footer class="bg-surface-container-low border-t-2 border-outline-variant w-full mt-auto">
+<div class="max-w-7xl mx-auto px-margin py-space-lg flex flex-col md:flex-row justify-between items-center gap-space-md w-full">
+<!-- Brand & Standard Compliance Tag -->
+<div class="flex flex-col sm:flex-row items-center gap-2 text-center sm:text-left">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface">ACCESSPREP-X</span>
+<span class="text-on-surface-variant font-body-sm text-body-sm">
+          © 2025 ACCESSPREP-X. Accessible Civil Services Exam Portal. Compliant with WCAG 2.2 AAA Standards.
+        </span>
+</div>
+<!-- Footer Accessible Navigation Links -->
+<nav aria-label="Footer Accessibility &amp; Assistance Links">
+<ul class="flex flex-wrap items-center justify-center gap-space-md text-on-surface-variant font-body-sm text-body-sm">
+<li>
+<a class="hover:text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded p-1" href="#">
+              Audio Help
+            </a>
+</li>
+<li>
+<a class="hover:text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded p-1" href="#">
+              Keyboard Guide
+            </a>
+</li>
+<li>
+<a class="hover:text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded p-1" href="#">
+              Report Barrier
+            </a>
+</li>
+<li>
+<a class="hover:text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded p-1" href="#">
+              Privacy &amp; Security
+            </a>
+</li>
+<li>
+<a class="hover:text-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary rounded p-1" href="#">
+              Screen Reader Support
+            </a>
+</li>
+</ul>
+</nav>
+</div>
+</footer>
+<!-- Inline Micro-interactions & Accessibility Logic -->
+<script>
+    // Live Screen Reader Announcement helper
+    function announceToSR(message) {
+      const announcer = document.getElementById('sr-announcer');
+      if (announcer) {
+        announcer.textContent = message;
+      }
+    }
+
+    // Audio Guide Voice-First Simulation
+    function speakGuidance() {
+      const textToSpeak = "New Candidate Registration. Step 1 of 2. Please provide your Full Name as per Matriculation Certificate, active Email, Mobile Number, and specify your Benchmark Disability accommodations such as Scribe and Compensatory Time. Password must have 8 characters, 1 number, and 1 special symbol.";
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.rate = 0.95;
+        window.speechSynthesis.speak(utterance);
+        announceToSR("Reading registration guidance aloud.");
+      } else {
+        announceToSR(textToSpeak);
+      }
+    }
+
+    // Password Visibility Toggle
+    function togglePasswordVisibility(fieldId, iconId) {
+      const input = document.getElementById(fieldId);
+      const icon = document.getElementById(iconId);
+      if (input.type === "password") {
+        input.type = "text";
+        icon.textContent = "visibility_off";
+        announceToSR("Password shown in plain text");
+      } else {
+        input.type = "password";
+        icon.textContent = "visibility";
+        announceToSR("Password hidden");
+      }
+    }
+
+    // Dynamic Live Password Validation
+    function validatePassword(val) {
+      const hasLength = val.length >= 8;
+      const hasNumber = /\d/.test(val);
+      const hasSpecial = /[!@#$%^&*(),.?":{}|<>]/.test(val);
+
+      updateRuleUI('rule-length', 'icon-length', 'text-length', hasLength, "At least 8 characters in length");
+      updateRuleUI('rule-number', 'icon-number', 'text-number', hasNumber, "At least 1 numeric digit (0-9)");
+      updateRuleUI('rule-special', 'icon-special', 'text-special', hasSpecial, "At least 1 special character (!@#$%^&*)");
+
+      checkPasswordMatch();
+    }
+
+    function updateRuleUI(ruleId, iconId, textId, isValid, label) {
+      const icon = document.getElementById(iconId);
+      const rule = document.getElementById(ruleId);
+      if (isValid) {
+        icon.textContent = "check_circle";
+        icon.className = "material-symbols-outlined text-tertiary text-lg";
+        rule.className = "flex items-center gap-2 text-label-sm font-label-sm text-tertiary font-bold";
+      } else {
+        icon.textContent = "radio_button_unchecked";
+        icon.className = "material-symbols-outlined text-outline text-lg";
+        rule.className = "flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant";
+      }
+    }
+
+    // Live Confirm Password Match check
+    function checkPasswordMatch() {
+      const pwd = document.getElementById('password-input').value;
+      const confirmPwd = document.getElementById('confirm-password-input').value;
+      const matchText = document.getElementById('match-text');
+      const matchIcon = document.getElementById('match-icon');
+      const matchContainer = document.getElementById('match-status');
+
+      if (!confirmPwd) {
+        matchText.textContent = "Passwords must match identically.";
+        matchIcon.textContent = "sync";
+        matchIcon.className = "material-symbols-outlined text-outline text-lg";
+        matchContainer.className = "mt-3 p-3 bg-surface-container-low border border-outline-variant rounded-lg text-label-sm font-label-sm text-on-surface-variant flex items-center gap-2";
+        return;
+      }
+
+      if (pwd === confirmPwd) {
+        matchText.textContent = "Passwords match verified.";
+        matchIcon.textContent = "verified";
+        matchIcon.className = "material-symbols-outlined text-tertiary text-lg";
+        matchContainer.className = "mt-3 p-3 bg-surface-container-high border-2 border-tertiary rounded-lg text-label-sm font-label-sm text-tertiary font-bold flex items-center gap-2";
+      } else {
+        matchText.textContent = "Passwords do not match yet.";
+        matchIcon.textContent = "error";
+        matchIcon.className = "material-symbols-outlined text-error text-lg";
+        matchContainer.className = "mt-3 p-3 bg-error-container border border-error rounded-lg text-label-sm font-label-sm text-on-error-container flex items-center gap-2";
+      }
+    }
+
+    // Terms Modal Open / Close
+    function openAccessibleTermsModal() {
+      const modal = document.getElementById('terms-modal');
+      modal.classList.remove('hidden');
+      document.getElementById('modal-title').focus();
+      announceToSR("Terms and Privacy dialog opened. Press Escape to close.");
+    }
+
+    function closeAccessibleTermsModal() {
+      const modal = document.getElementById('terms-modal');
+      modal.classList.add('hidden');
+      announceToSR("Terms dialog closed.");
+    }
+
+    // Escape Key listener for Modal
+    document.addEventListener('keydown', function(e) {
+      if (e.key === "Escape") {
+        const modal = document.getElementById('terms-modal');
+        if (!modal.classList.contains('hidden')) {
+          closeAccessibleTermsModal();
+        }
+      }
+    });
+
+    // Form Validation with Auto-Focus to First Error
+    document.getElementById('registration-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      let firstErrorField = null;
+
+      // Validate Full Name
+      const name = document.getElementById('full-name');
+      const nameError = document.getElementById('full-name-error');
+      if (!name.value.trim()) {
+        nameError.classList.remove('hidden');
+        name.setAttribute('aria-invalid', 'true');
+        name.classList.add('border-error');
+        if (!firstErrorField) firstErrorField = name;
+      } else {
+        nameError.classList.add('hidden');
+        name.removeAttribute('aria-invalid');
+        name.classList.remove('border-error');
+      }
+
+      // Validate Email
+      const email = document.getElementById('email-address');
+      const emailError = document.getElementById('email-error');
+      if (!email.value.trim() || !email.checkValidity()) {
+        emailError.classList.remove('hidden');
+        email.setAttribute('aria-invalid', 'true');
+        email.classList.add('border-error');
+        if (!firstErrorField) firstErrorField = email;
+      } else {
+        emailError.classList.add('hidden');
+        email.removeAttribute('aria-invalid');
+        email.classList.remove('border-error');
+      }
+
+      // Validate Mobile
+      const mobile = document.getElementById('mobile-number');
+      const mobileError = document.getElementById('mobile-error');
+      if (!mobile.value.trim() || mobile.value.length < 10) {
+        mobileError.classList.remove('hidden');
+        mobile.setAttribute('aria-invalid', 'true');
+        mobile.classList.add('border-error');
+        if (!firstErrorField) firstErrorField = mobile;
+      } else {
+        mobileError.classList.add('hidden');
+        mobile.removeAttribute('aria-invalid');
+        mobile.classList.remove('border-error');
+      }
+
+      // Validate Terms Checkbox
+      const terms = document.getElementById('terms-consent');
+      const termsError = document.getElementById('terms-error');
+      if (!terms.checked) {
+        termsError.classList.remove('hidden');
+        terms.setAttribute('aria-invalid', 'true');
+        if (!firstErrorField) firstErrorField = terms;
+      } else {
+        termsError.classList.add('hidden');
+        terms.removeAttribute('aria-invalid');
+      }
+
+      // Focus first error element
+      if (firstErrorField) {
+        firstErrorField.focus();
+        announceToSR("Form contains errors. Focused on the first required field.");
+      } else {
+        announceToSR("Registration details validated successfully. Redirecting to Step 2 Verification.");
+        alert("Account setup initiated for SSC MTS PwBD candidate! Proceeding to Step 2: Verification.");
+      }
+    });
+  </script>
+</body></html>

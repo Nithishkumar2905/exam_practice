@@ -1,0 +1,113 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-primary: #1749E8;
+    --color-primary-dark: #123BB8;
+    --color-purple: #6241C8;
+    --color-purple-dark: #4C2FA8;
+    --color-lavender-bg: #F3F0FF;
+    --color-blue-bg: #EEF4FF;
+    --color-surface: #F8FAFC;
+    --color-surface-container: #EEF4FF;
+    --color-on-surface: #172033;
+    --color-secondary-text: #53627A;
+    --color-border: #D9E1EF;
+    --color-primary-container: #1749E8;
+    --color-outline: #53627A;
+    --focus-ring-color: #6241C8;
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* Accessible Focus Indicator (WCAG 2.1 AAA) */
+  *:focus-visible {
+    outline: 3px solid var(--focus-ring-color) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* High Contrast Yellow Theme */
+  body.theme-high_contrast_yellow {
+    background-color: #0a0f1d !important;
+    color: #facc15 !important;
+    --color-surface: #0a0f1d;
+    --color-surface-container: #151d33;
+    --color-on-surface: #facc15;
+    --color-primary: #facc15;
+    --color-primary-container: #fef08a;
+    --color-outline: #facc15;
+    --focus-ring-color: #38bdf8;
+  }
+
+  body.theme-high_contrast_yellow * {
+    border-color: #facc15 !important;
+  }
+
+  /* Monochrome Dark Theme */
+  body.theme-monochrome_dark {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    --color-surface: #000000;
+    --color-surface-container: #171717;
+    --color-on-surface: #ffffff;
+    --color-primary: #ffffff;
+    --color-primary-container: #404040;
+    --color-outline: #ffffff;
+    --focus-ring-color: #f59e0b;
+  }
+
+  body.theme-monochrome_dark * {
+    border-color: #ffffff !important;
+  }
+
+  /* Soft Dark Theme */
+  body.theme-soft_dark {
+    background-color: #0f172a !important;
+    color: #f1f5f9 !important;
+    --color-surface: #0f172a;
+    --color-surface-container: #1e293b;
+    --color-on-surface: #f1f5f9;
+    --color-primary: #3b82f6;
+    --color-primary-container: #1d4ed8;
+    --color-outline: #475569;
+    --focus-ring-color: #60a5fa;
+  }
+
+  /* Dyslexia / Hyperlegible Font Mode */
+  body.font-dyslexic {
+    font-family: 'Comic Sans MS', 'Atkinson Hyperlegible', sans-serif !important;
+    letter-spacing: 0.05em !important;
+    word-spacing: 0.1em !important;
+    line-height: 1.8 !important;
+  }
+
+  /* Dynamic Font Scaling */
+  body.font-scale-100 { font-size: 100%; }
+  body.font-scale-125 { font-size: 115%; }
+  body.font-scale-150 { font-size: 130%; }
+  body.font-scale-175 { font-size: 145%; }
+  body.font-scale-200 { font-size: 160%; }
+
+  /* Reduced Motion Compliance */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  body.reduce-motion *, body.reduce-motion ::before, body.reduce-motion ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

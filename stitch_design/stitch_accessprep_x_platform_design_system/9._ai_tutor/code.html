@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-background" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACCESSPREP-X | AI Tutor Scribe - SSC MTS Quantitative Aptitude</title>
+<!-- Material Symbols Outlined Font -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Inter Font Family for Accessibility & High Legibility -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary": "#565e74",
+            "on-tertiary-container": "#76eab6",
+            "on-tertiary-fixed-variant": "#005137",
+            "surface-tint": "#2151da",
+            "surface-container-lowest": "#ffffff",
+            "secondary-fixed": "#dae2fd",
+            "surface-container": "#e7eeff",
+            "on-secondary-fixed-variant": "#3f465c",
+            "primary-fixed-dim": "#b7c4ff",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container-highest": "#d8e3fb",
+            "on-secondary-container": "#5c647a",
+            "on-error": "#ffffff",
+            "background": "#f9f9ff",
+            "inverse-on-surface": "#ecf1ff",
+            "outline": "#747686",
+            "outline-variant": "#c4c5d7",
+            "secondary-fixed-dim": "#bec6e0",
+            "surface-dim": "#cfdaf2",
+            "on-tertiary": "#ffffff",
+            "on-secondary-fixed": "#131b2e",
+            "inverse-surface": "#263143",
+            "on-surface-variant": "#434655",
+            "on-primary-fixed": "#001551",
+            "on-primary-container": "#cad3ff",
+            "surface-container-high": "#dee8ff",
+            "error-container": "#ffdad6",
+            "on-surface": "#111c2d",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f0f3ff",
+            "primary": "#0037b0",
+            "tertiary-fixed-dim": "#68dba9",
+            "on-primary-fixed-variant": "#0039b5",
+            "tertiary": "#004f35",
+            "secondary-container": "#dae2fd",
+            "error": "#ba1a1a",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dce1ff",
+            "surface-variant": "#d8e3fb",
+            "tertiary-fixed": "#85f8c4",
+            "primary-container": "#1d4ed8",
+            "on-error-container": "#93000a",
+            "on-background": "#111c2d",
+            "inverse-primary": "#b7c4ff",
+            "surface-bright": "#f9f9ff",
+            "tertiary-container": "#006948"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "margin-mobile": "1rem",
+            "space-xl": "2rem",
+            "gutter": "1.5rem",
+            "gutter-mobile": "1rem",
+            "space-sm": "0.5rem",
+            "margin": "2rem",
+            "space-xs": "0.25rem",
+            "space-md": "1rem"
+          },
+          "fontFamily": {
+            "label-md": ["Inter"],
+            "label-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "headline-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "headline-lg-mobile": ["Inter"],
+            "headline-xl": ["Inter"],
+            "headline-sm": ["Inter"],
+            "headline-lg": ["Inter"],
+            "headline-xl-mobile": ["Inter"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"]
+          },
+          "fontSize": {
+            "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.03em", "fontWeight": "600" }],
+            "label-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "body-md": ["16px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "30px", "letterSpacing": "0em", "fontWeight": "600" }],
+            "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["24px", { "lineHeight": "32px", "letterSpacing": "0em", "fontWeight": "700" }],
+            "headline-xl": ["36px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-sm": ["18px", { "lineHeight": "26px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "headline-xl-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "body-sm": ["14px", { "lineHeight": "22px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1;
+    }
+    /* Explicit high-visibility focus ring according to design guidelines */
+    *:focus-visible {
+      outline: 3px solid #1d4ed8 !important;
+      outline-offset: 2px !important;
+    }
+    /* Skip link hidden off-screen until focused */
+    .skip-nav-link:not(:focus) {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md text-body-md antialiased selection:bg-primary selection:text-on-primary">
+<!-- Accessible Skip Navigation Link for Blind & Keyboard-Only Students -->
+<a class="skip-nav-link fixed top-2 left-1/2 -translate-x-1/2 z-50 bg-inverse-surface text-inverse-on-surface px-6 py-3 font-label-md text-label-md rounded border-2 border-primary shadow-lg focus:outline-none focus:ring-4 focus:ring-primary" href="#chat-transcript-area">
+    Skip to AI Conversation Transcript (Alt+C)
+  </a>
+<!-- TopNavBar (Shared Component from JSON) -->
+<header class="bg-surface-container-lowest dark:bg-inverse-surface border-b-2 border-outline-variant dark:border-outline docked full-width top-0 sticky z-40" role="banner">
+<div class="max-w-7xl mx-auto px-margin flex items-center justify-between w-full h-16 min-h-[48px]">
+<!-- Brand Logo Anchor -->
+<div class="flex items-center gap-space-md">
+<a aria-label="ACCESSPREP-X Home Dashboard" class="text-headline-md font-headline-md font-bold tracking-tight text-primary dark:text-inverse-primary focus:outline-none focus:ring-2 focus:ring-primary" href="#home">
+          ACCESSPREP-X
+        </a>
+<span aria-label="Audio accessibility mode enabled" class="inline-flex items-center px-2 py-0.5 rounded text-label-sm font-label-sm bg-tertiary-fixed text-on-tertiary-fixed border border-tertiary">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px] mr-1" data-icon="volume_up">volume_up</span>
+          AUDIO SCREEN READER OPTIMIZED
+        </span>
+</div>
+<!-- Navigation Links (Active mapping: AI Tutor) -->
+<nav aria-label="Main Civil Services Portal Navigation" class="hidden md:flex items-center space-x-6">
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:text-on-surface transition-colors duration-150" href="#dashboard">Dashboard</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:text-on-surface transition-colors duration-150" href="#practice">Practice &amp; Exams</a>
+<!-- ACTIVE: AI Tutor -->
+<a aria-current="page" class="border-b-4 border-primary dark:border-inverse-primary text-primary dark:text-inverse-primary font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary" href="#ai-tutor">AI Tutor</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:text-on-surface transition-colors duration-150" href="#revision">Revision</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:text-on-surface transition-colors duration-150" href="#progress">Progress</a>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-label-md text-label-md pb-1 focus:outline-none focus:ring-2 focus:ring-primary hover:text-on-surface transition-colors duration-150" href="#admin">Admin Console</a>
+</nav>
+<!-- Trailing Action Controls -->
+<div class="flex items-center space-x-3">
+<button accesskey="a" aria-label="Accessibility Settings dialog (Alt plus A)" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-low text-primary border border-outline-variant rounded font-label-sm text-label-sm hover:bg-surface-container focus:outline-none focus:ring-2 focus:ring-primary transition-colors" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]" data-icon="settings_accessibility">settings_accessibility</span>
+          Accessibility (Alt+A)
+        </button>
+<button accesskey="s" aria-label="Keyboard Shortcuts Cheatsheet (Alt plus S)" class="hidden lg:inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-low text-on-surface-variant border border-outline-variant rounded font-label-sm text-label-sm hover:bg-surface-container focus:outline-none focus:ring-2 focus:ring-primary transition-colors" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]" data-icon="keyboard">keyboard</span>
+          Shortcuts (Alt+S)
+        </button>
+<!-- Audio Volume Master Status -->
+<button aria-label="Master audio speech synthesizer output is on. Click to mute audio synthesizer." class="p-2 min-w-[48px] min-h-[48px] flex items-center justify-center text-primary hover:bg-surface-container rounded focus:outline-none focus:ring-2 focus:ring-primary" id="master-mute-btn" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[24px]" data-icon="volume_up">volume_up</span>
+</button>
+<!-- Candidate Profile Icon -->
+<a aria-label="Candidate profile avatar menu: Rajesh Kumar (Blind/Visually Impaired Profile)" class="p-1 min-w-[48px] min-h-[48px] flex items-center justify-center text-secondary hover:bg-surface-container rounded focus:outline-none focus:ring-2 focus:ring-primary" href="#profile">
+<span aria-hidden="true" class="material-symbols-outlined text-[28px]" data-icon="account_circle">account_circle</span>
+</a>
+</div>
+</div>
+</header>
+<!-- Main Work Canvas -->
+<main class="flex-1 max-w-7xl mx-auto w-full px-margin py-space-md flex flex-col gap-space-md">
+<!-- Screen Title & Audio Synthesis Engine Status Bar (Bento Header) -->
+<section aria-labelledby="ai-tutor-heading" class="bg-surface-container-lowest border-2 border-outline-variant rounded p-space-md shadow-none flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="space-y-1">
+<div class="flex items-center gap-2">
+<span aria-hidden="true" class="p-2 bg-primary-fixed text-on-primary-fixed rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" data-icon="smart_toy">smart_toy</span>
+</span>
+<div>
+<h1 class="text-headline-md font-headline-md text-on-surface font-bold tracking-tight" id="ai-tutor-heading">
+              ACCESSPREP-X AI Tutor • Specialized Civil Services Audio Explainer
+            </h1>
+<p class="text-body-sm font-body-sm text-on-surface-variant">
+              Interactive high-contrast voice tutor for SSC Multi-Tasking Staff (MTS) &amp; Civil Services Aspirants
+            </p>
+</div>
+</div>
+</div>
+<!-- Realtime Engine Diagnostics Badges -->
+<div aria-label="System Connection Diagnostics" class="flex flex-wrap items-center gap-2 sm:gap-3" role="status">
+<div class="flex items-center gap-2 bg-surface-container-low border border-outline-variant px-3 py-2 rounded">
+<span aria-hidden="true" class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-tertiary"></span>
+</span>
+<span class="text-label-sm font-label-sm text-tertiary">AI Audio Engine Connected &amp; Ready (Latency: 140ms)</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low border border-outline-variant px-3 py-2 rounded">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[18px]" data-icon="record_voice_over">record_voice_over</span>
+<span class="text-label-sm font-label-sm text-primary">Voice Mode: Conversational Speech Synthesis</span>
+</div>
+</div>
+</section>
+<!-- Session Controls Bar (Topic Switcher, Clear, Audio Export) -->
+<nav aria-label="Session and Chat Management Controls" class="bg-surface-container-low border-2 border-outline-variant rounded p-space-sm flex flex-wrap items-center justify-between gap-space-sm">
+<!-- Current Topic Dropdown / Selector -->
+<div class="flex items-center gap-2">
+<label class="sr-only" for="topic-selector">Change Subject Topic</label>
+<span class="text-label-sm font-label-sm text-on-surface-variant font-bold ml-2">SUBJECT:</span>
+<button aria-expanded="false" aria-haspopup="dialog" class="inline-flex items-center gap-2 px-3 py-2 bg-surface-container-lowest border-2 border-outline rounded text-label-md font-label-md text-on-surface hover:bg-surface-container focus:outline-none focus:ring-4 focus:ring-primary min-h-[48px]" id="topic-selector" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[20px]" data-icon="menu_book">menu_book</span>
+<span>Change Subject Topic (Current: Quantitative Aptitude - Compound Interest Formula)</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]" data-icon="expand_more">expand_more</span>
+</button>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-2">
+<button aria-label="Clear active conversation history" class="inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-lowest border-2 border-outline-variant rounded text-label-md font-label-md text-on-surface-variant hover:bg-surface-container hover:text-on-surface min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary transition-colors" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]" data-icon="delete_sweep">delete_sweep</span>
+          Clear Chat History
+        </button>
+<button aria-label="Export conversation transcript as an accessible DAISY audio file or structured text transcript" class="inline-flex items-center gap-1.5 px-3 py-2 bg-surface-container-lowest border-2 border-outline-variant rounded text-label-md font-label-md text-primary font-bold hover:bg-surface-container min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary transition-colors" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]" data-icon="download">download</span>
+          Export Chat as Accessible Audio / Text
+        </button>
+</div>
+</nav>
+<!-- Error State Component / Live Accessibility Notification Banner -->
+<aside aria-live="assertive" class="bg-error-container border-l-[6px] border-error border-y-2 border-r-2 border-outline-variant p-space-md rounded flex items-start gap-space-md text-on-error-container" role="alert">
+<div aria-hidden="true" class="p-1 bg-on-error text-error rounded flex-shrink-0">
+<span class="material-symbols-outlined text-[24px]" data-icon="warning">warning</span>
+</div>
+<div class="flex-1 flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<h2 class="text-label-lg font-label-lg font-bold text-error">Connection Alert: Audio stream momentarily paused due to slow network.</h2>
+<p class="text-body-sm font-body-sm text-on-surface">
+            Connection Alert: Audio stream momentarily paused due to slow network. Press Alt+Y to retry or switch to text response.
+          </p>
+</div>
+<div class="flex items-center gap-2 flex-shrink-0">
+<button accesskey="y" aria-label="Retry audio stream download (Keyboard shortcut Alt plus Y)" class="px-4 py-2 bg-error text-on-error rounded font-label-md text-label-md hover:bg-on-error-container min-h-[48px] focus:outline-none focus:ring-4 focus:ring-error" type="button">
+            Retry Audio (Alt+Y)
+          </button>
+<button aria-label="Switch directly to silent high-contrast text mode" class="px-3 py-2 bg-surface-container-lowest border border-error text-error rounded font-label-md text-label-md min-h-[48px] hover:bg-surface-container focus:outline-none focus:ring-2 focus:ring-error" type="button">
+            Switch to Text
+          </button>
+</div>
+</div>
+</aside>
+<!-- Main Chat Transcript Container (Linear, high-contrast, fully labeled for screen readers) -->
+<section aria-label="Interactive Learning Conversation Transcript" class="bg-surface-container-lowest border-2 border-outline-variant rounded p-space-md sm:p-space-lg flex flex-col gap-space-lg min-h-[440px] overflow-y-auto" id="chat-transcript-area" tabindex="0">
+<!-- SCREEN READER ORIENTATION HELPER (SR ONLY) -->
+<div class="sr-only">
+        Beginning of message transcript with AI Tutor. Use arrow keys or Tab to move between question prompts, spoken audio controls, and mathematics explanations.
+      </div>
+<!-- MESSAGE 1: Candidate (Student Question) -->
+<article aria-labelledby="msg-1-author" class="w-full flex flex-col items-end gap-1.5">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-on-surface-variant pr-1">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]" data-icon="person">person</span>
+<span class="font-bold" id="msg-1-author">You (Rajesh Kumar) • 10:14 AM</span>
+</div>
+<div class="max-w-2xl bg-secondary-container border-2 border-outline text-on-surface rounded p-space-md flex flex-col gap-2 shadow-none">
+<p class="text-body-lg font-body-lg font-medium leading-relaxed">
+            Can you explain the difference between simple interest and compound interest for 2 years without using complex visual fraction formulas?
+          </p>
+<div class="flex items-center justify-between pt-2 border-t border-outline-variant text-label-sm font-label-sm text-on-secondary-container">
+<span class="inline-flex items-center gap-1 bg-surface-container-lowest px-2 py-1 rounded border border-outline-variant font-bold text-primary">
+<span aria-hidden="true" class="material-symbols-outlined text-[16px]" data-icon="mic">mic</span>
+              Spoken via Voice Input (Alt+M)
+            </span>
+<span class="text-label-sm font-label-sm">Audio Verified • 98% Match</span>
+</div>
+</div>
+</article>
+<!-- MESSAGE 2: AI Tutor (Audio Scribe Bot Response) -->
+<article aria-labelledby="msg-2-author" class="w-full flex flex-col items-start gap-2">
+<div class="flex items-center justify-between w-full max-w-3xl pl-1">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-primary font-bold">
+<span aria-hidden="true" class="p-1 bg-primary text-on-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-[16px]" data-icon="school">school</span>
+</span>
+<span class="text-headline-sm font-headline-sm text-primary" id="msg-2-author">AI Tutor Scribe • 10:15 AM</span>
+</div>
+<!-- Quick Audio Player Widget -->
+<div class="flex items-center gap-2">
+<button accesskey="r" aria-label="Read Response Aloud using synthesized speech (Shortcut Alt plus R)" class="inline-flex items-center gap-1.5 px-3 py-2 bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary min-h-[48px]" id="read-aloud-main-btn" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="play_arrow">play_arrow</span>
+<span>▶ Read Response Aloud (Alt+R)</span>
+</button>
+<div aria-label="Speech playback rate: 1.0x standard" class="hidden sm:inline-flex items-center px-2 py-1.5 bg-surface-container border border-outline-variant rounded font-label-sm text-label-sm text-on-surface">
+              Speed: 1.0x
+            </div>
+</div>
+</div>
+<div class="max-w-3xl w-full bg-surface-container-low border-2 border-primary rounded p-space-md sm:p-space-lg flex flex-col gap-space-md">
+<!-- Audio Visualizer Simulation (Accessible Status) -->
+<div aria-hidden="true" class="flex items-center justify-between p-2 bg-surface-container rounded border border-outline-variant">
+<div class="flex items-center gap-1">
+<span class="w-1.5 h-6 bg-primary rounded-full animate-pulse"></span>
+<span class="w-1.5 h-4 bg-primary rounded-full"></span>
+<span class="w-1.5 h-7 bg-primary rounded-full animate-pulse"></span>
+<span class="w-1.5 h-3 bg-primary rounded-full"></span>
+<span class="w-1.5 h-5 bg-primary rounded-full"></span>
+<span class="ml-2 text-label-sm font-label-sm text-primary font-bold">Speech Audio Synthesizer: Ready to play (Duration: 52 seconds)</span>
+</div>
+<span class="material-symbols-outlined text-primary text-[20px]" data-icon="graphic_eq">graphic_eq</span>
+</div>
+<!-- Structured Explanation for Screen Reader & Low-Vision High Contrast -->
+<div class="space-y-4 text-body-lg font-body-lg text-on-surface leading-relaxed" style="max-width: 75ch;">
+<p>
+              In simple interest, the principal stays unchanged every year. For example, on 1000 rupees at 10%, you earn 100 rupees in year 1 and 100 rupees in year 2. Total interest is 200 rupees.
+            </p>
+<p>
+              In compound interest, interest earns interest. In year 1 you earn 100 rupees. For year 2, the new principal is 1100 rupees, so you earn 110 rupees. Total interest is 210 rupees. The difference of 10 rupees is interest calculated on the first year's interest.
+            </p>
+</div>
+<!-- High-Contrast Shortcut Rule Box -->
+<div aria-label="Key Exam Formula Shortcut" class="bg-surface-container-lowest border-l-4 border-l-primary border-2 border-outline rounded p-space-md" role="region">
+<div class="flex items-center gap-2 mb-1 text-primary">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="lightbulb">lightbulb</span>
+<span class="font-label-lg text-label-lg font-bold">Exam Shortcut:</span>
+</div>
+<p class="text-body-md font-body-md font-semibold text-on-surface">
+              Exam Shortcut: The difference for 2 years equals Principal times Rate squared divided by 10,000.
+            </p>
+<div class="mt-2 text-label-sm font-label-sm text-on-surface-variant bg-surface-container-low p-2 rounded">
+              Formula Audio Description: <span class="italic">Difference equals 'P' multiplied by 'R' squared, over one-zero-zero-zero-zero.</span>
+</div>
+</div>
+<!-- Contextual Quick Actions -->
+<div class="pt-space-sm border-t-2 border-outline-variant flex flex-wrap items-center gap-space-sm">
+<button accesskey="p" aria-label="Practice 3 interactive practice questions based on this 2-year difference formula rule. Shortcut Alt plus P" class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-on-primary rounded font-label-md text-label-md hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary min-h-[48px]" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="assignment_turned_in">assignment_turned_in</span>
+              Practice 3 Questions on This Rule (Alt+P)
+            </button>
+<button aria-label="Ask follow up doubt regarding this calculation to AI Tutor" class="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border-2 border-outline rounded font-label-md text-label-md text-on-surface hover:bg-surface-container min-h-[48px] focus:outline-none focus:ring-4 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="contact_support">contact_support</span>
+              Ask Follow-up Doubt
+            </button>
+<button aria-label="Repeat verbal explanation from start" class="inline-flex items-center gap-1.5 px-3 py-2 text-on-surface-variant hover:text-primary rounded font-label-sm text-label-sm min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]" data-icon="replay">replay</span>
+              Repeat Audio
+            </button>
+</div>
+</div>
+</article>
+<!-- MESSAGE 3: Loading & Processing State Simulation -->
+<article aria-atomic="true" aria-live="polite" class="w-full flex flex-col items-start gap-1">
+<div class="flex items-center gap-2 text-label-sm font-label-sm text-secondary font-bold pl-1">
+<span aria-hidden="true" class="material-symbols-outlined animate-spin text-[18px]" data-icon="progress_activity">progress_activity</span>
+<span>AI Tutor is preparing response...</span>
+</div>
+<div class="max-w-2xl bg-surface-container-high border-2 border-dashed border-outline-variant rounded p-space-md flex flex-col gap-2">
+<div class="flex items-center gap-3">
+<span aria-hidden="true" class="p-2 bg-primary-fixed rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[22px]" data-icon="hearing">hearing</span>
+</span>
+<div class="space-y-0.5">
+<p class="font-label-md text-label-md text-on-surface">
+                Processing your spoken query: "Give me an example with 5% rate..." (Estimated 2 seconds)
+              </p>
+<p class="text-label-sm font-label-sm text-on-surface-variant">
+                Synthesizing step-by-step arithmetic without fractions...
+              </p>
+</div>
+</div>
+<!-- Progress bar for screen reader perception -->
+<div aria-label="AI Speech response generation progress: 65 percent complete" aria-valuemax="100" aria-valuemin="0" aria-valuenow="65" class="w-full bg-outline-variant h-2 rounded-full overflow-hidden mt-1" role="progressbar">
+<div class="bg-primary h-full w-[65%]"></div>
+</div>
+</div>
+</article>
+</section>
+<!-- Docked Accessible Interaction Dock (Input, Voice & Control Matrix) -->
+<section aria-label="Candidate Input and Audio Controls" class="bg-surface-container-lowest border-2 border-outline rounded p-space-md sm:p-space-lg flex flex-col gap-space-md">
+<!-- Primary Voice and Fast Action Cluster (Prominent 48px+ Touch Targets) -->
+<div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-space-md">
+<!-- PROMINENT VOICE ACTION BUTTON (Target for blind candidates) -->
+<button accesskey="m" aria-label="Hold Spacebar or Press Alt plus M to Speak your question using microphone" class="flex-1 inline-flex items-center justify-center gap-3 px-6 py-4 bg-primary text-on-primary rounded font-label-lg text-label-lg hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary min-h-[56px] shadow-sm transition-all active:scale-[0.99]" id="voice-record-btn" type="button">
+<span aria-hidden="true" class="p-1 bg-surface-container-lowest text-primary rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]" data-icon="mic">mic</span>
+</span>
+<span class="font-bold text-headline-sm font-headline-sm">🎙️ Hold Space or Press Alt+M to Speak Question</span>
+</button>
+<!-- Auxiliary Audio Control Bar -->
+<div class="flex flex-wrap items-center gap-2">
+<button accesskey="l" aria-label="Read Last Tutor Response again using screen reader speaker (Shortcut Alt plus L)" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-surface-container-low border-2 border-outline-variant rounded font-label-md text-label-md text-on-surface hover:bg-surface-container min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-primary text-[20px]" data-icon="replay_circle_filled">replay_circle_filled</span>
+            Read Last Tutor Response (Alt+L)
+          </button>
+<button aria-label="Stop all audio playback immediately (Escape key)" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-surface-container-low border-2 border-outline-variant rounded font-label-md text-label-md text-error hover:bg-error-container min-h-[48px] focus:outline-none focus:ring-2 focus:ring-error" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="stop_circle">stop_circle</span>
+            Stop Audio (Escape)
+          </button>
+<button aria-label="Attach Question from Revision History bank" class="inline-flex items-center gap-1.5 px-3 py-2.5 bg-surface-container-low border-2 border-outline-variant rounded font-label-md text-label-md text-on-surface-variant hover:bg-surface-container min-h-[48px] focus:outline-none focus:ring-2 focus:ring-primary" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="playlist_add">playlist_add</span>
+            Attach Question from History
+          </button>
+</div>
+</div>
+<!-- Text Input Form for Keyboard Typing -->
+<form class="w-full flex flex-col sm:flex-row items-stretch gap-2" onsubmit="event.preventDefault(); handleSend();">
+<div class="flex-1 relative">
+<label class="sr-only" for="student-text-input">Type your question or concept doubt here (Press Enter to Send)</label>
+<input aria-describedby="input-keyboard-help" class="w-full bg-surface-container-lowest border-2 border-outline text-on-surface placeholder:text-on-surface-variant font-body-lg text-body-lg px-4 py-3 rounded min-h-[48px] focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary" id="student-text-input" placeholder="Type your question or concept doubt here (Press Enter to Send)..." type="text"/>
+<div class="sr-only" id="input-keyboard-help">
+            Text input field. Type your doubt and press Enter key to send. Or press Escape to cancel.
+          </div>
+</div>
+<button aria-label="Send typed query to AI Scribe Tutor" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-on-primary rounded font-label-lg text-label-lg hover:bg-primary-container focus:outline-none focus:ring-4 focus:ring-primary min-h-[48px]" type="submit">
+<span>Send Question</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[20px]" data-icon="send">send</span>
+</button>
+</form>
+<!-- Keyboard Accessibility Hints & Quick Commands Bar -->
+<div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-outline-variant text-label-sm font-label-sm text-on-surface-variant">
+<div class="flex flex-wrap items-center gap-3">
+<span><strong>Quick Keys:</strong> <kbd class="px-1.5 py-0.5 bg-surface-container border border-outline rounded">Alt+M</kbd> Mic</span>
+<span><kbd class="px-1.5 py-0.5 bg-surface-container border border-outline rounded">Alt+R</kbd> Read Response</span>
+<span><kbd class="px-1.5 py-0.5 bg-surface-container border border-outline rounded">Alt+P</kbd> Practice Questions</span>
+<span><kbd class="px-1.5 py-0.5 bg-surface-container border border-outline rounded">Esc</kbd> Silence Audio</span>
+</div>
+<div class="text-right">
+<span>Screen Reader Mode: <strong>Jaws / NVDA / VoiceOver Compatible</strong></span>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component from JSON) -->
+<footer class="bg-surface-container-low dark:bg-inverse-surface border-t-2 border-outline-variant dark:border-outline docked full-width bottom mt-space-lg" role="contentinfo">
+<div class="max-w-7xl mx-auto px-margin py-space-lg flex flex-col md:flex-row justify-between items-center gap-space-md w-full">
+<!-- Brand & Copyright -->
+<div class="flex flex-col sm:flex-row items-center gap-2 text-center md:text-left">
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface dark:text-inverse-on-surface">
+          ACCESSPREP-X
+        </span>
+<span class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm">
+          © 2025 ACCESSPREP-X. Accessible Civil Services Exam Portal. Compliant with WCAG 2.2 AAA Standards.
+        </span>
+</div>
+<!-- Accessibility & Support Navigation Links -->
+<ul aria-label="Portal Support Links" class="flex flex-wrap items-center justify-center gap-space-md">
+<li>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#audio-help">Audio Help</a>
+</li>
+<li>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#keyboard-guide">Keyboard Guide</a>
+</li>
+<li>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#report-barrier">Report Barrier</a>
+</li>
+<li>
+<a class="text-on-surface-variant dark:text-inverse-on-surface font-body-sm text-body-sm hover:text-primary dark:hover:text-inverse-primary hover:underline focus:outline-none focus:ring-2 focus:ring-primary" href="#privacy">Privacy &amp; Security</a>
+</li>
+<li>
+<a aria-current="page" class="text-primary dark:text-inverse-primary underline font-label-sm focus:outline-none focus:ring-2 focus:ring-primary" href="#screen-reader">Screen Reader Support</a>
+</li>
+</ul>
+</div>
+</footer>
+<!-- Micro-interactions & Audio Hotkey Emulation -->
+<script>
+    // Audio read aloud simulation logic
+    const readBtn = document.getElementById('read-aloud-main-btn');
+    let isSpeaking = false;
+
+    if (readBtn) {
+      readBtn.addEventListener('click', function() {
+        if ('speechSynthesis' in window) {
+          if (isSpeaking) {
+            window.speechSynthesis.cancel();
+            isSpeaking = false;
+            readBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]" aria-hidden="true" data-icon="play_arrow">play_arrow</span><span>▶ Read Response Aloud (Alt+R)</span>';
+          } else {
+            const explanation = "In simple interest, the principal stays unchanged every year. For example, on 1000 rupees at 10 percent, you earn 100 rupees in year 1 and 100 rupees in year 2. Total interest is 200 rupees. In compound interest, interest earns interest. In year 1 you earn 100 rupees. For year 2, the new principal is 1100 rupees, so you earn 110 rupees. Total interest is 210 rupees. The difference of 10 rupees is interest calculated on the first year's interest. Exam shortcut: The difference for 2 years equals Principal times Rate squared divided by 10,000.";
+            const utterance = new SpeechSynthesisUtterance(explanation);
+            utterance.rate = 1.0;
+            utterance.onend = () => {
+              isSpeaking = false;
+              readBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]" aria-hidden="true" data-icon="play_arrow">play_arrow</span><span>▶ Read Response Aloud (Alt+R)</span>';
+            };
+            window.speechSynthesis.speak(utterance);
+            isSpeaking = true;
+            readBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]" aria-hidden="true" data-icon="pause">pause</span><span>⏸ Pause Speech (Alt+R)</span>';
+          }
+        }
+      });
+    }
+
+    // Escape key stops speech
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        isSpeaking = false;
+        if (readBtn) {
+          readBtn.innerHTML = '<span class="material-symbols-outlined text-[20px]" aria-hidden="true" data-icon="play_arrow">play_arrow</span><span>▶ Read Response Aloud (Alt+R)</span>';
+        }
+      }
+    });
+
+    // Handle dummy submission
+    function handleSend() {
+      const input = document.getElementById('student-text-input');
+      if (input && input.value.trim() !== '') {
+        input.value = '';
+        input.placeholder = 'Query received. AI Tutor processing next response...';
+        setTimeout(() => {
+          input.placeholder = 'Type your question or concept doubt here (Press Enter to Send)...';
+        }, 3000);
+      }
+    }
+  </script>
+</body></html>
