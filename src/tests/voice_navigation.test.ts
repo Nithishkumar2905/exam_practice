@@ -646,7 +646,7 @@ test('NavigationController: unrecognized phrase returns helpful fallback', async
 // 16. Registry integrity check
 // ---------------------------------------------------------------------------
 
-test('Voice Registry: all 16 APPROVED_SCREENS have entries in SCREEN_TARGETS', () => {
+test('Voice Registry: all 17 APPROVED_SCREENS have entries in SCREEN_TARGETS', () => {
   for (const screenId of APPROVED_SCREENS) {
     const target = SCREEN_TARGETS[screenId];
     assert.ok(target, `Missing registry entry for screen: ${screenId}`);
@@ -655,7 +655,7 @@ test('Voice Registry: all 16 APPROVED_SCREENS have entries in SCREEN_TARGETS', (
   }
 });
 
-test('Voice Registry: exactly 16 screen targets registered', () => {
+test('Voice Registry: exactly 17 screen targets registered', () => {
   const count = Object.keys(SCREEN_TARGETS).length;
-  assert.equal(count, 16, `Expected 16 SCREEN_TARGETS, got ${count}`);
+  assert.equal(count, 17, `Expected 17 SCREEN_TARGETS, got ${count}`);
 });

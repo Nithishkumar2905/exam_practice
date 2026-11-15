@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS questions (
     difficulty_label VARCHAR(16) NOT NULL CHECK (difficulty_label IN ('Easy', 'Medium', 'Hard')),
     source_name VARCHAR(255) NOT NULL,
     source_reference VARCHAR(255) NOT NULL,
+    source_url TEXT DEFAULT '',
     source_type VARCHAR(64) NOT NULL DEFAULT 'Official Exam Paper',
     verification_status VARCHAR(32) NOT NULL DEFAULT 'Verified' CHECK (verification_status IN ('Verified', 'Pending', 'Rejected')),
     language VARCHAR(32) NOT NULL DEFAULT 'English',
@@ -101,6 +102,47 @@ CREATE TABLE IF NOT EXISTS mock_attempts (
 
 CREATE INDEX IF NOT EXISTS idx_mock_user_time ON mock_attempts(user_id, completed_at DESC);
 
+-- 5A. Mock Examination Question Rotation (non-repeating assignments, backward-compatible additive migration)
+CREATE TABLE IF NOT EXISTS mock_exam_assignments (
+    id VARCHAR(96) PRIMARY KEY,
+    user_id VARCHAR(64) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    sequence_number INTEGER NOT NULL,
+    cycle_number INTEGER NOT NULL DEFAULT 1,
+    status VARCHAR(16) NOT NULL DEFAULT 'IN_PROGRESS' CHECK (status IN ('IN_PROGRESS', 'COMPLETED', 'INVALIDATED')),
+    assigned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    completed_at TIMESTAMPTZ,
+    mock_attempt_id VARCHAR(64),
+    rotation_summary JSONB NOT NULL DEFAULT '{}'::jsonb,
+    UNIQUE (user_id, sequence_number)
+);
+
+CREATE TABLE IF NOT EXISTS mock_exam_cycles (
+    user_id VARCHAR(64) PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+    current_cycle INTEGER NOT NULL DEFAULT 1,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- At most one in-progress mock exam per student (prevents duplicate generation on refresh/double click)
+CREATE UNIQUE INDEX IF NOT EXISTS idx_mock_assignment_one_active
+    ON mock_exam_assignments(user_id) WHERE status = 'IN_PROGRESS';
+
+CREATE TABLE IF NOT EXISTS mock_exam_question_usage (
+    assignment_id VARCHAR(96) NOT NULL REFERENCES mock_exam_assignments(id) ON DELETE CASCADE,
+    user_id VARCHAR(64) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    question_id VARCHAR(64) NOT NULL,
+    subject VARCHAR(128) NOT NULL,
+    position INTEGER NOT NULL,
+    sequence_number INTEGER NOT NULL,
+    assigned_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    attempt_status VARCHAR(16) NOT NULL DEFAULT 'IN_PROGRESS',
+    exam_completed BOOLEAN NOT NULL DEFAULT FALSE,
+    question_submitted BOOLEAN NOT NULL DEFAULT FALSE,
+    PRIMARY KEY (assignment_id, question_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_mock_usage_user_completed
+    ON mock_exam_question_usage(user_id, exam_completed, sequence_number);
+
 -- 6. SuperMemo SM-2 Spaced Repetition Items
 CREATE TABLE IF NOT EXISTS revision_items (
     id VARCHAR(64) PRIMARY KEY,
@@ -138,7 +180,7 @@ CREATE INDEX IF NOT EXISTS idx_mastery_user ON topic_mastery(user_id);
 CREATE TABLE IF NOT EXISTS learning_history (
     id VARCHAR(64) PRIMARY KEY,
     user_id VARCHAR(64) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    type VARCHAR(32) NOT NULL CHECK (type IN ('practice', 'mock_exam', 'ai_tutor', 'revision')),
+    type VARCHAR(32) NOT NULL CHECK (type IN ('practice', 'mock_exam', 'diagnostic', 'ai_tutor', 'revision')),
     title VARCHAR(255) NOT NULL,
     summary TEXT NOT NULL,
     score INTEGER DEFAULT NULL,
@@ -148,3 +190,34 @@ CREATE TABLE IF NOT EXISTS learning_history (
 );
 
 CREATE INDEX IF NOT EXISTS idx_history_user_time ON learning_history(user_id, timestamp DESC);
+
+-- 9. Pilot Demo Diagnostic Attempts
+CREATE TABLE IF NOT EXISTS diagnostic_attempts (
+    id VARCHAR(64) PRIMARY KEY,
+    client_submission_id VARCHAR(128) UNIQUE,
+    user_id VARCHAR(64) NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    exam_title VARCHAR(255) NOT NULL DEFAULT 'SSC MTS Pilot Demo Diagnostic',
+    status VARCHAR(32) NOT NULL DEFAULT 'completed' CHECK (status IN ('completed', 'in_progress')),
+    total_questions INTEGER NOT NULL DEFAULT 20,
+    attempted_count INTEGER NOT NULL DEFAULT 0,
+    correct_count INTEGER NOT NULL DEFAULT 0,
+    incorrect_count INTEGER NOT NULL DEFAULT 0,
+    unanswered_count INTEGER NOT NULL DEFAULT 0,
+    session1_score INTEGER NOT NULL DEFAULT 0,
+    session2_score INTEGER NOT NULL DEFAULT 0,
+    total_score INTEGER NOT NULL DEFAULT 0,
+    total_max INTEGER NOT NULL DEFAULT 60,
+    percentage NUMERIC(5,2) NOT NULL DEFAULT 0.00,
+    accuracy_percentage NUMERIC(5,2) NOT NULL DEFAULT 0.00,
+    total_time_seconds INTEGER NOT NULL DEFAULT 0,
+    responses JSONB NOT NULL DEFAULT '[]'::jsonb,
+    subject_breakdown JSONB NOT NULL DEFAULT '[]'::jsonb,
+    topic_breakdown JSONB NOT NULL DEFAULT '[]'::jsonb,
+    acceptance_status VARCHAR(32) NOT NULL DEFAULT 'ACCEPTED',
+    acceptance_method VARCHAR(32) NOT NULL DEFAULT 'CHECKBOX' CHECK (acceptance_method IN ('VOICE', 'CHECKBOX', 'KEYBOARD')),
+    accepted_at TIMESTAMPTZ,
+    exam_started_at TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_diagnostic_user_time ON diagnostic_attempts(user_id, completed_at DESC);

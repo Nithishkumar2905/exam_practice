@@ -195,26 +195,26 @@ export const AiTutorScreen: React.FC = () => {
   ]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-6xl mx-auto px-4 py-6 space-y-6">
       {/* Screen Title */}
-      <div className="mb-6 border-b border-slate-300 dark:border-slate-700 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/60 px-3 py-1 rounded-sm border border-blue-200 dark:border-blue-800">
+      <div className="bg-white border border-[#E8EBF0] rounded-xl p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xs">
+        <div className="space-y-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[#1749E8] bg-[#EEF4FF] px-3 py-1 rounded-full border border-[#D0DEFF]">
               <Sparkles className="w-3.5 h-3.5" aria-hidden="true" />
-              Screen 9 of 16 • Accessible AI Tutor
+              <span>Screen 9 of 17 · Accessible AI Tutor</span>
             </div>
             {isBlindMode && (
-              <span className="text-xs px-2 py-0.5 bg-amber-100 text-amber-900 border border-amber-300 font-bold rounded-md flex items-center gap-1">
-                <Mic className="w-3 h-3 text-red-600 animate-pulse" />
+              <span className="text-xs px-2.5 py-0.5 bg-amber-50 text-[#B45309] border border-amber-200 font-bold rounded-full flex items-center gap-1">
+                <Mic className="w-3 h-3 text-[#DC2626] animate-pulse" aria-hidden="true" />
                 Hands-Free Voice Dialogue Active
               </span>
             )}
           </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 dark:text-white mt-1">
+          <h1 className="text-2xl font-extrabold text-[#172033]">
             SSC MTS AI Scribe &amp; Subject Tutor
           </h1>
-          <p className="text-sm text-slate-600 dark:text-slate-300">
+          <p className="text-xs sm:text-sm text-[#64748B]">
             Structured step-by-step conceptual explanations aligned with the official Staff Selection Commission syllabus.
           </p>
         </div>
@@ -229,16 +229,16 @@ export const AiTutorScreen: React.FC = () => {
       {/* Main Grid: Subject Select & Chat Log */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Left Sidebar: Topic context & suggested prompts */}
-        <aside className="lg:col-span-1 space-y-5" aria-label="Tutor Subject Selector">
-          <div className="bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-sm p-4 shadow-sm">
-            <label htmlFor="topic-select" className="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">
+        <aside className="lg:col-span-1 space-y-4" aria-label="Tutor Subject Selector">
+          <div className="bg-white border border-[#E8EBF0] rounded-xl p-4 shadow-2xs">
+            <label htmlFor="topic-select" className="block text-[11px] font-bold uppercase tracking-wider text-[#64748B] mb-2">
               Current Syllabus Subject
             </label>
             <select
               id="topic-select"
               value={selectedTopic}
               onChange={(e) => setSelectedTopic(e.target.value)}
-              className="w-full text-sm font-semibold p-2.5 rounded-sm bg-slate-50 dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-3 focus:ring-blue-600 text-slate-900 dark:text-white"
+              className="w-full text-xs sm:text-sm font-semibold p-2.5 rounded-lg bg-[#F8F9FB] border border-[#D9E1EF] focus:outline-none focus:ring-2 focus:ring-[#1749E8] text-[#172033]"
             >
               <option value="Numerical and Mathematical Ability">Numerical &amp; Math Ability (Session I)</option>
               <option value="Reasoning Ability and Problem Solving">Reasoning &amp; Problem Solving (Session I)</option>
@@ -247,18 +247,19 @@ export const AiTutorScreen: React.FC = () => {
             </select>
           </div>
 
-          <div className="bg-blue-50 dark:bg-slate-900/80 border border-blue-200 dark:border-blue-900 rounded-sm p-4">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-blue-900 dark:text-blue-300 flex items-center gap-1.5 mb-3">
-              <Lightbulb className="w-4 h-4 text-blue-600 dark:text-blue-400" aria-hidden="true" />
-              Frequently Asked MTS Queries
+          <div className="bg-white border border-[#E8EBF0] rounded-xl p-4 shadow-2xs">
+            <h2 className="text-[11px] font-bold uppercase tracking-wider text-[#1749E8] flex items-center gap-1.5 mb-3">
+              <Lightbulb className="w-4 h-4 text-[#1749E8]" aria-hidden="true" />
+              <span>Frequently Asked MTS Queries</span>
             </h2>
             <div className="space-y-2">
               {sampleQuestions.map((q, idx) => (
                 <button
                   key={idx}
+                  type="button"
                   onClick={() => handleSend(q)}
                   disabled={loading}
-                  className="w-full text-left text-xs font-medium p-2.5 rounded-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-blue-600 hover:text-blue-700 dark:hover:text-blue-300 transition-colors focus:ring-2 focus:ring-blue-600"
+                  className="w-full text-left text-xs font-medium p-2.5 rounded-lg bg-[#F8F9FB] text-[#172033] border border-[#E8EBF0] hover:border-[#1749E8] hover:bg-[#EEF4FF] hover:text-[#1749E8] transition-colors focus:ring-2 focus:ring-[#1749E8]"
                 >
                   "{q}"
                 </button>
@@ -266,19 +267,19 @@ export const AiTutorScreen: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-4 bg-slate-100 dark:bg-slate-800/60 border border-slate-300 dark:border-slate-700 rounded-sm text-xs space-y-2">
-            <div className="font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-              <CheckCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              Voice-First Supported
+          <div className="p-4 bg-[#EEF4FF]/60 border border-[#D0DEFF] rounded-xl text-xs space-y-1.5">
+            <div className="font-bold text-[#172033] flex items-center gap-1.5">
+              <CheckCircle className="w-3.5 h-3.5 text-[#15803D]" aria-hidden="true" />
+              <span>Voice-First Supported</span>
             </div>
-            <p className="text-slate-600 dark:text-slate-400">
+            <p className="text-[#53627A] leading-relaxed">
               Speak your doubt hands-free. The AI tutor listens automatically, explains concepts, and speaks answers aloud.
             </p>
           </div>
         </aside>
 
         {/* Chat Window */}
-        <section className="lg:col-span-3 flex flex-col bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-sm shadow-sm min-h-[550px]" aria-label="Conversation Log">
+        <section className="lg:col-span-3 flex flex-col bg-white border border-[#E8EBF0] rounded-xl shadow-2xs min-h-[550px] overflow-hidden" aria-label="Conversation Log">
           {/* Chat Messages */}
           <div className="flex-1 p-4 md:p-6 space-y-4 overflow-y-auto max-h-[500px]" role="log" aria-live="polite">
             {messages.map((msg, idx) => (
@@ -286,24 +287,24 @@ export const AiTutorScreen: React.FC = () => {
                 key={msg.id}
                 className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
               >
-                <div className="flex items-center gap-2 mb-1 text-xs text-slate-500 dark:text-slate-400">
-                  <span className="font-bold text-slate-700 dark:text-slate-300">
+                <div className="flex items-center gap-2 mb-1 text-xs text-[#64748B]">
+                  <span className="font-bold text-[#172033]">
                     {msg.sender === 'user' ? 'Candidate' : 'AI Tutor'}
                   </span>
                   <span>•</span>
                   <span>{msg.timestamp}</span>
                   {msg.topic && (
-                    <span className="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 text-[10px] rounded font-medium border border-slate-200 dark:border-slate-700">
+                    <span className="px-2 py-0.5 bg-[#EEF4FF] text-[#1749E8] text-[10px] rounded-full font-semibold border border-[#D0DEFF]">
                       {msg.topic}
                     </span>
                   )}
                 </div>
 
                 <div
-                  className={`max-w-[85%] rounded-sm p-4 text-sm font-medium leading-relaxed whitespace-pre-wrap ${
+                  className={`max-w-[85%] rounded-xl p-4 text-sm font-medium leading-relaxed whitespace-pre-wrap ${
                     msg.sender === 'user'
-                      ? 'bg-blue-700 text-white'
-                      : 'bg-slate-50 dark:bg-slate-800/90 text-slate-900 dark:text-slate-100 border border-slate-200 dark:border-slate-700'
+                      ? 'bg-[#1749E8] text-white'
+                      : 'bg-[#F8F9FB] text-[#172033] border border-[#E8EBF0]'
                   }`}
                 >
                   {msg.text}
@@ -311,6 +312,7 @@ export const AiTutorScreen: React.FC = () => {
 
                 {msg.sender === 'tutor' && (
                   <button
+                    type="button"
                     onClick={() => speakText(msg.text)}
                     data-action={
                       !messages.slice(idx + 1).some((m) => m.sender === 'tutor')
@@ -318,24 +320,25 @@ export const AiTutorScreen: React.FC = () => {
                         : undefined
                     }
                     aria-label={`Listen to tutor response: ${msg.text.slice(0, 40)}`}
-                    className="mt-1 text-xs font-semibold text-blue-700 dark:text-blue-300 hover:underline inline-flex items-center gap-1 focus:ring-2 focus:ring-blue-600 rounded"
+                    className="mt-1.5 text-xs font-bold text-[#1749E8] hover:underline inline-flex items-center gap-1 focus:ring-2 focus:ring-[#1749E8] rounded px-1"
                   >
-                    🔊 Listen to explanation
+                    <span aria-hidden="true">🔊</span>
+                    <span>Listen to explanation</span>
                   </button>
                 )}
               </div>
             ))}
 
             {loading && (
-              <div className="flex items-center gap-3 text-slate-600 dark:text-slate-300 p-3 bg-slate-50 dark:bg-slate-800 rounded-sm border border-slate-200 dark:border-slate-700 animate-pulse">
-                <Bot className="w-5 h-5 text-blue-600 animate-spin" />
+              <div className="flex items-center gap-3 text-[#53627A] p-3.5 bg-[#F8F9FB] rounded-xl border border-[#E8EBF0] animate-pulse">
+                <Bot className="w-5 h-5 text-[#1749E8] animate-spin" aria-hidden="true" />
                 <span className="text-sm font-semibold">Tutor is analyzing syllabus concepts &amp; drafting explanation...</span>
               </div>
             )}
           </div>
 
           {/* Input Box with Voice Input */}
-          <div className="p-4 border-t border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/60">
+          <div className="p-4 border-t border-[#E8EBF0] bg-[#F8F9FB]">
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -351,7 +354,7 @@ export const AiTutorScreen: React.FC = () => {
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="Ask any question, formula, or concept doubt..."
                     disabled={loading}
-                    className="w-full p-3 text-sm rounded-sm bg-white dark:bg-slate-900 border-2 border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white focus:outline-none focus:ring-3 focus:ring-blue-600"
+                    className="w-full p-3 text-sm rounded-lg bg-white border border-[#D9E1EF] text-[#172033] placeholder:text-[#64748B] focus:outline-none focus:ring-2 focus:ring-[#1749E8]"
                     aria-label="Ask AI Tutor"
                   />
                 </div>
@@ -367,7 +370,7 @@ export const AiTutorScreen: React.FC = () => {
                   <button
                     type="submit"
                     disabled={loading || !inputText.trim()}
-                    className="px-5 py-3 rounded-sm font-bold text-sm bg-blue-700 hover:bg-blue-800 text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-3 focus:ring-blue-600 transition-colors shadow-sm"
+                    className="px-5 py-3 rounded-lg font-bold text-sm bg-[#1749E8] hover:bg-[#123BB8] text-white disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-[#1749E8] transition-colors shadow-xs"
                   >
                     <Send className="w-4 h-4" aria-hidden="true" />
                     <span>Send</span>
@@ -375,9 +378,9 @@ export const AiTutorScreen: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+              <div className="flex items-center justify-between text-xs text-[#64748B]">
                 <span>Tip: Press Enter to submit. Use microphone for voice questions.</span>
-                <span className="font-mono font-bold text-blue-700 dark:text-blue-300">Alt+T Focus Chat</span>
+                <span className="font-mono font-bold text-[#1749E8]">Alt+T Focus Chat</span>
               </div>
             </form>
           </div>

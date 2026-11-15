@@ -42,7 +42,7 @@ function buildSpokenScreenInfo(screenId: ScreenId): string {
 function buildHelpNavigation(user: User | null): string {
   const isAdmin = user?.role === 'admin';
   const candidateScreens = [
-    'Dashboard', 'Explore Subjects', 'Voice Practice', 'Mock Examination',
+    'Dashboard', 'Explore Subjects', 'Voice Practice', 'Pilot Demo Diagnostic', 'Mock Examination',
     'AI Tutor', 'Revision Planner', 'Progress Analytics', 'Topic Mastery',
     'Learning History', 'Accessibility Settings'
   ];
@@ -105,7 +105,8 @@ export class NavigationController {
    */
   async processTranscript(
     rawTranscript: string,
-    activeVoiceHandler?: ((t: string) => boolean | Promise<boolean>) | null
+    activeVoiceHandler?: ((t: string, meta?: { confidence?: number }) => boolean | Promise<boolean>) | null,
+    meta?: { confidence?: number }
   ): Promise<NavigationCommandResult> {
     const clean = cleanVoiceTranscript(rawTranscript);
     const normalized = normalizePhonetics(clean);
@@ -154,7 +155,7 @@ export class NavigationController {
     // ───────────────────────────────────────────
     if (activeVoiceHandler) {
       try {
-        const handled = await activeVoiceHandler(rawTranscript);
+        const handled = await activeVoiceHandler(rawTranscript, meta);
         if (handled) {
           return { ...base, status: 'local_handled', spokenResponse: '' };
         }
@@ -208,7 +209,7 @@ export class NavigationController {
 
     if (
       this.context.isExamActive &&
-      this.context.currentScreen === 'mock_exam' &&
+      (this.context.currentScreen === 'mock_exam' || this.context.currentScreen === 'pilot_demo') &&
       (isNavigationAttempt || (isLogout && this.context.isExamActive))
     ) {
       const destinationTitle = isNavigationAttempt

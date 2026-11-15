@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Volume2,
   VolumeX,
@@ -15,7 +15,8 @@ import {
   X,
   LogIn,
   Mic,
-  Bell
+  Bell,
+  SlidersHorizontal
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext.tsx';
 import { APPROVED_SCREENS, SCREEN_REGISTRY } from '../types/screens.ts';
@@ -37,12 +38,60 @@ export function Header() {
     toggleMobileNav,
     isBlindMode,
     toggleBlindMode,
-    isVoiceListening
+    isVoiceListening,
+    wakeWordState,
+    speechRate,
+    speechPitch,
+    speechVolume,
+    selectedVoiceURI,
+    availableVoices,
+    updateSpeechRate,
+    updateSpeechPitch,
+    updateSpeechVolume,
+    updateSelectedVoice,
+    testVoice
   } = useAccessibility();
 
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showAudioControls, setShowAudioControls] = useState(false);
+  const audioPopoverRef = useRef<HTMLDivElement | null>(null);
+  const audioTriggerRef = useRef<HTMLButtonElement | null>(null);
+
+  const closeAudioControls = () => {
+    setShowAudioControls(false);
+    stopSpeaking();
+    audioTriggerRef.current?.focus();
+  };
+
+  useEffect(() => {
+    if (!showAudioControls) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        setShowAudioControls(false);
+        stopSpeaking();
+        audioTriggerRef.current?.focus();
+      }
+    };
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        audioPopoverRef.current &&
+        !audioPopoverRef.current.contains(e.target as Node) &&
+        !audioTriggerRef.current?.contains(e.target as Node)
+      ) {
+        setShowAudioControls(false);
+        stopSpeaking();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showAudioControls, stopSpeaking]);
 
   const currentMeta = SCREEN_REGISTRY[currentScreen];
   const screenIndex = APPROVED_SCREENS.indexOf(currentScreen) + 1;
@@ -173,14 +222,14 @@ export function Header() {
           </button>
         </div>
 
-        {/* Center: Strict 16-Screen Indicator Badge (Desktop) */}
+        {/* Center: Screen Indicator Badge (Desktop) */}
         <div className="hidden xl:flex items-center gap-2 px-3 py-1 bg-[#EEF4FF] rounded-lg border border-[#D9E1EF]">
           <Layers className="w-4 h-4 text-[#1749E8]" />
           <span className="text-xs font-semibold text-[#172033]">
-            Screen {screenIndex} of 16:
+            Screen {screenIndex} of {APPROVED_SCREENS.length}:
           </span>
-          <span className="text-xs font-bold text-[#6241C8] max-w-[200px] truncate" title={currentMeta.title}>
-            {currentMeta.shortLabel}
+          <span className="text-xs font-bold text-[#6241C8] max-w-[200px] truncate" title={currentMeta?.title}>
+            {currentMeta?.shortLabel || currentScreen}
           </span>
         </div>
 
@@ -188,13 +237,13 @@ export function Header() {
         <div className="flex items-center gap-2 sm:gap-3">
           {/* Accessibility Quick Controls (Integrated cleanly) */}
           <div className="flex items-center gap-1.5 bg-[#F8FAFC] p-1 rounded-lg border border-[#D9E1EF]">
-            {/* Hands-Free Blind Mode Toggle */}
+            {/* Hands-Free Vision Mode Toggle */}
             <button
               type="button"
               onClick={toggleBlindMode}
               aria-pressed={isBlindMode}
-              aria-label={isBlindMode ? 'Hands-Free Blind Mode is ON. Click to disable.' : 'Hands-Free Blind Mode is OFF. Click to enable.'}
-              title="Toggle Hands-Free Blind Assistant Mode (Alt+B)"
+              aria-label={isBlindMode ? 'Hands-Free Vision Mode is ON. Click to disable.' : 'Hands-Free Vision Mode is OFF. Click to enable.'}
+              title="Toggle Hands-Free Vision Assistant Mode (Alt+B)"
               className={`px-2.5 py-1 rounded text-xs font-bold flex items-center gap-1.5 border transition-colors ${
                 isBlindMode
                   ? 'bg-amber-400 text-slate-950 border-amber-600 shadow-xs ring-2 ring-amber-400'
@@ -202,8 +251,23 @@ export function Header() {
               }`}
             >
               <Mic className={`w-3.5 h-3.5 ${isBlindMode && isVoiceListening ? 'text-red-700 animate-pulse' : ''}`} />
-              <span>{isBlindMode ? 'Blind Mode: ON' : 'Blind Mode'}</span>
+              <span>{isBlindMode ? 'Vision Mode: ON' : 'Vision Mode'}</span>
             </button>
+            {isBlindMode && (
+              <span
+                role="status"
+                aria-live="polite"
+                title="Microphone is in local wake-word standby for 'Hey Vision'. Commands activate only after speaking the wake word."
+                className="hidden xl:inline-flex items-center gap-1 px-2 py-1 text-[11px] font-semibold rounded bg-emerald-50 text-emerald-800 border border-emerald-200"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600" aria-hidden="true" />
+                <span>
+                  {wakeWordState === 'COMMAND_LISTENING' || wakeWordState === 'ASSISTANT_ACTIVE'
+                    ? 'Vision Listening'
+                    : 'Wake Word: Hey Vision'}
+                </span>
+              </span>
+            )}
 
             {/* Font Scaler */}
             <div className="flex items-center gap-0.5 bg-white px-1.5 py-0.5 rounded border border-[#D9E1EF] text-xs font-bold text-slate-800">
@@ -265,6 +329,156 @@ export function Header() {
               <Eye className="w-3.5 h-3.5 text-[#1749E8]" />
               <span className="capitalize hidden lg:inline">{settings.theme.replace('_', ' ')}</span>
             </button>
+
+            {/* Global Voice Audio Controls Popover Trigger */}
+            <div className="relative">
+              <button
+                ref={audioTriggerRef}
+                type="button"
+                onClick={() => {
+                  if (showAudioControls) {
+                    closeAudioControls();
+                  } else {
+                    setShowAudioControls(true);
+                  }
+                }}
+                aria-expanded={showAudioControls}
+                aria-haspopup="dialog"
+                aria-label="Voice Audio Controls"
+                title="Adjust speech rate, pitch, volume and voice."
+                className={`px-2 py-1 rounded text-xs font-semibold flex items-center gap-1 border transition-colors focus:ring-2 focus:ring-blue-600 focus:outline-none ${
+                  showAudioControls
+                    ? 'bg-[#EEF4FF] text-[#1749E8] border-[#1749E8]'
+                    : 'bg-white text-slate-700 border-[#D9E1EF] hover:bg-[#EEF4FF] hover:text-[#1749E8]'
+                }`}
+              >
+                <SlidersHorizontal className="w-3.5 h-3.5 text-[#1749E8]" aria-hidden="true" />
+                <span className="hidden xl:inline">Audio</span>
+              </button>
+
+              {showAudioControls && (
+                <div
+                  ref={audioPopoverRef}
+                  role="dialog"
+                  aria-label="Voice Audio Controls"
+                  className="absolute right-0 mt-2 w-80 max-w-[90vw] bg-white border border-[#D9E1EF] rounded-xl shadow-xl p-4 z-50 space-y-3.5 text-left"
+                >
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                    <h2 className="text-xs font-extrabold text-[#172033] flex items-center gap-1.5">
+                      <Volume2 className="w-4 h-4 text-[#1749E8]" aria-hidden="true" />
+                      <span>Voice Audio Controls</span>
+                    </h2>
+                    <button
+                      type="button"
+                      onClick={closeAudioControls}
+                      aria-label="Close Voice Audio Controls"
+                      className="p-1 rounded text-slate-500 hover:bg-slate-100 focus:ring-2 focus:ring-blue-600"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+
+                  {/* Speech Rate */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <label htmlFor="audio-rate-slider" className="font-bold text-[#172033]">
+                        Speech Rate
+                      </label>
+                      <span className="font-mono font-bold text-[#1749E8]">{speechRate.toFixed(1)}x</span>
+                    </div>
+                    <input
+                      id="audio-rate-slider"
+                      type="range"
+                      min={0.5}
+                      max={2.0}
+                      step={0.1}
+                      value={speechRate}
+                      onChange={(e) => updateSpeechRate(parseFloat(e.target.value))}
+                      className="w-full accent-[#1749E8] cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Speech Pitch */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <label htmlFor="audio-pitch-slider" className="font-bold text-[#172033]">
+                        Speech Pitch
+                      </label>
+                      <span className="font-mono font-bold text-[#1749E8]">{speechPitch.toFixed(1)}</span>
+                    </div>
+                    <input
+                      id="audio-pitch-slider"
+                      type="range"
+                      min={0.5}
+                      max={1.5}
+                      step={0.1}
+                      value={speechPitch}
+                      onChange={(e) => updateSpeechPitch(parseFloat(e.target.value))}
+                      className="w-full accent-[#1749E8] cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Speech Volume */}
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-xs">
+                      <label htmlFor="audio-volume-slider" className="font-bold text-[#172033]">
+                        Speech Volume
+                      </label>
+                      <span className="font-mono font-bold text-[#1749E8]">{speechVolume}%</span>
+                    </div>
+                    <input
+                      id="audio-volume-slider"
+                      type="range"
+                      min={0}
+                      max={100}
+                      step={1}
+                      value={speechVolume}
+                      onChange={(e) => updateSpeechVolume(parseInt(e.target.value, 10))}
+                      className="w-full accent-[#1749E8] cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Voice Selector */}
+                  <div className="space-y-1">
+                    <label htmlFor="audio-voice-select" className="block text-xs font-bold text-[#172033]">
+                      System Voice
+                    </label>
+                    <select
+                      id="audio-voice-select"
+                      value={selectedVoiceURI}
+                      onChange={(e) => updateSelectedVoice(e.target.value)}
+                      className="w-full px-2.5 py-1.5 text-xs bg-white border border-[#D9E1EF] rounded-lg text-[#172033] focus:border-[#1749E8] focus:ring-2 focus:ring-blue-600 focus:outline-none"
+                    >
+                      <option value="default">Browser Default Voice</option>
+                      {availableVoices.map((v) => (
+                        <option key={v.voiceURI} value={v.voiceURI}>
+                          {v.name} ({v.lang})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Test Voice */}
+                  <div className="pt-1 flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={testVoice}
+                      className="flex-1 px-3 py-2 text-xs font-bold text-white bg-[#1749E8] hover:bg-[#123BB8] rounded-lg inline-flex items-center justify-center gap-1.5 focus:ring-2 focus:ring-blue-600"
+                    >
+                      <Volume2 className="w-3.5 h-3.5" aria-hidden="true" />
+                      <span>Test Voice</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={stopSpeaking}
+                      className="px-3 py-2 text-xs font-bold text-[#172033] bg-slate-100 hover:bg-slate-200 border border-[#D9E1EF] rounded-lg focus:ring-2 focus:ring-blue-600"
+                    >
+                      Stop
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
 
             {/* Keyboard Shortcuts Trigger */}
             <button
@@ -433,7 +647,7 @@ export function Header() {
 
             <div className="space-y-2.5 text-xs text-slate-800">
               <div className="flex items-center justify-between p-2 bg-amber-50 rounded border border-amber-200">
-                <span className="font-semibold text-amber-950">Toggle Hands-Free Blind Assistant Mode</span>
+                <span className="font-semibold text-amber-950">Toggle Hands-Free Vision Assistant Mode</span>
                 <kbd className="px-2 py-1 bg-amber-200 text-amber-950 rounded font-mono font-bold">Alt + B</kbd>
               </div>
               <div className="flex items-center justify-between p-2 bg-slate-50 rounded border border-slate-200">

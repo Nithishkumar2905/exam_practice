@@ -4,6 +4,15 @@ import { User, AccessibilitySettings } from '../db/database.ts';
 import { audioBeacon } from '../utils/audioBeacon.ts';
 import { NavigationController } from '../voice/NavigationController.ts';
 import { NavigationContext } from '../voice/commandTypes.ts';
+import { matchWakeWord, WakeWordLifecycleState } from '../voice/wakeWord.ts';
+import {
+  VoicePreferences,
+  loadVoicePreferences,
+  saveVoicePreferences,
+  clampSpeechRate,
+  clampSpeechPitch,
+  clampSpeechVolume
+} from '../utils/voicePreferences.ts';
 
 export type ThemeMode = 'default' | 'sapphire' | 'high-contrast-yellow' | 'monochrome' | 'soft-dark';
 export type FontSize = 'normal' | 'large' | 'xlarge' | 'xxlarge';
@@ -43,19 +52,34 @@ export interface AccessibilityContextType {
   setDyslexiaFont: (d: boolean) => void;
   speechRate: number;
   setSpeechRate: (r: number) => void;
+  speechPitch: number;
+  speechVolume: number;
+  selectedVoiceURI: string;
+  availableVoices: SpeechSynthesisVoice[];
+  updateSpeechRate: (value: number) => void;
+  updateSpeechPitch: (value: number) => void;
+  updateSpeechVolume: (value: number) => void;
+  updateSelectedVoice: (uri: string) => void;
+  testVoice: () => void;
   compensatoryTime: boolean;
   setCompensatoryTime: (c: boolean) => void;
   whisperModel: 'tiny' | 'base' | 'small';
   setWhisperModel: (m: 'tiny' | 'base' | 'small') => void;
+  resetDefaults: () => void;
 
-  // Autonomous Hands-Free Blind Mode & Voice Command Engine
+  // Autonomous Hands-Free Vision Mode & Voice Command Engine
   isBlindMode: boolean;
   setIsBlindMode: (enabled: boolean) => void;
   toggleBlindMode: () => void;
+  isVisionMode: boolean;
+  setIsVisionMode: (enabled: boolean) => void;
+  toggleVisionMode: () => void;
+  wakeWordState: WakeWordLifecycleState;
   isVoiceListening: boolean;
+  micPermissionStatus: 'unknown' | 'granted' | 'denied' | 'unsupported';
   startVoiceListening: () => void;
   stopVoiceListening: () => void;
-  registerVoiceHandler: (handler: (transcript: string) => boolean | Promise<boolean>) => () => void;
+  registerVoiceHandler: (handler: (transcript: string, meta?: { confidence?: number }) => boolean | Promise<boolean>) => () => void;
   playBeacon: (type?: 'listening' | 'success' | 'alert') => void;
 
   // Global Voice Navigation Controller
@@ -107,6 +131,9 @@ function getSavedSessionUser(): User | null {
   return null;
 }
 
+// Global reference set to protect SpeechSynthesisUtterance from Chromium V8 garbage collection freeze on Windows
+const activeUtterances = new Set<SpeechSynthesisUtterance>();
+
 export function AccessibilityProvider({ children }: { children: ReactNode }) {
   // Determine initial screen based on authentication status and URL hash
   const getInitialScreen = (): ScreenId => {
@@ -136,21 +163,33 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [activeAnnouncement, setActiveAnnouncement] = useState<{ message: string; priority: 'polite' | 'assertive' } | null>(null);
 
-  // Blind Mode State
+  // Vision Mode State (with backward-compatible accessprep_blind_mode fallback)
   const [isBlindMode, setIsBlindModeState] = useState<boolean>(() => {
     try {
       const savedUser = getSavedSessionUser();
-      const localFlag = localStorage.getItem('accessprep_blind_mode');
-      if (localFlag !== null) return localFlag === 'true';
+      const visionFlag = localStorage.getItem('accessprep_vision_mode');
+      if (visionFlag !== null) return visionFlag === 'true';
+      const legacyFlag = localStorage.getItem('accessprep_blind_mode');
+      if (legacyFlag !== null) return legacyFlag === 'true';
       if (savedUser?.pwdCategory === 'Visually Impaired' || savedUser?.needScribe) return true;
       return false;
     } catch {
       return false;
     }
   });
+  const [wakeWordState, setWakeWordState] = useState<WakeWordLifecycleState>(() =>
+    isBlindMode || currentScreen === 'login' ? 'WAKE_WORD_STANDBY' : 'DISABLED'
+  );
+  const wakeWordStateRef = useRef<WakeWordLifecycleState>(wakeWordState);
+  const updateWakeWordState = useCallback((next: WakeWordLifecycleState) => {
+    wakeWordStateRef.current = next;
+    setWakeWordState(next);
+  }, []);
+  const commandWindowTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Voice Engine State
   const [isVoiceListening, setIsVoiceListening] = useState(false);
+  const [micPermissionStatus, setMicPermissionStatus] = useState<'unknown' | 'granted' | 'denied' | 'unsupported'>('unknown');
 
   // Exam activity guard state — set by MockExamScreen on exam start/finish
   const [isExamActive, setIsExamActiveState] = useState(false);
@@ -172,7 +211,7 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
 
   const recognitionRef = useRef<any>(null);
   const silenceTimerRef = useRef<any>(null);
-  const activeVoiceHandlerRef = useRef<((transcript: string) => boolean | Promise<boolean>) | null>(null);
+  const activeVoiceHandlerRef = useRef<((transcript: string, meta?: { confidence?: number }) => boolean | Promise<boolean>) | null>(null);
   const isManuallyStoppedRef = useRef<boolean>(false);
   const currentScreenRef = useRef<ScreenId>(currentScreen);
   currentScreenRef.current = currentScreen;
@@ -214,14 +253,16 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     });
   }, [user?.id]);
 
-  // Set Blind Mode with persistence
+  // Set Vision Mode with dual-key localStorage persistence for backward compatibility
   const setIsBlindMode = useCallback((enabled: boolean) => {
     setIsBlindModeState(enabled);
+    updateWakeWordState(enabled ? 'WAKE_WORD_STANDBY' : 'DISABLED');
     try {
+      localStorage.setItem('accessprep_vision_mode', String(enabled));
       localStorage.setItem('accessprep_blind_mode', String(enabled));
     } catch {}
     updateSettings({ isBlindMode: enabled, autoReadAloud: enabled });
-  }, [updateSettings]);
+  }, [updateSettings, updateWakeWordState]);
 
   const toggleBlindMode = useCallback(() => {
     setIsBlindMode(!isBlindMode);
@@ -236,10 +277,49 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timer);
   }, []);
 
+  const [voicePrefs, setVoicePrefs] = useState<VoicePreferences>(() => loadVoicePreferences());
+  const voicePrefsRef = useRef<VoicePreferences>(voicePrefs);
+  voicePrefsRef.current = voicePrefs;
+  const [availableVoices, setAvailableVoices] = useState<SpeechSynthesisVoice[]>([]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    const syncVoices = () => {
+      const list = window.speechSynthesis.getVoices() || [];
+      if (list.length > 0) {
+        setAvailableVoices(list);
+      }
+    };
+    syncVoices();
+    try {
+      window.speechSynthesis.onvoiceschanged = syncVoices;
+      window.speechSynthesis.addEventListener?.('voiceschanged', syncVoices);
+    } catch {}
+
+    // Windows fallback: poll twice in case voices load asynchronously without event
+    const t1 = setTimeout(syncVoices, 250);
+    const t2 = setTimeout(syncVoices, 1000);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      try {
+        window.speechSynthesis.removeEventListener?.('voiceschanged', syncVoices);
+      } catch {}
+    };
+  }, []);
+
   // Text-To-Speech (Web Speech API) with Echo Cancellation & Playback Control
   const [isPausedSpeaking, setIsPausedSpeaking] = useState<boolean>(false);
+  const speechGenerationRef = useRef<number>(0);
+  const speechFallbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const stopSpeaking = useCallback(() => {
+    speechGenerationRef.current += 1;
+    if (speechFallbackTimerRef.current) {
+      clearTimeout(speechFallbackTimerRef.current);
+      speechFallbackTimerRef.current = null;
+    }
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       setIsSpeaking(false);
@@ -285,7 +365,10 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
       if (!isSpeakingRef.current && isBlindModeRef.current) {
         audioBeacon.playAlertBeacon();
         const screen = currentScreenRef.current;
-        if (screen === 'voice_practice' || screen === 'mock_exam') {
+        if (screen === 'register' || activeVoiceHandlerRef.current) {
+          return;
+        }
+        if (screen === 'voice_practice' || screen === 'mock_exam' || screen === 'pilot_demo') {
           speakText("I didn't hear an answer. Say 'Repeat' to hear the options again, or say Option A, B, C, or D.");
         } else if (screen === 'revision_planner') {
           speakText("I didn't hear an answer. Say 'Easy', 'Good', 'Hard', 'Forgot', or 'Show answer'.");
@@ -303,6 +386,7 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     const SpeechRec = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRec) {
       console.warn('Browser SpeechRecognition not supported.');
+      setMicPermissionStatus('unsupported');
       return;
     }
 
@@ -319,10 +403,14 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
 
       rec.onstart = () => {
         setIsVoiceListening(true);
+        setMicPermissionStatus('granted');
         armSilenceTimer();
       };
 
       rec.onresult = async (event: any) => {
+        if (isSpeakingRef.current) {
+          return;
+        }
         if (silenceTimerRef.current) {
           clearTimeout(silenceTimerRef.current);
         }
@@ -331,17 +419,83 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
         const result = event.results[lastIdx];
         if (!result || !result[0]) return;
 
-        const transcript = result[0].transcript.trim();
-        console.log('[VoiceCommander Heard]:', transcript);
+        // Check top alternative and any candidate alternatives
+        let matchedResult = result[0];
+        let wakeMatch = matchWakeWord(
+          result[0].transcript.trim(),
+          typeof result[0].confidence === 'number' && result[0].confidence > 0 ? result[0].confidence : undefined
+        );
+
+        if (!wakeMatch.matched && result.length > 1) {
+          for (let i = 1; i < result.length; i++) {
+            const alt = result[i];
+            if (alt && alt.transcript) {
+              const altConf = typeof alt.confidence === 'number' && alt.confidence > 0 ? alt.confidence : undefined;
+              const altMatch = matchWakeWord(alt.transcript.trim(), altConf);
+              if (altMatch.matched) {
+                matchedResult = alt;
+                wakeMatch = altMatch;
+                break;
+              }
+            }
+          }
+        }
+
+        const transcript = matchedResult.transcript.trim();
+        const confidence = typeof matchedResult.confidence === 'number' && matchedResult.confidence > 0
+          ? matchedResult.confidence
+          : undefined;
+        console.log('[VoiceCommander Heard]:', transcript, confidence !== undefined ? `(conf: ${confidence.toFixed(2)})` : '');
+
+        // Wake-word gating when in silent standby (unless an active screen handler is capturing direct answers)
+        let commandTranscript = transcript;
+
+        // When "Hey Vision" wake-word is matched with NO trailing command:
+        // Always activate assistant standby window and greet the user
+        if (wakeMatch.matched && !wakeMatch.strippedCommand) {
+          updateWakeWordState('COMMAND_LISTENING');
+          audioBeacon.playListeningBeacon();
+          if (commandWindowTimerRef.current) clearTimeout(commandWindowTimerRef.current);
+          commandWindowTimerRef.current = setTimeout(() => {
+            if (wakeWordStateRef.current === 'COMMAND_LISTENING' || wakeWordStateRef.current === 'ASSISTANT_ACTIVE') {
+              updateWakeWordState(isBlindModeRef.current || currentScreenRef.current === 'login' ? 'WAKE_WORD_STANDBY' : 'IDLE');
+            }
+          }, 20000);
+          const greeting = currentScreenRef.current === 'login'
+            ? "Vision assistant activated. You can say 'Start login' to begin voice sign-in, or ask for help."
+            : 'Vision assistant activated. How can I help you?';
+          speakText(greeting, () => {
+            resumeVoiceListening();
+          });
+          return;
+        }
+
+        if (wakeMatch.matched && wakeMatch.strippedCommand) {
+          commandTranscript = wakeMatch.strippedCommand;
+          updateWakeWordState('ASSISTANT_ACTIVE');
+        } else if (wakeWordStateRef.current === 'WAKE_WORD_STANDBY' && !activeVoiceHandlerRef.current) {
+          return;
+        }
+
+        if (wakeWordStateRef.current === 'COMMAND_LISTENING' || wakeWordStateRef.current === 'ASSISTANT_ACTIVE') {
+          updateWakeWordState('PROCESSING_COMMAND');
+        }
 
         // Route through NavigationController — it handles priority chain internally
         if (navControllerRef.current) {
           const navResult = await navControllerRef.current.processTranscript(
-            transcript,
-            activeVoiceHandlerRef.current
+            commandTranscript,
+            activeVoiceHandlerRef.current,
+            { confidence }
           );
 
           console.log('[NavigationController]:', navResult.status, navResult.destination || '');
+
+          if (commandWindowTimerRef.current) {
+            clearTimeout(commandWindowTimerRef.current);
+            commandWindowTimerRef.current = null;
+          }
+          updateWakeWordState(isBlindModeRef.current || currentScreenRef.current === 'login' ? 'WAKE_WORD_STANDBY' : 'IDLE');
 
           // status 'local_handled' means screen handler consumed it — nothing more to do
           if (navResult.status === 'local_handled' && !navResult.spokenResponse) {
@@ -366,11 +520,31 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
           }
         }
 
+        if (isBlindModeRef.current) {
+          updateWakeWordState('WAKE_WORD_STANDBY');
+        }
         // Unrecognized speech - re-arm silence timer
         armSilenceTimer();
       };
 
       rec.onerror = (e: any) => {
+        if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+          setMicPermissionStatus('denied');
+          isManuallyStoppedRef.current = true;
+          setIsVoiceListening(false);
+        } else if (e.error === 'language-not-supported' && rec.lang !== 'en-US') {
+          // Windows machine without regional speech pack: fallback to en-US
+          rec.lang = 'en-US';
+          try { rec.start(); } catch {}
+          return;
+        } else if (e.error === 'audio-capture') {
+          // Hardware/driver busy on Windows: retry in 1000ms
+          setTimeout(() => {
+            if (!isSpeakingRef.current && !isManuallyStoppedRef.current) {
+              try { startVoiceListeningInternal(); } catch {}
+            }
+          }, 1000);
+        }
         if (e.error !== 'no-speech' && e.error !== 'aborted') {
           console.warn('SpeechRecognition error:', e.error);
         }
@@ -378,10 +552,19 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
 
       rec.onend = () => {
         setIsVoiceListening(false);
-        // Auto-restart if in blind mode and not speaking and not manually stopped
-        if (isBlindModeRef.current && !isSpeakingRef.current && !isManuallyStoppedRef.current) {
+        // Robust Windows auto-restart: keeps listening active through silence timeouts
+        const shouldKeepListening =
+          (isBlindModeRef.current ||
+           currentScreenRef.current === 'login' ||
+           wakeWordStateRef.current === 'WAKE_WORD_STANDBY' ||
+           wakeWordStateRef.current === 'COMMAND_LISTENING' ||
+           activeVoiceHandlerRef.current !== null) &&
+          !isSpeakingRef.current &&
+          !isManuallyStoppedRef.current;
+
+        if (shouldKeepListening) {
           setTimeout(() => {
-            if (isBlindModeRef.current && !isSpeakingRef.current && !isManuallyStoppedRef.current) {
+            if (!isSpeakingRef.current && !isManuallyStoppedRef.current) {
               startVoiceListeningInternal();
             }
           }, 300);
@@ -421,6 +604,9 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
 
     // Immediately stop synthesis and mute microphone
     stopSpeaking();
+    const myGen = speechGenerationRef.current + 1;
+    speechGenerationRef.current = myGen;
+
     // Mark speaking synchronously so speech recognition abort does not auto-restart
     isSpeakingRef.current = true;
     setIsSpeaking(true);
@@ -428,41 +614,74 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
 
     const cleanText = text.replace(/<[^>]*>?/gm, '').trim();
     const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.rate = settings.speechRate || 1.0;
-    utterance.pitch = settings.speechPitch || 1.0;
+    activeUtterances.add(utterance);
+    const activePrefs = voicePrefsRef.current;
+    utterance.rate = activePrefs.speechRate || settings.speechRate || 1.0;
+    utterance.pitch = activePrefs.speechPitch || settings.speechPitch || 1.0;
+    utterance.volume = Math.max(0, Math.min(1, (activePrefs.speechVolume ?? 100) / 100));
 
     const voices = window.speechSynthesis.getVoices();
-    if (settings.voiceURI && settings.voiceURI !== 'default') {
-      const match = voices.find((v) => v.voiceURI === settings.voiceURI);
+    const preferredUri = activePrefs.selectedVoiceURI !== 'default' ? activePrefs.selectedVoiceURI : settings.voiceURI;
+    if (preferredUri && preferredUri !== 'default') {
+      const match = voices.find((v) => v.voiceURI === preferredUri);
       if (match) utterance.voice = match;
     }
 
-    utterance.onstart = () => {
-      setIsSpeaking(true);
-      isSpeakingRef.current = true;
-    };
+    let settled = false;
+    let keepAliveTimer: ReturnType<typeof setInterval> | null = null;
 
-    utterance.onend = () => {
+    const finishSpeech = (allowAutoResume: boolean) => {
+      if (settled || myGen !== speechGenerationRef.current) return;
+      settled = true;
+      activeUtterances.delete(utterance);
+      if (keepAliveTimer) {
+        clearInterval(keepAliveTimer);
+        keepAliveTimer = null;
+      }
+      if (speechFallbackTimerRef.current) {
+        clearTimeout(speechFallbackTimerRef.current);
+        speechFallbackTimerRef.current = null;
+      }
       setIsSpeaking(false);
       isSpeakingRef.current = false;
       if (onEnd) {
         onEnd();
-      } else if (isBlindModeRef.current) {
-        // Play beacon chime signaling system is now listening
+      } else if (allowAutoResume && isBlindModeRef.current) {
         audioBeacon.playListeningBeacon();
         resumeVoiceListening();
       }
     };
 
-    utterance.onerror = () => {
-      setIsSpeaking(false);
-      isSpeakingRef.current = false;
-      if (onEnd) {
-        onEnd();
-      } else if (isBlindModeRef.current) {
-        resumeVoiceListening();
-      }
+    utterance.onstart = () => {
+      if (myGen !== speechGenerationRef.current) return;
+      setIsSpeaking(true);
+      isSpeakingRef.current = true;
     };
+
+    utterance.onend = () => {
+      finishSpeech(true);
+    };
+
+    utterance.onerror = () => {
+      finishSpeech(true);
+    };
+
+    // Chromium Windows keep-alive: periodic resume check while speaking
+    keepAliveTimer = setInterval(() => {
+      if ('speechSynthesis' in window && window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        try { window.speechSynthesis.resume(); } catch {}
+      } else if (keepAliveTimer) {
+        clearInterval(keepAliveTimer);
+        keepAliveTimer = null;
+      }
+    }, 4000);
+
+    // Safety fallback if browser speechSynthesis drops onend event
+    const rate = settings.speechRate || 1.0;
+    const estimatedMs = Math.max(4500, Math.ceil((cleanText.length * 95) / Math.max(0.5, rate)) + 2000);
+    speechFallbackTimerRef.current = setTimeout(() => {
+      finishSpeech(true);
+    }, estimatedMs);
 
     window.speechSynthesis.speak(utterance);
   }, [settings.speechRate, settings.speechPitch, settings.voiceURI, stopSpeaking, pauseVoiceListening, resumeVoiceListening]);
@@ -476,7 +695,7 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
   }, [settings.speechRate, updateSettings, announce, speakText]);
 
   // Screen handler registration for Practice / Mock Exam / AI Tutor / Revision
-  const registerVoiceHandler = useCallback((handler: (transcript: string) => boolean | Promise<boolean>) => {
+  const registerVoiceHandler = useCallback((handler: (transcript: string, meta?: { confidence?: number }) => boolean | Promise<boolean>) => {
     activeVoiceHandlerRef.current = handler;
     return () => {
       if (activeVoiceHandlerRef.current === handler) {
@@ -500,7 +719,11 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     }
 
     // Active exam safety guard
-    if (isExamActiveRef.current && currentScreenRef.current === 'mock_exam' && matched !== 'mock_exam') {
+    if (
+      isExamActiveRef.current &&
+      (currentScreenRef.current === 'mock_exam' || currentScreenRef.current === 'pilot_demo') &&
+      matched !== currentScreenRef.current
+    ) {
       const destTitle = SCREEN_REGISTRY[matched]?.title || matched;
       const pending = { destination: matched, title: destTitle };
       setPendingExamExit(pending);
@@ -635,56 +858,28 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
       console.warn('Could not persist session to localStorage:', e);
     }
 
-    const isBlind = loggedInUser.pwdCategory === 'Visually Impaired' || loggedInUser.needScribe || Boolean(newSettings?.isBlindMode);
+    const isVision = loggedInUser.pwdCategory === 'Visually Impaired' || loggedInUser.needScribe || Boolean(newSettings?.isBlindMode);
     if (newSettings) {
-      setSettings({ ...newSettings, isBlindMode: isBlind });
+      setSettings({ ...newSettings, isBlindMode: isVision });
     }
-    setIsBlindModeState(isBlind);
+    setIsBlindModeState(isVision);
+    updateWakeWordState(isVision ? 'WAKE_WORD_STANDBY' : 'DISABLED');
     try {
-      localStorage.setItem('accessprep_blind_mode', String(isBlind));
+      localStorage.setItem('accessprep_vision_mode', String(isVision));
+      localStorage.setItem('accessprep_blind_mode', String(isVision));
     } catch {}
-
-    // Verbal Onboarding Sequence
-    if (isBlind) {
-      const welcome = `Welcome to your SSC MTS Candidate Portal, ${loggedInUser.name}. Hands-Free Blind Assistant Mode is active. You do not need to click anything. Say 'Start Mock Test', 'Practice Reasoning', 'Review Topics', or 'Help' for all commands.`;
-      setTimeout(() => {
-        speakText(welcome, () => {
-          audioBeacon.playListeningBeacon();
-          resumeVoiceListening();
-        });
-      }, 500);
-    } else {
-      const prompt = 'Welcome to ACCESSPREP-X. Would you like to enable Hands-Free Blind Assistance Mode? Say Yes or No.';
-      setTimeout(() => {
-        speakText(prompt, () => {
-          audioBeacon.playListeningBeacon();
-          // One-shot listener for Yes / No
-          activeVoiceHandlerRef.current = (transcript: string) => {
-            const clean = transcript.toLowerCase();
-            if (clean.includes('yes') || clean.includes('enable') || clean.includes('sure')) {
-              activeVoiceHandlerRef.current = null;
-              setIsBlindMode(true);
-              audioBeacon.playSuccessBeacon();
-              speakText('Hands-Free Blind Assistant Mode enabled. Say Start Mock Test, Practice Reasoning, Review Topics, or Help for all commands.');
-              return true;
-            } else if (clean.includes('no') || clean.includes('cancel') || clean.includes('disable')) {
-              activeVoiceHandlerRef.current = null;
-              audioBeacon.playAlertBeacon();
-              speakText('Standard Mode selected. You can enable Blind Mode anytime in settings.');
-              return true;
-            }
-            return false;
-          };
-          resumeVoiceListening();
-        });
-      }, 500);
-    }
-  }, [setIsBlindMode, speakText, resumeVoiceListening]);
+    // Dashboard remains silent after login; speech starts only on explicit user action or "Hey Vision" wake word.
+  }, [updateWakeWordState]);
 
   // Logout handler: invalidates session, clears client storage, and redirects to login
   const logout = useCallback(() => {
     stopSpeaking();
     pauseVoiceListening();
+    if (commandWindowTimerRef.current) {
+      clearTimeout(commandWindowTimerRef.current);
+      commandWindowTimerRef.current = null;
+    }
+    updateWakeWordState('DISABLED');
     setUser(null);
     try {
       localStorage.removeItem('accessprep_session_user');
@@ -756,17 +951,40 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
     }
   }, [settings]);
 
-  // Start continuous voice listening automatically if blind mode is active
+  // Start silent wake-word standby listening automatically when Vision Mode is active or when on login screen
   useEffect(() => {
-    if (isBlindMode && !isSpeakingRef.current) {
-      const timer = setTimeout(() => {
-        resumeVoiceListening();
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else if (!isBlindMode) {
+    const isLoginScreen = currentScreen === 'login';
+    const shouldWakeStandby = Boolean(isBlindMode || isLoginScreen);
+
+    if (!shouldWakeStandby) {
+      updateWakeWordState('DISABLED');
       pauseVoiceListening();
+      return;
     }
-  }, [isBlindMode, resumeVoiceListening, pauseVoiceListening]);
+
+    if (!isSpeakingRef.current) {
+      updateWakeWordState('WAKE_WORD_STANDBY');
+      const timer = setTimeout(() => {
+        if (document.visibilityState !== 'hidden') {
+          resumeVoiceListening();
+        }
+      }, 500);
+
+      const handleVisibilityChange = () => {
+        if (document.visibilityState === 'hidden') {
+          pauseVoiceListening();
+        } else if (!isSpeakingRef.current) {
+          updateWakeWordState('WAKE_WORD_STANDBY');
+          resumeVoiceListening();
+        }
+      };
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+      return () => {
+        clearTimeout(timer);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      };
+    }
+  }, [user, isBlindMode, currentScreen, resumeVoiceListening, pauseVoiceListening, updateWakeWordState]);
 
   // Keyboard shortcut listener (Single-key WCAG backup)
   useEffect(() => {
@@ -822,10 +1040,10 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
             stopSpeaking();
             announce('Speech stopped', 'polite');
             break;
-          case 'b': // Alt+B: Toggle Hands-Free Blind Mode
+          case 'b': // Alt+B: Toggle Hands-Free Vision Mode
             e.preventDefault();
             toggleBlindMode();
-            speakText(!isBlindMode ? 'Hands-Free Blind Mode Activated.' : 'Hands-Free Blind Mode Deactivated.');
+            speakText(!isBlindMode ? 'Hands-Free Vision Mode Activated.' : 'Hands-Free Vision Mode Deactivated.');
             break;
           case 't': // Alt+T: Jump to AI Tutor
             e.preventDefault();
@@ -875,14 +1093,84 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
   const dyslexiaFont = !!settings.dyslexiaFont;
   const setDyslexiaFont = (d: boolean) => updateSettings({ dyslexiaFont: d });
 
-  const speechRate = settings.speechRate || 1.0;
-  const setSpeechRate = (r: number) => updateSettings({ speechRate: r });
+  const speechRate = voicePrefs.speechRate;
+  const speechPitch = voicePrefs.speechPitch;
+  const speechVolume = voicePrefs.speechVolume;
+  const selectedVoiceURI = voicePrefs.selectedVoiceURI;
+
+  const updateSpeechRate = useCallback((value: number) => {
+    const rate = clampSpeechRate(value);
+    setVoicePrefs((prev) => {
+      const next = saveVoicePreferences({ ...prev, speechRate: rate });
+      voicePrefsRef.current = next;
+      return next;
+    });
+    updateSettings({ speechRate: rate });
+  }, [updateSettings]);
+
+  const updateSpeechPitch = useCallback((value: number) => {
+    const pitch = clampSpeechPitch(value);
+    setVoicePrefs((prev) => {
+      const next = saveVoicePreferences({ ...prev, speechPitch: pitch });
+      voicePrefsRef.current = next;
+      return next;
+    });
+    updateSettings({ speechPitch: pitch });
+  }, [updateSettings]);
+
+  const updateSpeechVolume = useCallback((value: number) => {
+    const volume = clampSpeechVolume(value);
+    setVoicePrefs((prev) => {
+      const next = saveVoicePreferences({ ...prev, speechVolume: volume });
+      voicePrefsRef.current = next;
+      return next;
+    });
+  }, []);
+
+  const updateSelectedVoice = useCallback((uri: string) => {
+    const normalized = uri && uri.trim() ? uri.trim() : 'default';
+    setVoicePrefs((prev) => {
+      const next = saveVoicePreferences({ ...prev, selectedVoiceURI: normalized });
+      voicePrefsRef.current = next;
+      return next;
+    });
+    updateSettings({ voiceURI: normalized });
+  }, [updateSettings]);
+
+  const testVoice = useCallback(() => {
+    stopSpeaking();
+    speakText('Hello! This is your ACCESSPREP-X voice preview. You can adjust my speed, pitch and volume.');
+  }, [stopSpeaking, speakText]);
+
+  const setSpeechRate = (r: number) => updateSpeechRate(r);
 
   const compensatoryTime = !!settings.compensatoryTimeEnabled;
   const setCompensatoryTime = (c: boolean) => updateSettings({ compensatoryTimeEnabled: c });
 
   const whisperModel = settings.whisperModelSize || 'base';
   const setWhisperModel = (m: 'tiny' | 'base' | 'small') => updateSettings({ whisperModelSize: m });
+
+  const resetDefaults = useCallback(() => {
+    updateSettings({
+      theme: 'sapphire',
+      fontScale: 125,
+      dyslexiaFont: false,
+      speechRate: 1.0,
+      speechPitch: 1.0,
+      voiceURI: 'default',
+      autoReadAloud: false,
+      highContrastBorders: true,
+      reduceMotion: false,
+      compensatoryTimeEnabled: true,
+      whisperModelSize: 'base',
+      isBlindMode: false
+    });
+    updateSpeechRate(1.0);
+    updateSpeechPitch(1.0);
+    updateSpeechVolume(100);
+    updateSelectedVoice('default');
+    setIsBlindModeState(false);
+  }, [updateSettings, updateSpeechRate, updateSpeechPitch, updateSpeechVolume, updateSelectedVoice]);
 
   return (
     <AccessibilityContext.Provider
@@ -921,15 +1209,30 @@ export function AccessibilityProvider({ children }: { children: ReactNode }) {
         setDyslexiaFont,
         speechRate,
         setSpeechRate,
+        speechPitch,
+        speechVolume,
+        selectedVoiceURI,
+        availableVoices,
+        updateSpeechRate,
+        updateSpeechPitch,
+        updateSpeechVolume,
+        updateSelectedVoice,
+        testVoice,
         compensatoryTime,
         setCompensatoryTime,
         whisperModel,
         setWhisperModel,
-        // Hands-Free Blind Mode & Voice Command Engine
+        resetDefaults,
+        // Hands-Free Vision Mode & Voice Command Engine
         isBlindMode,
         setIsBlindMode,
         toggleBlindMode,
+        isVisionMode: isBlindMode,
+        setIsVisionMode: setIsBlindMode,
+        toggleVisionMode: toggleBlindMode,
+        wakeWordState,
         isVoiceListening,
+        micPermissionStatus,
         startVoiceListening,
         stopVoiceListening,
         registerVoiceHandler,

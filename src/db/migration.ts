@@ -233,6 +233,108 @@ export async function runDatabaseMigration(): Promise<MigrationReport> {
       );
       counts.learningHistory++;
     }
+
+    // 9. Ensure acceptance audit trail columns exist on diagnostic_attempts and migrate rows
+    await client.query(`
+      ALTER TABLE diagnostic_attempts
+        ADD COLUMN IF NOT EXISTS acceptance_status VARCHAR(32) NOT NULL DEFAULT 'ACCEPTED',
+        ADD COLUMN IF NOT EXISTS acceptance_method VARCHAR(32) NOT NULL DEFAULT 'CHECKBOX',
+        ADD COLUMN IF NOT EXISTS accepted_at TIMESTAMPTZ,
+        ADD COLUMN IF NOT EXISTS exam_started_at TIMESTAMPTZ
+    `);
+
+    for (const d of jsonData.diagnosticAttempts || []) {
+      await client.query(
+        `INSERT INTO diagnostic_attempts (
+           id, client_submission_id, user_id, exam_title, status,
+           total_questions, attempted_count, correct_count, incorrect_count, unanswered_count,
+           session1_score, session2_score, total_score, total_max,
+           percentage, accuracy_percentage, total_time_seconds,
+           responses, subject_breakdown, topic_breakdown,
+           acceptance_status, acceptance_method, accepted_at, exam_started_at, completed_at
+         )
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)
+         ON CONFLICT (id) DO NOTHING`,
+        [
+          d.id,
+          d.clientSubmissionId || null,
+          d.userId,
+          d.examTitle || 'SSC MTS Pilot Demo Diagnostic',
+          d.status || 'completed',
+          d.totalQuestions || 20,
+          d.attemptedCount || 0,
+          d.correctCount || 0,
+          d.incorrectCount || 0,
+          d.unansweredCount || 0,
+          d.session1Score || 0,
+          d.session2Score || 0,
+          d.totalScore || 0,
+          d.totalMax || 60,
+          d.percentage || 0,
+          d.accuracyPercentage || 0,
+          d.totalTimeSeconds || 0,
+          JSON.stringify(d.responses || []),
+          JSON.stringify(d.subjectBreakdown || []),
+          JSON.stringify(d.topicBreakdown || []),
+          d.acceptanceStatus || 'ACCEPTED',
+          d.acceptanceMethod || 'CHECKBOX',
+          d.acceptedAt || null,
+          d.examStartedAt || null,
+          d.completedAt || new Date().toISOString()
+        ]
+      );
+    }
+
+    // 10. Migrate Mock Exam Question Rotation assignments (tables created idempotently by schema.sql)
+    await client.query(`
+      ALTER TABLE mock_exam_assignments ADD COLUMN IF NOT EXISTS cycle_number INTEGER NOT NULL DEFAULT 1;
+      CREATE TABLE IF NOT EXISTS mock_exam_cycles (
+        user_id VARCHAR(64) PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+        current_cycle INTEGER NOT NULL DEFAULT 1,
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+      );
+    `);
+
+    for (const a of jsonData.mockExamAssignments || []) {
+      if (!a?.id || !a?.userId || !Array.isArray(a.questions)) continue;
+      const ins = await client.query(
+        `INSERT INTO mock_exam_assignments (id, user_id, sequence_number, cycle_number, status, assigned_at, completed_at, mock_attempt_id, rotation_summary)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+         ON CONFLICT DO NOTHING`,
+        [
+          a.id,
+          a.userId,
+          a.sequenceNumber || 1,
+          a.cycleNumber || 1,
+          a.status || 'COMPLETED',
+          a.assignedAt || new Date().toISOString(),
+          a.completedAt || null,
+          a.mockAttemptId || null,
+          JSON.stringify(a.rotationSummary || {})
+        ]
+      );
+      if (!ins.rowCount) continue;
+      for (const q of a.questions) {
+        await client.query(
+          `INSERT INTO mock_exam_question_usage
+             (assignment_id, user_id, question_id, subject, position, sequence_number, assigned_at, attempt_status, exam_completed, question_submitted)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+           ON CONFLICT (assignment_id, question_id) DO NOTHING`,
+          [
+            a.id,
+            a.userId,
+            q.questionId,
+            q.subject || '',
+            q.position || 0,
+            a.sequenceNumber || 1,
+            a.assignedAt || new Date().toISOString(),
+            a.status || 'COMPLETED',
+            a.status === 'COMPLETED',
+            Boolean(q.submitted)
+          ]
+        );
+      }
+    }
   });
 
   return {

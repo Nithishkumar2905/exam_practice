@@ -1,7 +1,11 @@
 /**
  * ACCESSPREP-X Screen Registry
- * Enforces strict compliance with the 16 approved unique application screens.
- * No additional screens may be added.
+ *
+ * Architectural Registry Note:
+ * Originally enforced 16 approved application screens.
+ * Adjusted to 17 approved screens to integrate "Pilot Demo Diagnostic" (`pilot_demo`)
+ * as an independent first-class sidebar destination and diagnostic examination module
+ * while keeping Mock Examination (`mock_exam`) and all other 16 screens independent.
  */
 
 export const APPROVED_SCREENS = [
@@ -20,7 +24,8 @@ export const APPROVED_SCREENS = [
   'accessibility_settings', // 13. Accessibility settings
   'learning_history',       // 14. Learning history
   'model_evaluation',       // 15. Dataset / model evaluation dashboard
-  'model_training'          // 16. Dataset management / model training
+  'model_training',         // 16. Dataset management / model training
+  'pilot_demo'              // 17. Pilot Demo Diagnostic (20-question structured diagnostic)
 ] as const;
 
 export type ScreenId = (typeof APPROVED_SCREENS)[number];
@@ -165,39 +170,47 @@ export const SCREEN_REGISTRY: Record<ScreenId, ScreenMetadata> = {
     description: 'Dataset repository, schema validation pipeline, reproducible scikit-learn training triggers, and artifact management.',
     requiresAuth: true,
     isAdminOnly: true
+  },
+  pilot_demo: {
+    id: 'pilot_demo',
+    screenNumber: 17,
+    title: 'Pilot Demo Diagnostic',
+    shortLabel: 'Pilot Demo',
+    description: 'Structured 20-question, 25-minute SSC MTS diagnostic examination with section-wise scoring, topic priority analysis, and attempt history.',
+    requiresAuth: true
   }
 };
 
 /**
- * Validates that the application contains exactly the 16 approved screens.
+ * Validates that the application contains all 17 approved screens (16 core + Pilot Demo Diagnostic).
  */
 export function validateScreenRegistry(): {
   isValid: boolean;
   totalScreens: number;
-  approvedCount: 16;
+  approvedCount: 17;
   screens: readonly ScreenId[];
   error?: string;
 } {
   const registeredCount = Object.keys(SCREEN_REGISTRY).length;
   const approvedCount = APPROVED_SCREENS.length;
 
-  if (approvedCount !== 16) {
+  if (approvedCount !== 17) {
     return {
       isValid: false,
       totalScreens: approvedCount,
-      approvedCount: 16,
+      approvedCount: 17,
       screens: APPROVED_SCREENS,
-      error: `Approved screens list has ${approvedCount} screens, expected exactly 16.`
+      error: `Approved screens list has ${approvedCount} screens, expected 17.`
     };
   }
 
-  if (registeredCount !== 16) {
+  if (registeredCount !== 17) {
     return {
       isValid: false,
       totalScreens: registeredCount,
-      approvedCount: 16,
+      approvedCount: 17,
       screens: APPROVED_SCREENS,
-      error: `Screen registry contains ${registeredCount} screens, expected exactly 16.`
+      error: `Screen registry contains ${registeredCount} screens, expected 17.`
     };
   }
 
@@ -206,7 +219,7 @@ export function validateScreenRegistry(): {
       return {
         isValid: false,
         totalScreens: registeredCount,
-        approvedCount: 16,
+        approvedCount: 17,
         screens: APPROVED_SCREENS,
         error: `Screen "${screenId}" is declared in APPROVED_SCREENS but missing from SCREEN_REGISTRY.`
       };
@@ -215,8 +228,8 @@ export function validateScreenRegistry(): {
 
   return {
     isValid: true,
-    totalScreens: 16,
-    approvedCount: 16,
+    totalScreens: 17,
+    approvedCount: 17,
     screens: APPROVED_SCREENS
   };
 }

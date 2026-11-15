@@ -256,13 +256,17 @@ export const SCREEN_TARGETS: Record<ScreenId, NavigationTarget> = {
     spokenName: 'Accessibility Settings',
     aliases: [
       'accessibility settings',
+      'screen reader settings',
+      'screen reader',
       'settings',
       'voice settings',
       'contrast',
       'preferences',
       'options',
       'display settings',
-      'configure accessibility'
+      'configure accessibility',
+      'open accessibility settings',
+      'open screen reader settings'
     ],
     requiresAuth: false,
     actionSummary: 'You can change high contrast themes, font scaling, OpenDyslexic font, speech rates, and speech recognition models.'
@@ -320,6 +324,27 @@ export const SCREEN_TARGETS: Record<ScreenId, NavigationTarget> = {
     requiresAuth: true,
     isAdminOnly: true,
     actionSummary: 'Administrator console for managing dataset versions, schema validation, and executing reproducible model training pipelines.'
+  },
+  pilot_demo: {
+    screenId: 'pilot_demo',
+    screenNumber: 17,
+    title: 'Pilot Demo Diagnostic',
+    shortLabel: 'Pilot Demo',
+    spokenName: 'Pilot Demo Diagnostic',
+    aliases: [
+      'pilot demo',
+      'pilot demo diagnostic',
+      'diagnostic',
+      'diagnostic test',
+      'diagnostic exam',
+      'diagnostic examination',
+      'start pilot demo',
+      'open pilot demo',
+      'pilot test',
+      'pilot examination'
+    ],
+    requiresAuth: true,
+    actionSummary: 'You can take a structured 20-question, 25-minute diagnostic examination across all four SSC MTS sections, review topic-wise accuracy, and view attempt history.'
   }
 };
 

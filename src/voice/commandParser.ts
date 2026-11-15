@@ -142,10 +142,11 @@ export function parseSystemControl(
     'shut up',
     'stop reading',
     'stop talking',
-    'quiet'
+    'quiet',
+    'stop'
   ];
 
-  if (stopPhrases.some((p) => t === p || t.includes(p))) {
+  if (stopPhrases.some((p) => t === p || (p !== 'stop' && t.includes(p)))) {
     return 'stop_speaking';
   }
 
@@ -326,16 +327,21 @@ export function matchScreenNavigation(
   // e.g. "review" on mock_exam means review questions, not Revision Planner.
   // "repeat" means repeat question, not results.
   // "submit" means submit exam, not login/registration.
-  if (currentScreen === 'mock_exam') {
+  if (currentScreen === 'mock_exam' || currentScreen === 'pilot_demo') {
     if (
       normalized === 'review' ||
       normalized === 'review test' ||
       normalized === 'repeat' ||
       normalized === 'submit' ||
+      normalized === 'submit examination' ||
+      normalized === 'submit exam' ||
+      normalized === 'start examination' ||
+      normalized === 'start exam' ||
+      normalized === 'begin test' ||
       normalized === 'previous' ||
       normalized === 'back'
     ) {
-      return null; // Let mock exam screen handle local control
+      return null; // Let mock exam / pilot demo screen handle local control
     }
   }
 

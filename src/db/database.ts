@@ -1,5 +1,11 @@
 import fs from 'fs';
 import path from 'path';
+import type { MockExamAssignment } from '../utils/mockExamRotation.ts';
+import {
+  DiagnosticQuestionResponse,
+  DiagnosticSubjectSummary,
+  DiagnosticTopicSummary
+} from '../utils/pilotDemoScoring.ts';
 
 export interface User {
   id: string;
@@ -63,6 +69,9 @@ export interface MockExamAttempt {
   totalTimeSeconds: number;
   answers: Record<string, { selectedOption: string | null; timeSpent: number; markedForReview?: boolean }>;
   completedAt: string;
+  /** Rotation assignment this attempt was generated from (absent on legacy attempts). */
+  assignmentId?: string;
+  sequenceNumber?: number;
 }
 
 export interface RevisionItem {
@@ -109,13 +118,41 @@ export interface AccessibilitySettings {
 export interface LearningHistoryEntry {
   id: string;
   userId: string;
-  type: 'practice' | 'mock_exam' | 'ai_tutor' | 'revision';
+  type: 'practice' | 'mock_exam' | 'diagnostic' | 'ai_tutor' | 'revision';
   title: string;
   summary: string;
   score?: number;
   maxScore?: number;
   durationSeconds: number;
   timestamp: string;
+}
+
+export interface DiagnosticAttempt {
+  id: string;
+  clientSubmissionId?: string;
+  userId: string;
+  examTitle: string;
+  status: 'completed' | 'in_progress';
+  totalQuestions: number;
+  attemptedCount: number;
+  correctCount: number;
+  incorrectCount: number;
+  unansweredCount: number;
+  session1Score: number;
+  session2Score: number;
+  totalScore: number;
+  totalMax: number;
+  percentage: number;
+  accuracyPercentage: number;
+  totalTimeSeconds: number;
+  responses: DiagnosticQuestionResponse[];
+  subjectBreakdown: DiagnosticSubjectSummary[];
+  topicBreakdown: DiagnosticTopicSummary[];
+  acceptanceStatus?: 'NOT_ACCEPTED' | 'ACCEPTED';
+  acceptanceMethod?: 'VOICE' | 'CHECKBOX' | 'KEYBOARD';
+  acceptedAt?: string;
+  examStartedAt?: string;
+  completedAt: string;
 }
 
 const DB_FILE = path.resolve(process.cwd(), 'src/data/app_database.json');
@@ -125,10 +162,13 @@ interface DatabaseStore {
   users: User[];
   practiceAttempts: PracticeAttempt[];
   mockAttempts: MockExamAttempt[];
+  diagnosticAttempts: DiagnosticAttempt[];
   revisionItems: RevisionItem[];
   topicMastery: TopicMasteryRecord[];
   accessibilitySettings: Record<string, AccessibilitySettings>;
   learningHistory: LearningHistoryEntry[];
+  mockExamAssignments: MockExamAssignment[];
+  mockExamCycles: Record<string, number>;
 }
 
 let memoryDb: DatabaseStore | null = null;
@@ -182,6 +222,7 @@ export function initDatabase(): DatabaseStore {
     ],
     practiceAttempts: [],
     mockAttempts: [],
+    diagnosticAttempts: [],
     revisionItems: [],
     topicMastery: [],
     accessibilitySettings: {
@@ -200,13 +241,24 @@ export function initDatabase(): DatabaseStore {
         whisperModelSize: 'base'
       }
     },
-    learningHistory: []
+    learningHistory: [],
+    mockExamAssignments: [],
+    mockExamCycles: {}
   };
 
   if (fs.existsSync(DB_FILE)) {
     try {
       const data = fs.readFileSync(DB_FILE, 'utf-8');
       initial = { ...initial, ...JSON.parse(data) };
+      if (!Array.isArray(initial.diagnosticAttempts)) {
+        initial.diagnosticAttempts = [];
+      }
+      if (!Array.isArray(initial.mockExamAssignments)) {
+        initial.mockExamAssignments = [];
+      }
+      if (!initial.mockExamCycles || typeof initial.mockExamCycles !== 'object') {
+        initial.mockExamCycles = {};
+      }
     } catch (e) {
       console.warn('Could not parse database file, initializing fresh store:', e);
     }

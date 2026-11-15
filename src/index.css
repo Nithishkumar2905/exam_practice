@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Bind Tailwind dark: utilities strictly to explicit dark/high-contrast portal themes, never OS dark mode when Sapphire light theme is active */
+@custom-variant dark (&:where(.theme-soft_dark, .theme-soft_dark *, .theme-monochrome_dark, .theme-monochrome_dark *, .theme-high_contrast_yellow, .theme-high_contrast_yellow *));
+
 @layer base {
   :root {
     --color-primary: #1749E8;

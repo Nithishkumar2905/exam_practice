@@ -17,7 +17,8 @@ import {
   Play,
   Square,
   List,
-  RefreshCw
+  RefreshCw,
+  Calculator
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext.tsx';
 import { AudioToolbar } from '../components/AudioToolbar.tsx';
@@ -28,10 +29,19 @@ import {
   formatFullQuestionPrompt,
   formatQuestionStemOnly,
   formatAllOptionsPrompt,
-  formatSingleOptionPrompt
+  formatSingleOptionPrompt,
+  formatSourcePrompt
 } from '../utils/repeatQuestionHelper.ts';
+import {
+  PRACTICE_MODULES,
+  PracticeModuleId,
+  parseVoicePracticeModuleChoice,
+  filterQuestionsByModule,
+  parseFeedbackControlCommand
+} from '../utils/voicePracticeModules.ts';
 
 export type PracticeSessionStep =
+  | 'SELECTING_MODULE'
   | 'LOADING'
   | 'READING_QUESTION'
   | 'READING_OPTIONS'
@@ -64,32 +74,50 @@ export function VoicePracticeScreen() {
   // ---------------------------------------------------------------------------
   // Session State
   // ---------------------------------------------------------------------------
+  const [selectedModule, setSelectedModule] = useState<PracticeModuleId | null>(() => {
+    try {
+      const savedSubject = sessionStorage.getItem('practice_filter_subject');
+      const savedTopic = sessionStorage.getItem('practice_filter_topic');
+      if (savedTopic && savedSubject === PRACTICE_MODULES.maths.subject) return 'maths';
+      if (savedTopic && savedSubject === PRACTICE_MODULES.reasoning.subject) return 'reasoning';
+      return null;
+    } catch {
+      return null;
+    }
+  });
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [sessionStep, setSessionStep] = useState<PracticeSessionStep>('LOADING');
+  const [sessionStep, setSessionStep] = useState<PracticeSessionStep>(() =>
+    selectedModule ? 'LOADING' : 'SELECTING_MODULE'
+  );
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [evaluation, setEvaluation] = useState<{
     isCorrect: boolean;
     explanation: string;
     correctAnswer?: string;
+    chosenOption?: string;
+    chosenOptionText?: string;
+    correctOptionText?: string;
   } | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(Boolean(selectedModule));
+  const [moduleEmptyError, setModuleEmptyError] = useState<string | null>(null);
+  const [confirmingChangeModule, setConfirmingChangeModule] = useState(false);
   const [sessionScore, setSessionScore] = useState({ correct: 0, total: 0 });
 
   const [selectedSubjectFilter, setSelectedSubjectFilter] = useState<string>(() => {
-    try {
-      return sessionStorage.getItem('practice_filter_subject') || 'all';
-    } catch {
-      return 'all';
-    }
+    if (selectedModule) return PRACTICE_MODULES[selectedModule].subject;
+    return 'all';
   });
 
   // ---------------------------------------------------------------------------
   // Synchronous State Guard Refs (Prevents Stale Closures & Duplicate Submissions)
   // ---------------------------------------------------------------------------
-  const sessionStepRef = useRef<PracticeSessionStep>('LOADING');
+  const sessionStepRef = useRef<PracticeSessionStep>(selectedModule ? 'LOADING' : 'SELECTING_MODULE');
   sessionStepRef.current = sessionStep;
+
+  const selectedModuleRef = useRef<PracticeModuleId | null>(selectedModule);
+  selectedModuleRef.current = selectedModule;
 
   const currentIndexRef = useRef<number>(0);
   currentIndexRef.current = currentIndex;
@@ -98,10 +126,11 @@ export function VoicePracticeScreen() {
   questionsRef.current = questions;
 
   const isSubmittingRef = useRef<boolean>(false);
+  const isAdvancingRef = useRef<boolean>(false);
   const hasAnsweredCurrentQuestionRef = useRef<boolean>(false);
   const questionStartTimeRef = useRef<number>(Date.now());
   const advanceTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const hasInitializedRef = useRef<boolean>(false);
+  const hasSpokenModulePromptRef = useRef<boolean>(false);
 
   const subjects = [
     { name: 'All Subjects', value: 'all' },
@@ -203,6 +232,9 @@ export function VoicePracticeScreen() {
    * Advances cleanly to the next question or completes the session.
    */
   const advanceToNextQuestion = useCallback(() => {
+    if (isAdvancingRef.current) return;
+    isAdvancingRef.current = true;
+
     if (advanceTimerRef.current) {
       clearTimeout(advanceTimerRef.current);
       advanceTimerRef.current = null;
@@ -216,6 +248,7 @@ export function VoicePracticeScreen() {
       setSessionStep('COMPLETED');
       sessionStepRef.current = 'COMPLETED';
       stopSpeaking();
+      isAdvancingRef.current = false;
 
       const finalMsg = `Practice session complete! You completed all ${total} questions. Outstanding effort!`;
       announce(finalMsg, 'assertive');
@@ -235,6 +268,7 @@ export function VoicePracticeScreen() {
     isSubmittingRef.current = false;
     hasAnsweredCurrentQuestionRef.current = false;
     questionStartTimeRef.current = Date.now();
+    isAdvancingRef.current = false;
 
     const nextQ = questionsRef.current[nextIdx];
     if (nextQ) {
@@ -328,14 +362,25 @@ export function VoicePracticeScreen() {
 
         const data = await res.json();
         const isCorrect = Boolean(data.isCorrect);
-        const correctAnswer = data.correctAnswer || curQ.correct_answer;
-        const explanation = data.explanation || curQ.explanation;
+        const correctAnswer = (data.correctAnswer || curQ.correct_answer || '').toUpperCase();
+        const rawExplanation = typeof data.explanation === 'string' && data.explanation.trim()
+          ? data.explanation.trim()
+          : (typeof curQ.explanation === 'string' && curQ.explanation.trim() ? curQ.explanation.trim() : '');
+        const explanationText = rawExplanation || 'Detailed explanation is not available for this question.';
+
+        const chosenOptKey = `option_${optKey.toLowerCase()}` as keyof Question;
+        const chosenOptText = String((curQ as any)[chosenOptKey] || '');
+        const correctOptKey = `option_${correctAnswer.toLowerCase()}` as keyof Question;
+        const correctOptText = String((curQ as any)[correctOptKey] || '');
 
         setHasSubmitted(true);
         setEvaluation({
           isCorrect,
-          explanation,
-          correctAnswer
+          explanation: explanationText,
+          correctAnswer,
+          chosenOption: optKey,
+          chosenOptionText: chosenOptText,
+          correctOptionText: correctOptText
         });
 
         setSessionScore((prev) => ({
@@ -346,21 +391,18 @@ export function VoicePracticeScreen() {
         setSessionStep('SPEAKING_FEEDBACK');
         sessionStepRef.current = 'SPEAKING_FEEDBACK';
 
-        const correctOptKey = `option_${correctAnswer.toLowerCase()}` as keyof Question;
-        const correctOptText = (curQ as any)[correctOptKey] || '';
-
         const feedback = isCorrect
-          ? `Correct! You earned three marks. ${explanation}. Moving to next question.`
-          : `Incorrect. You chose Option ${optKey}. The correct answer is Option ${correctAnswer}: ${correctOptText}. ${explanation}. Moving to next question.`;
+          ? `Correct! You earned three marks. ${explanationText}. Say Next or press Enter when you are ready.`
+          : `Incorrect. You chose Option ${optKey}: ${chosenOptText}. The correct answer is Option ${correctAnswer}: ${correctOptText}. ${explanationText}. Say Next or press Enter when you are ready.`;
 
         announce(isCorrect ? 'Correct! (+3 Marks)' : `Incorrect. Correct is Option ${correctAnswer}`, 'assertive');
         playBeacon(isCorrect ? 'success' : 'alert');
 
-        // Speak feedback, and once completed, advance to the next question
+        // Speak feedback and wait for the student's explicit Next / Enter command (no auto-advance)
         speakText(feedback, () => {
-          advanceTimerRef.current = setTimeout(() => {
-            advanceToNextQuestion();
-          }, 1200);
+          if (sessionStepRef.current === 'SPEAKING_FEEDBACK') {
+            startVoiceListening();
+          }
         });
       } catch (err) {
         console.error('[VoicePractice] Submit error:', err);
@@ -387,27 +429,62 @@ export function VoicePracticeScreen() {
   // Data Fetching & Initial Sequence Start
   // ---------------------------------------------------------------------------
 
-  const fetchQuestions = useCallback(
-    (subjectToFetch: string) => {
+  const fetchQuestionsForModule = useCallback(
+    (moduleId: PracticeModuleId, options?: { waitForConfirmationSpeech?: boolean }) => {
+      const mod = PRACTICE_MODULES[moduleId];
       setLoading(true);
+      setModuleEmptyError(null);
       setSessionStep('LOADING');
       sessionStepRef.current = 'LOADING';
 
-      const params = new URLSearchParams({ limit: '400' });
-      if (subjectToFetch && subjectToFetch !== 'all') {
-        params.append('subject', subjectToFetch);
-      }
-      const topicFilter = sessionStorage.getItem('practice_filter_topic');
-      if (topicFilter && subjectToFetch !== 'all') {
-        params.append('topic', topicFilter);
+      const params = new URLSearchParams({ limit: '400', subject: mod.subject });
+      try {
+        const topicFilter = sessionStorage.getItem('practice_filter_topic');
+        if (topicFilter) {
+          params.append('topic', topicFilter);
+        }
+      } catch {}
+
+      let speechDone = !options?.waitForConfirmationSpeech;
+      let loadedQuestions: Question[] | null = null;
+      let fetchFailed = false;
+
+      const tryStartFirstQuestion = () => {
+        if (!speechDone || loadedQuestions === null) return;
+        if (fetchFailed) return;
+        if (loadedQuestions.length === 0) {
+          const msg = `No questions are currently available for ${mod.title}. Please choose another module.`;
+          setModuleEmptyError(msg);
+          setSessionStep('SELECTING_MODULE');
+          sessionStepRef.current = 'SELECTING_MODULE';
+          setSelectedModule(null);
+          selectedModuleRef.current = null;
+          announce(msg, 'assertive');
+          speakText(msg, () => {
+            if (sessionStepRef.current === 'SELECTING_MODULE') {
+              startVoiceListening();
+            }
+          });
+          return;
+        }
+        readCurrentQuestion(loadedQuestions[0], 0, loadedQuestions.length);
+      };
+
+      if (options?.waitForConfirmationSpeech) {
+        const confirmMsg = `You selected ${mod.confirmationName}. Let's begin your practice.`;
+        announce(confirmMsg, 'polite');
+        speakText(confirmMsg, () => {
+          speechDone = true;
+          tryStartFirstQuestion();
+        });
       }
 
       fetch(`/api/questions?${params.toString()}`)
         .then((r) => r.json())
         .then((data) => {
-          const qList: Question[] = data.questions || [];
-          setQuestions(qList);
-          questionsRef.current = qList;
+          const filtered = filterQuestionsByModule(data.questions || [], moduleId);
+          setQuestions(filtered);
+          questionsRef.current = filtered;
 
           setCurrentIndex(0);
           currentIndexRef.current = 0;
@@ -415,31 +492,101 @@ export function VoicePracticeScreen() {
           setHasSubmitted(false);
           setEvaluation(null);
           isSubmittingRef.current = false;
+          isAdvancingRef.current = false;
           hasAnsweredCurrentQuestionRef.current = false;
           questionStartTimeRef.current = Date.now();
 
-          if (qList.length > 0) {
-            readCurrentQuestion(qList[0], 0, qList.length);
-          }
+          loadedQuestions = filtered;
         })
-        .catch((e) => console.warn('Questions fetch error:', e))
-        .finally(() => setLoading(false));
+        .catch((e) => {
+          console.warn('Questions fetch error:', e);
+          fetchFailed = true;
+          const errMsg = `Could not load questions for ${mod.title}. Please try again.`;
+          setModuleEmptyError(errMsg);
+          setSessionStep('SELECTING_MODULE');
+          sessionStepRef.current = 'SELECTING_MODULE';
+          setSelectedModule(null);
+          selectedModuleRef.current = null;
+          loadedQuestions = [];
+        })
+        .finally(() => {
+          setLoading(false);
+          tryStartFirstQuestion();
+        });
     },
-    [readCurrentQuestion]
+    [readCurrentQuestion, announce, speakText, startVoiceListening]
   );
 
-  useEffect(() => {
-    fetchQuestions(selectedSubjectFilter);
-  }, [selectedSubjectFilter, fetchQuestions]);
+  const handleSelectModule = useCallback(
+    (moduleId: PracticeModuleId) => {
+      const mod = PRACTICE_MODULES[moduleId];
+      stopSpeaking();
+      hasSpokenModulePromptRef.current = false;
+      setConfirmingChangeModule(false);
+      setSessionScore({ correct: 0, total: 0 });
+      setSelectedModule(moduleId);
+      selectedModuleRef.current = moduleId;
+      setSelectedSubjectFilter(mod.subject);
+      try {
+        sessionStorage.setItem('practice_filter_subject', mod.subject);
+      } catch {}
+      fetchQuestionsForModule(moduleId, { waitForConfirmationSpeech: true });
+    },
+    [stopSpeaking, fetchQuestionsForModule]
+  );
 
-  const handleSubjectChange = (newSubject: string) => {
+  const resetToModuleSelection = useCallback(() => {
+    if (advanceTimerRef.current) {
+      clearTimeout(advanceTimerRef.current);
+      advanceTimerRef.current = null;
+    }
+    stopSpeaking();
+    hasSpokenModulePromptRef.current = false;
+    setConfirmingChangeModule(false);
+    setModuleEmptyError(null);
+    setSelectedModule(null);
+    selectedModuleRef.current = null;
+    setQuestions([]);
+    questionsRef.current = [];
+    setCurrentIndex(0);
+    currentIndexRef.current = 0;
+    setSelectedOption(null);
+    setHasSubmitted(false);
+    setEvaluation(null);
+    setSessionScore({ correct: 0, total: 0 });
+    isSubmittingRef.current = false;
+    isAdvancingRef.current = false;
+    hasAnsweredCurrentQuestionRef.current = false;
+    setSessionStep('SELECTING_MODULE');
+    sessionStepRef.current = 'SELECTING_MODULE';
     try {
-      sessionStorage.setItem('practice_filter_subject', newSubject);
+      sessionStorage.removeItem('practice_filter_subject');
       sessionStorage.removeItem('practice_filter_topic');
     } catch {}
-    setSelectedSubjectFilter(newSubject);
-    announce(`Switched practice topic filter to ${newSubject}`, 'polite');
-  };
+  }, [stopSpeaking]);
+
+  // Initial load: if a topic+module was pre-selected (e.g. from Weak Areas), fetch immediately;
+  // otherwise speak the module selection prompt once.
+  useEffect(() => {
+    if (selectedModule) {
+      if (questionsRef.current.length === 0 && sessionStepRef.current === 'LOADING') {
+        fetchQuestionsForModule(selectedModule, { waitForConfirmationSpeech: false });
+      }
+      return;
+    }
+
+    if (!hasSpokenModulePromptRef.current) {
+      hasSpokenModulePromptRef.current = true;
+      const welcomePrompt =
+        'Welcome to Voice Practice. Which module would you like to practice? Numerical and Mathematical Ability, Maths, or Reasoning Ability?';
+      announce(welcomePrompt, 'polite');
+      speakText(welcomePrompt, () => {
+        if (sessionStepRef.current === 'SELECTING_MODULE') {
+          startVoiceListening();
+        }
+      });
+    }
+  }, [selectedModule, fetchQuestionsForModule, announce, speakText, startVoiceListening]);
 
   // ---------------------------------------------------------------------------
   // Context-Aware Voice Command Handler
@@ -447,8 +594,61 @@ export function VoicePracticeScreen() {
 
   useEffect(() => {
     const unregister = registerVoiceHandler((transcript: string) => {
+      // --- 0. Pre-Session Module Selection Voice Commands ---
+      if (sessionStepRef.current === 'SELECTING_MODULE' || !selectedModuleRef.current) {
+        const chosenModule = parseVoicePracticeModuleChoice(transcript);
+        if (chosenModule) {
+          handleSelectModule(chosenModule);
+          return true;
+        }
+        return false;
+      }
+
       const curQ = questionsRef.current[currentIndexRef.current];
       if (!curQ) return false;
+
+      // --- 0B. Feedback-Stage Voice Commands (No auto-advance) ---
+      if (hasAnsweredCurrentQuestionRef.current || sessionStepRef.current === 'SPEAKING_FEEDBACK') {
+        const feedbackCmd = parseFeedbackControlCommand(transcript);
+        if (feedbackCmd === 'next') {
+          advanceToNextQuestion();
+          return true;
+        }
+        if (feedbackCmd === 'repeat_explanation') {
+          const expText =
+            (curQ.explanation && curQ.explanation.trim()) ||
+            'Detailed explanation is not available for this question.';
+          speakText(`${expText}. Say Next or press Enter when you are ready.`, () => {
+            if (sessionStepRef.current === 'SPEAKING_FEEDBACK') {
+              startVoiceListening();
+            }
+          });
+          return true;
+        }
+        if (feedbackCmd === 'repeat_question') {
+          readCurrentQuestion(curQ, currentIndexRef.current, questionsRef.current.length);
+          return true;
+        }
+        if (feedbackCmd === 'read_correct_answer') {
+          const corrLetter = (curQ.correct_answer || '').toUpperCase();
+          const corrText = String((curQ as any)[`option_${corrLetter.toLowerCase()}`] || '');
+          speakText(
+            `The correct answer is Option ${corrLetter}: ${corrText}. Say Next or press Enter when you are ready.`,
+            () => {
+              if (sessionStepRef.current === 'SPEAKING_FEEDBACK') {
+                startVoiceListening();
+              }
+            }
+          );
+          return true;
+        }
+      }
+
+      const lowerRaw = transcript.toLowerCase();
+      if (lowerRaw.includes('read source') || lowerRaw.includes('source information')) {
+        speakText(formatSourcePrompt(curQ));
+        return true;
+      }
 
       const optionsMap = {
         A: curQ.option_a,
@@ -561,7 +761,9 @@ export function VoicePracticeScreen() {
     handlePreviousQuestion,
     speakText,
     announce,
-    submitAnswer
+    submitAnswer,
+    handleSelectModule,
+    startVoiceListening
   ]);
 
   // Fallback Voice Input Button Handler
@@ -642,6 +844,146 @@ export function VoicePracticeScreen() {
   }, [stopSpeaking]);
 
   // ---------------------------------------------------------------------------
+  // Render: Pre-Session Module Selection Screen
+  // ---------------------------------------------------------------------------
+  if (!selectedModule || sessionStep === 'SELECTING_MODULE') {
+    const mathsMod = PRACTICE_MODULES.maths;
+    const reasoningMod = PRACTICE_MODULES.reasoning;
+
+    return (
+      <div className="max-w-4xl mx-auto px-4 py-8 sm:py-12 space-y-8" id="main-content">
+        <div className="bg-white border border-[#D9E1EF] rounded-2xl p-6 sm:p-10 shadow-sm space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E8EBF0] pb-5">
+            <div className="space-y-1.5">
+              <span className="text-xs font-bold text-[#1749E8] uppercase tracking-wider">
+                Voice-First Practice · Pre-Session Setup
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-[#172033]">
+                Choose Your Practice Module
+              </h1>
+              <p className="text-sm sm:text-base text-[#53627A]">
+                Which module would you like to practice?
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <AudioToolbar
+                textToRead="Welcome to Voice Practice. Which module would you like to practice? Numerical and Mathematical Ability, Maths, or Reasoning Ability?"
+                label="Read module choices aloud"
+              />
+              <VoiceInputButton
+                onTranscriptConfirmed={(transcript) => {
+                  const chosen = parseVoicePracticeModuleChoice(transcript);
+                  if (chosen) {
+                    handleSelectModule(chosen);
+                  } else {
+                    announce(
+                      `Heard "${transcript}". Please say Maths or Reasoning Ability.`,
+                      'polite'
+                    );
+                  }
+                }}
+                label="Speak Module Choice"
+                contextHint='Say "Maths" or "Reasoning Ability"'
+              />
+            </div>
+          </div>
+
+          {moduleEmptyError && (
+            <div
+              role="alert"
+              className="p-4 rounded-xl bg-amber-50 border border-amber-300 text-amber-900 text-sm font-semibold"
+            >
+              {moduleEmptyError}
+            </div>
+          )}
+
+          <div
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            role="group"
+            aria-label="Practice Module Selection"
+          >
+            {/* Card 1: Numerical and Mathematical Ability (Maths) */}
+            <button
+              type="button"
+              data-module-id="maths"
+              onClick={() => handleSelectModule('maths')}
+              className="group text-left p-6 bg-white hover:bg-[#F8FAFF] border-2 border-[#D9E1EF] hover:border-[#1749E8] rounded-2xl shadow-xs transition-all flex flex-col justify-between gap-5 focus:outline-none focus:ring-2 focus:ring-[#1749E8] focus:ring-offset-2"
+              aria-label={`${mathsMod.title} (${mathsMod.label}). ${mathsMod.description}`}
+            >
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-[#EEF4FF] text-[#1749E8] flex items-center justify-center border border-[#D9E1EF] group-hover:bg-[#1749E8] group-hover:text-white transition-colors">
+                    <Calculator className="w-6 h-6" aria-hidden="true" />
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-[#EEF4FF] text-[#1749E8] border border-[#D9E1EF] text-xs font-bold uppercase tracking-wide">
+                    {mathsMod.label}
+                  </span>
+                </div>
+
+                <div>
+                  <h2 className="text-lg font-extrabold text-[#172033]">
+                    {mathsMod.title}
+                  </h2>
+                  <p className="text-sm text-[#53627A] mt-1.5 leading-relaxed">
+                    {mathsMod.description}
+                  </p>
+                </div>
+              </div>
+
+              <div className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-[#F8F9FB] group-hover:bg-[#1749E8] text-[#172033] group-hover:text-white border border-[#E8EBF0] group-hover:border-[#1749E8] text-sm font-bold transition-colors">
+                <span>{mathsMod.ctaLabel}</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </button>
+
+            {/* Card 2: Reasoning Ability */}
+            <button
+              type="button"
+              data-module-id="reasoning"
+              onClick={() => handleSelectModule('reasoning')}
+              className="group text-left p-6 bg-white hover:bg-[#F8FAFF] border-2 border-[#D9E1EF] hover:border-[#1749E8] rounded-2xl shadow-xs transition-all flex flex-col justify-between gap-5 focus:outline-none focus:ring-2 focus:ring-[#1749E8] focus:ring-offset-2"
+              aria-label={`${reasoningMod.title} (${reasoningMod.label}). ${reasoningMod.description}`}
+            >
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="w-12 h-12 rounded-xl bg-[#EEF4FF] text-[#1749E8] flex items-center justify-center border border-[#D9E1EF] group-hover:bg-[#1749E8] group-hover:text-white transition-colors">
+                    <Brain className="w-6 h-6" aria-hidden="true" />
+                  </div>
+                  <span className="px-2.5 py-1 rounded-full bg-[#EEF4FF] text-[#1749E8] border border-[#D9E1EF] text-xs font-bold uppercase tracking-wide">
+                    {reasoningMod.label}
+                  </span>
+                </div>
+
+                <div>
+                  <h2 className="text-lg font-extrabold text-[#172033]">
+                    {reasoningMod.title}
+                  </h2>
+                  <p className="text-sm text-[#53627A] mt-1.5 leading-relaxed">
+                    {reasoningMod.description}
+                  </p>
+                </div>
+              </div>
+
+              <div className="inline-flex items-center justify-between w-full px-4 py-2.5 rounded-xl bg-[#F8F9FB] group-hover:bg-[#1749E8] text-[#172033] group-hover:text-white border border-[#E8EBF0] group-hover:border-[#1749E8] text-sm font-bold transition-colors">
+                <span>{reasoningMod.ctaLabel}</span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </div>
+            </button>
+          </div>
+
+          <p className="text-xs text-[#64748B] flex items-center gap-2 pt-2">
+            <Mic className="w-4 h-4 text-[#1749E8] shrink-0" aria-hidden="true" />
+            <span>
+              Voice tip: Say <strong>&ldquo;Maths&rdquo;</strong>, <strong>&ldquo;Numerical and Mathematical Ability&rdquo;</strong>, or <strong>&ldquo;Reasoning Ability&rdquo;</strong> to begin.
+            </span>
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ---------------------------------------------------------------------------
   // Render: Loading State
   // ---------------------------------------------------------------------------
   if (loading || !currentQ) {
@@ -699,11 +1041,19 @@ export function VoicePracticeScreen() {
           <div className="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-slate-200">
             <button
               type="button"
-              onClick={() => fetchQuestions(selectedSubjectFilter)}
+              onClick={() => handleSelectModule(selectedModule)}
               className="px-6 py-3 rounded-xl bg-[#1749E8] text-white text-xs font-bold hover:bg-[#123BB8] transition-colors shadow-sm inline-flex items-center gap-2"
             >
               <RefreshCw className="w-4 h-4" />
               <span>Practice Again</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={resetToModuleSelection}
+              className="px-6 py-3 rounded-xl bg-white text-[#172033] text-xs font-bold hover:bg-slate-50 border border-[#D9E1EF] transition-colors"
+            >
+              Change Module
             </button>
 
             <button
@@ -778,28 +1128,60 @@ export function VoicePracticeScreen() {
         </div>
       </div>
 
-      {/* 1B. Subject Filter Selector */}
-      <div className="p-3 bg-white border border-[#D9E1EF] rounded-xl flex flex-wrap items-center justify-between gap-3 shadow-xs">
-        <div className="flex items-center gap-2">
-          <label htmlFor="practice-subject-select" className="text-xs font-bold text-[#172033] whitespace-nowrap">
-            Practice Subject:
-          </label>
-          <select
-            id="practice-subject-select"
-            value={selectedSubjectFilter}
-            onChange={(e) => handleSubjectChange(e.target.value)}
-            className="px-3 py-1.5 text-xs font-semibold bg-slate-50 border border-[#D9E1EF] rounded-lg text-[#172033] focus:border-[#1749E8] focus:ring-2 focus:ring-[#1749E8] focus:outline-none"
-          >
-            {subjects.map((sub) => (
-              <option key={sub.value} value={sub.value}>
-                {sub.name}
-              </option>
-            ))}
-          </select>
+      {/* 1B. Active Module Header & Safe Module Switcher */}
+      <div className="p-3.5 bg-white border border-[#D9E1EF] rounded-xl flex flex-wrap items-center justify-between gap-3 shadow-xs">
+        <div className="flex flex-wrap items-center gap-2.5">
+          <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider">
+            Active Module:
+          </span>
+          <span className="px-2.5 py-1 rounded-lg bg-[#EEF4FF] text-[#1749E8] border border-[#D9E1EF] text-xs font-bold">
+            {PRACTICE_MODULES[selectedModule].title} ({PRACTICE_MODULES[selectedModule].label})
+          </span>
+          <span className="text-xs font-medium text-[#53627A]">
+            Question <strong>{currentIndex + 1}</strong> of <strong>{questions.length}</strong>
+          </span>
         </div>
 
-        <div className="text-xs font-medium text-[#53627A]">
-          Showing <strong>{questions.length}</strong> questions in this section
+        <div className="flex items-center gap-2">
+          {!confirmingChangeModule ? (
+            <button
+              type="button"
+              onClick={() => {
+                if (sessionScore.total > 0) {
+                  setConfirmingChangeModule(true);
+                  announce(
+                    `You have answered ${sessionScore.total} questions. Confirm if you want to change module.`,
+                    'polite'
+                  );
+                } else {
+                  resetToModuleSelection();
+                }
+              }}
+              className="px-3 py-1.5 text-xs font-bold text-[#172033] bg-slate-50 hover:bg-slate-100 border border-[#D9E1EF] rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-[#1749E8]"
+            >
+              Change Module
+            </button>
+          ) : (
+            <div className="flex flex-wrap items-center gap-2 bg-amber-50 border border-amber-300 rounded-lg px-3 py-1.5">
+              <span className="text-xs font-semibold text-amber-900">
+                Reset current session ({sessionScore.total} answered)?
+              </span>
+              <button
+                type="button"
+                onClick={resetToModuleSelection}
+                className="px-2.5 py-1 text-xs font-bold text-white bg-amber-700 hover:bg-amber-800 rounded-md"
+              >
+                Confirm
+              </button>
+              <button
+                type="button"
+                onClick={() => setConfirmingChangeModule(false)}
+                className="px-2.5 py-1 text-xs font-semibold text-slate-700 bg-white border border-slate-300 hover:bg-slate-100 rounded-md"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -1051,11 +1433,13 @@ export function VoicePracticeScreen() {
             ) : (
               <button
                 type="button"
+                data-action="next-question"
                 onClick={advanceToNextQuestion}
-                disabled={currentIndex === questions.length - 1}
-                className="px-6 py-2.5 text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-lg shadow-sm inline-flex items-center gap-2 transition-all active:scale-95 focus:ring-2 focus:ring-emerald-500"
+                className="px-6 py-2.5 text-sm font-bold text-white bg-emerald-700 hover:bg-emerald-800 rounded-lg shadow-sm inline-flex items-center gap-2 transition-all active:scale-95 focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
               >
-                <span>Next Question</span>
+                <span>
+                  {currentIndex === questions.length - 1 ? 'Finish Practice Session' : 'Next Question'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             )}
@@ -1067,35 +1451,88 @@ export function VoicePracticeScreen() {
           <div
             role="region"
             aria-live="polite"
-            className={`p-5 rounded-xl border-2 space-y-3 transition-all ${
+            className={`p-5 sm:p-6 rounded-xl border-2 space-y-4 transition-all ${
               evaluation.isCorrect
-                ? 'bg-emerald-50 border-emerald-500 text-emerald-950'
-                : 'bg-red-50 border-red-500 text-red-950'
+                ? 'bg-emerald-50/70 border-emerald-500 text-emerald-950'
+                : 'bg-red-50/70 border-red-500 text-red-950'
             }`}
           >
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center gap-2 font-bold text-base">
                 {evaluation.isCorrect ? (
                   <>
-                    <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0" />
-                    <span>Correct Response! (+3 Marks)</span>
+                    <CheckCircle2 className="w-5 h-5 text-emerald-700 shrink-0" aria-hidden="true" />
+                    <span>Correct Answer! (+3 Marks)</span>
                   </>
                 ) : (
                   <>
-                    <XCircle className="w-5 h-5 text-red-700 shrink-0" />
-                    <span>
-                      Incorrect Option Selected. Correct Answer: Option{' '}
-                      {evaluation.correctAnswer || currentQ.correct_answer}
-                    </span>
+                    <XCircle className="w-5 h-5 text-red-700 shrink-0" aria-hidden="true" />
+                    <span>Incorrect Answer (-1 Mark)</span>
                   </>
                 )}
               </div>
               <AudioToolbar textToRead={evaluation.explanation} label="Read explanation aloud" />
             </div>
 
-            <div className="text-xs sm:text-sm font-medium leading-relaxed bg-white/90 p-3.5 rounded-lg border border-slate-300">
-              <strong className="block text-slate-900 mb-1">Academic Step-by-Step Derivation:</strong>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Your Answer */}
+              <div
+                className={`p-3.5 rounded-lg border-2 ${
+                  evaluation.isCorrect
+                    ? 'bg-emerald-50 border-emerald-400 text-emerald-950'
+                    : 'bg-red-50 border-red-400 text-red-950'
+                }`}
+              >
+                <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider mb-1">
+                  {evaluation.isCorrect ? (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" aria-hidden="true" />
+                  ) : (
+                    <XCircle className="w-4 h-4 text-red-700 shrink-0" aria-hidden="true" />
+                  )}
+                  <span>Your Answer</span>
+                </div>
+                <p className="text-sm font-semibold">
+                  Option {evaluation.chosenOption || selectedOption}:{' '}
+                  {evaluation.chosenOptionText ||
+                    String((currentQ as any)[`option_${(evaluation.chosenOption || selectedOption || 'a').toLowerCase()}`] || '')}
+                </p>
+              </div>
+
+              {/* Correct Answer */}
+              <div className="p-3.5 rounded-lg border-2 bg-emerald-50 border-emerald-500 text-emerald-950">
+                <div className="flex items-center gap-1.5 text-xs font-extrabold uppercase tracking-wider mb-1">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" aria-hidden="true" />
+                  <span>Correct Answer</span>
+                </div>
+                <p className="text-sm font-semibold">
+                  Option {evaluation.correctAnswer || currentQ.correct_answer}:{' '}
+                  {evaluation.correctOptionText ||
+                    String((currentQ as any)[`option_${(evaluation.correctAnswer || currentQ.correct_answer || 'a').toLowerCase()}`] || '')}
+                </p>
+              </div>
+            </div>
+
+            <div className="text-xs sm:text-sm font-medium leading-relaxed bg-white p-4 rounded-lg border border-slate-300 text-slate-900">
+              <strong className="block text-slate-900 mb-1">Explanation:</strong>
               {evaluation.explanation}
+            </div>
+
+            <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-200/80">
+              <p className="text-xs font-semibold text-slate-700">
+                Say <strong>&ldquo;Next&rdquo;</strong> or press <strong>Enter</strong> when you are ready.
+              </p>
+
+              <button
+                type="button"
+                data-action="next-question-footer"
+                onClick={advanceToNextQuestion}
+                className="px-5 py-2.5 text-sm font-bold text-white bg-[#1749E8] hover:bg-[#123BB8] rounded-lg shadow-sm inline-flex items-center gap-2 transition-all focus:outline-none focus:ring-2 focus:ring-[#1749E8] focus:ring-offset-2"
+              >
+                <span>
+                  {currentIndex === questions.length - 1 ? 'Finish Practice Session' : 'Next Question'}
+                </span>
+                <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </button>
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-slate-700">

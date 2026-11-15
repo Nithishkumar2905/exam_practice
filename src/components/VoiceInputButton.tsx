@@ -4,12 +4,14 @@ import { useAccessibility } from '../context/AccessibilityContext.tsx';
 
 interface VoiceInputButtonProps {
   onTranscriptConfirmed: (transcript: string) => void;
+  onMicError?: (message: string, errorName?: string) => void;
   label?: string;
   contextHint?: string;
 }
 
 export function VoiceInputButton({
   onTranscriptConfirmed,
+  onMicError,
   label = 'Voice Input (Alt+M)',
   contextHint = 'Say your answer option (e.g. "Select Option A") or question text'
 }: VoiceInputButtonProps) {
@@ -67,6 +69,7 @@ export function VoiceInputButton({
         : err.message || 'Could not initialize microphone recording.';
       setErrorMsg(msg);
       announce(msg, 'assertive');
+      onMicError?.(msg, err.name);
     }
   };
 
@@ -123,6 +126,7 @@ export function VoiceInputButton({
       const msg = 'Unable to connect to speech recognition service. Please check the server is running, or use manual input.';
       setErrorMsg(msg);
       announce(msg, 'assertive');
+      onMicError?.(msg, err.name);
     } finally {
       setIsProcessing(false);
     }

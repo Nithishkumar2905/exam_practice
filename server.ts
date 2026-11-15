@@ -12,13 +12,37 @@ import {
   loadQuestions,
   resetQuestionsCache,
   User,
+  Question,
   PracticeAttempt,
   MockExamAttempt,
+  DiagnosticAttempt,
   RevisionItem,
   TopicMasteryRecord,
   AccessibilitySettings,
   LearningHistoryEntry
 } from './src/db/database.ts';
+import {
+  selectPilotDemoQuestions,
+  selectPilotDemoWithMetadata,
+  evaluatePilotDemoSubmission,
+  generateDiagnosticRecommendations,
+  DIAGNOSTIC_SECTIONS,
+  PILOT_DEMO_DURATION_SECONDS
+} from './src/utils/pilotDemoScoring.ts';
+import { parseMathematicalSpeech } from './src/math/mathematicalSpeechParser.ts';
+import { renderTextWithMathToSpeech, renderMathExpressionToSpeech } from './src/math/mathematicalSpeechRenderer.ts';
+import { matchSpokenMathToOptions } from './src/math/mathematicalAnswerEvaluator.ts';
+import {
+  issueCaptchaChallenge,
+  verifyCaptchaChallengeToken,
+  invalidateCaptchaChallengeToken,
+  checkAuthRateLimit
+} from './src/utils/captchaServer.ts';
+import {
+  evaluateWithEngine,
+  equivalenceWithEngine,
+  validateRequestString
+} from './src/math/mathService.ts';
 import { getRepository, IDataRepository } from './src/db/repository.ts';
 import { runDatabaseMigration, MigrationReport } from './src/db/migration.ts';
 import { checkPostgresConnection, isPostgresConnected, getLastConnectionError } from './src/db/db_pool.ts';
@@ -33,6 +57,16 @@ function isHashedPassword(pwd: string): boolean {
 }
 
 import { evaluateSubmission, QuestionSubmission } from './src/utils/scoring.ts';
+import {
+  selectMockExamQuestions,
+  buildAssignment,
+  isAssignmentStillValid,
+  getEligibleMockQuestions,
+  deriveRotationState,
+  MOCK_EXAM_BLUEPRINT,
+  MOCK_EXAM_TOTAL_QUESTIONS,
+  MockExamAssignment
+} from './src/utils/mockExamRotation.ts';
 import { calculateSM2, getNextReviewDate } from './src/utils/sm2.ts';
 import { updateBKT, classifyMasteryTier } from './src/utils/bkt.ts';
 
@@ -115,8 +149,44 @@ app.post('/api/db/migrate', async (req, res) => {
 // -------------------------------------------------------------
 // 2. AUTHENTICATION & CANDIDATE REGISTRATION
 // -------------------------------------------------------------
+app.get('/api/auth/captcha', (req, res) => {
+  const clientKey = req.ip || req.socket.remoteAddress || 'unknown';
+  const rate = checkAuthRateLimit(clientKey, 'captcha');
+  if (!rate.allowed) {
+    res.setHeader('Retry-After', String(rate.retryAfterSeconds));
+    return res.status(429).json({
+      error: `Too many CAPTCHA requests. Please wait ${rate.retryAfterSeconds} seconds and try again.`
+    });
+  }
+
+  const previousToken = typeof req.query.previousToken === 'string' ? req.query.previousToken : undefined;
+  if (previousToken) {
+    invalidateCaptchaChallengeToken(previousToken);
+  }
+
+  const challenge = issueCaptchaChallenge();
+  return res.json(challenge);
+});
+
 app.post('/api/auth/login', async (req, res) => {
-  const { identifier, password } = req.body;
+  const { identifier, password, captchaToken, captchaAnswer } = req.body ?? {};
+  const clientKey = `${req.ip || req.socket.remoteAddress || 'unknown'}:${String(identifier || '').toLowerCase()}`;
+  const rate = checkAuthRateLimit(clientKey, 'login');
+  if (!rate.allowed) {
+    res.setHeader('Retry-After', String(rate.retryAfterSeconds));
+    return res.status(429).json({
+      error: `Too many login attempts. Please wait ${rate.retryAfterSeconds} seconds before trying again.`
+    });
+  }
+
+  const captchaCheck = verifyCaptchaChallengeToken(captchaToken, captchaAnswer);
+  if (!captchaCheck.valid) {
+    return res.status(400).json({
+      error: 'Invalid CAPTCHA code. Please listen and try again.',
+      code: 'INVALID_CAPTCHA'
+    });
+  }
+
   const repo = await getRepository();
 
   const user = await repo.getUserByIdentifier(identifier);
@@ -161,13 +231,46 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 app.post('/api/auth/register', async (req, res) => {
-  const { name, email, rollNumber, password, pwdCategory, needScribe, examRegion, examLanguage } = req.body;
-  if (!name || !email) {
+  const {
+    name,
+    email,
+    rollNumber,
+    password,
+    pwdCategory,
+    needScribe,
+    examRegion,
+    examLanguage,
+    captchaToken,
+    captchaAnswer
+  } = req.body ?? {};
+
+  const clientKey = `${req.ip || req.socket.remoteAddress || 'unknown'}:${String(email || '').toLowerCase()}`;
+  const rate = checkAuthRateLimit(clientKey, 'login');
+  if (!rate.allowed) {
+    res.setHeader('Retry-After', String(rate.retryAfterSeconds));
+    return res.status(429).json({
+      error: `Too many registration attempts. Please wait ${rate.retryAfterSeconds} seconds before trying again.`
+    });
+  }
+
+  const captchaCheck = verifyCaptchaChallengeToken(captchaToken, captchaAnswer);
+  if (!captchaCheck.valid) {
+    return res.status(400).json({
+      error: 'Invalid CAPTCHA code. Please listen and try again.',
+      code: 'INVALID_CAPTCHA'
+    });
+  }
+
+  if (!name || !String(name).trim() || !email || !String(email).trim()) {
     return res.status(400).json({ error: 'Name and email are mandatory fields.' });
   }
 
+  if (typeof password !== 'string' || password.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters long.' });
+  }
+
   const repo = await getRepository();
-  const existing = await repo.getUserByIdentifier(email);
+  const existing = await repo.getUserByIdentifier(String(email).trim());
   if (existing) {
     return res.status(400).json({ error: 'Candidate with this email already registered.' });
   }
@@ -178,9 +281,9 @@ app.post('/api/auth/register', async (req, res) => {
   const newUser: User = {
     id: newId,
     rollNumber: generatedRoll,
-    name,
-    email,
-    passwordHash: hashPassword(password || 'candidate123'),
+    name: String(name).trim(),
+    email: String(email).trim(),
+    passwordHash: hashPassword(password),
     role: 'candidate',
     pwdCategory: pwdCategory || 'None',
     needScribe: Boolean(needScribe),
@@ -244,13 +347,18 @@ app.get('/api/questions', async (req, res) => {
   const { total, questions } = await repo.getQuestions(req.query as any);
   const off = Number(req.query.offset) || 0;
   const lim = Number(req.query.limit) || 20;
+  const hideSolutions = req.query.examMode === 'true';
+
+  const payloadQuestions = hideSolutions
+    ? questions.map(({ correct_answer, explanation, ...rest }) => rest)
+    : questions;
 
   res.json({
     total,
-    count: questions.length,
+    count: payloadQuestions.length,
     offset: off,
     limit: lim,
-    questions
+    questions: payloadQuestions
   });
 });
 
@@ -358,6 +466,7 @@ app.post('/api/practice/submit', async (req, res) => {
     isCorrect,
     correctAnswer: q.correct_answer,
     explanation: q.explanation,
+    sourceName: q.source_name,
     mastery: bktRecord,
     nextReviewDue: sm2Record.nextReviewDue
   });
@@ -366,12 +475,287 @@ app.post('/api/practice/submit', async (req, res) => {
 // -------------------------------------------------------------
 // 5. MOCK EXAMINATION SUBMISSION & RESULTS
 // -------------------------------------------------------------
+
+/** Strips answer keys so the active exam never exposes correct answers to the client. */
+function toExamSafeQuestion(q: Question) {
+  const { correct_answer: _ca, explanation: _ex, ...rest } = q as any;
+  return rest;
+}
+
+function serializeAssignmentMeta(a: MockExamAssignment) {
+  return {
+    id: a.id,
+    sequenceNumber: a.sequenceNumber,
+    status: a.status,
+    assignedAt: a.assignedAt,
+    totalQuestions: a.questions.length,
+    rotationSummary: a.rotationSummary || null
+  };
+}
+
+/**
+ * Starts (or resumes) the student's mock examination with a persisted, non-repeating
+ * question set. Refreshing / re-opening returns the SAME in-progress set.
+ */
+app.post('/api/mock/start', async (req, res) => {
+  try {
+    const uid = String(req.body?.userId || 'usr_candidate_01');
+    const repo = await getRepository();
+    const user = await repo.getUserById(uid);
+    if (!user) {
+      return res.status(401).json({ error: 'Authenticated student account not found.' });
+    }
+
+    const currentCycle = await repo.getMockCycle(uid);
+    const allQuestions = loadQuestions();
+    const qMap = new Map<string, Question>(allQuestions.map((q) => [q.question_id, q]));
+    const assignments = await repo.getMockAssignments(uid);
+
+    // 1. Resume an existing in-progress exam (never regenerate on refresh)
+    const active = assignments.find((a) => a.status === 'IN_PROGRESS');
+    if (active) {
+      if (isAssignmentStillValid(active, allQuestions)) {
+        return res.json({
+          success: true,
+          resumed: true,
+          assignment: serializeAssignmentMeta(active),
+          isNearingExhaustion: active.questions.length < MOCK_EXAM_TOTAL_QUESTIONS,
+          availableQuestionCount: active.questions.length,
+          cycleNumber: active.cycleNumber || currentCycle,
+          questions: active.questions
+            .slice()
+            .sort((a, b) => a.position - b.position)
+            .map((aq) => toExamSafeQuestion(qMap.get(aq.questionId)!))
+        });
+      }
+      // Question bank changed underneath an unfinished exam: retire it safely.
+      await repo.setMockAssignmentStatus(active.id, 'INVALIDATED');
+    }
+
+    // 2. Generate a fresh set excluding previously completed questions in this cycle
+    const completed = assignments.filter((a) => a.status === 'COMPLETED');
+    const selection = selectMockExamQuestions(allQuestions, completed, currentCycle);
+
+    // When no unused questions remain, prompt for starting a new cycle
+    if (selection.questions.length === 0) {
+      return res.json({
+        success: false,
+        isExhausted: true,
+        cycleNumber: currentCycle,
+        message: 'You have completed all available Mock Examination questions. Would you like to start a new question cycle?'
+      });
+    }
+
+    const nextSequence = assignments.reduce((m, a) => Math.max(m, a.sequenceNumber), 0) + 1;
+    const draft = buildAssignment(uid, nextSequence, selection, currentCycle);
+
+    // 3. Persist BEFORE returning questions; a concurrent request gets the already-active set.
+    const persisted = await repo.createMockAssignment(draft);
+
+    return res.json({
+      success: true,
+      resumed: persisted.id !== draft.id,
+      assignment: serializeAssignmentMeta(persisted),
+      isNearingExhaustion: persisted.questions.length < MOCK_EXAM_TOTAL_QUESTIONS,
+      availableQuestionCount: persisted.questions.length,
+      cycleNumber: persisted.cycleNumber || currentCycle,
+      questions: persisted.questions
+        .slice()
+        .sort((a, b) => a.position - b.position)
+        .map((aq) => toExamSafeQuestion(qMap.get(aq.questionId)!))
+    });
+  } catch (err: any) {
+    console.error('[Mock Rotation] start error:', err);
+    res.status(500).json({ error: err?.message || 'Could not start mock examination.' });
+  }
+});
+
+/** Rotation progress for a student (used / remaining per subject in the current cycle). */
+app.get('/api/mock/rotation-status', async (req, res) => {
+  try {
+    const uid = String(req.query.userId || 'usr_candidate_01');
+    const repo = await getRepository();
+    const currentCycle = await repo.getMockCycle(uid);
+    const allQuestions = loadQuestions();
+    const assignments = await repo.getMockAssignments(uid);
+    const eligible = getEligibleMockQuestions(allQuestions);
+    const poolBySubject = new Map<string, Set<string>>();
+    for (const b of MOCK_EXAM_BLUEPRINT) {
+      poolBySubject.set(
+        b.subject,
+        new Set(eligible.filter((q) => q.subject === b.subject).map((q) => q.question_id))
+      );
+    }
+    const completed = assignments.filter((a) => a.status === 'COMPLETED');
+    const completedInCycle = completed.filter((a) => (a.cycleNumber ?? 1) === currentCycle);
+    const usedInCycle = new Set<string>();
+    completedInCycle.forEach((a) => a.questions.forEach((q) => usedInCycle.add(q.questionId)));
+
+    const state = deriveRotationState(completed, poolBySubject, currentCycle);
+    const everUsed = new Set(completed.flatMap((a) => a.questions.map((q) => q.questionId)));
+    const totalEligible = eligible.length;
+    const completedInCurrentCycle = usedInCycle.size;
+    const remainingUnused = Math.max(0, totalEligible - completedInCurrentCycle);
+
+    res.json({
+      userId: uid,
+      cycleNumber: currentCycle,
+      totalEligibleQuestions: totalEligible,
+      questionsPerExam: MOCK_EXAM_TOTAL_QUESTIONS,
+      completedExamsTotal: completed.length,
+      completedExamsInCycle: completedInCycle.length,
+      completedQuestionsInCycle: completedInCurrentCycle,
+      remainingUnusedQuestions: remainingUnused,
+      isNearingExhaustion: remainingUnused > 0 && remainingUnused < MOCK_EXAM_TOTAL_QUESTIONS,
+      isExhausted: remainingUnused === 0,
+      inProgressAssignmentId: assignments.find((a) => a.status === 'IN_PROGRESS')?.id || null,
+      distinctQuestionsEverCompleted: everUsed.size,
+      subjects: MOCK_EXAM_BLUEPRINT.map((b) => {
+        const pool = poolBySubject.get(b.subject)!;
+        const st = state.get(b.subject)!;
+        return {
+          subject: b.subject,
+          perExam: b.count,
+          poolSize: pool.size,
+          usedInCurrentCycle: st.usedInCycle.size,
+          remainingUnused: pool.size - st.usedInCycle.size,
+          cycleNumber: currentCycle
+        };
+      })
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Could not compute rotation status.' });
+  }
+});
+
+/** Reset question rotation cycle after all 400 questions are exhausted (explicit confirmation). */
+app.post('/api/mock/reset-cycle', async (req, res) => {
+  try {
+    const uid = String(req.body?.userId || req.query.userId || 'usr_candidate_01');
+    const repo = await getRepository();
+    // Invalidate any active in-progress assignment before starting a new cycle
+    const assignments = await repo.getMockAssignments(uid);
+    const active = assignments.find((a) => a.status === 'IN_PROGRESS');
+    if (active) {
+      await repo.setMockAssignmentStatus(active.id, 'INVALIDATED');
+    }
+    const newCycle = await repo.resetMockCycle(uid);
+    res.json({
+      success: true,
+      message: `Started Mock Examination Rotation Cycle #${newCycle}. All questions are now eligible in a fresh shuffled order.`,
+      cycleNumber: newCycle
+    });
+  } catch (err: any) {
+    res.status(500).json({ error: err?.message || 'Could not reset mock exam cycle.' });
+  }
+});
+
 app.post('/api/mock/submit', async (req, res) => {
-  const { userId, examTitle, submissions, answers } = req.body;
+  const { userId, examTitle, submissions, answers, assignmentId } = req.body;
   const repo = await getRepository();
   const allQuestions = loadQuestions();
   const uid = userId || 'usr_candidate_01';
 
+  // ---- Rotation-aware submission path (assignment generated by /api/mock/start) ----
+  if (assignmentId) {
+    const assignment = await repo.getMockAssignmentById(String(assignmentId));
+    if (!assignment || assignment.userId !== uid) {
+      return res.status(404).json({ error: 'Mock examination assignment not found for this student.' });
+    }
+    if (assignment.status === 'COMPLETED') {
+      // Idempotent: duplicate submit returns the original result instead of double-recording.
+      return res.json({ success: true, alreadySubmitted: true, attemptId: assignment.mockAttemptId });
+    }
+    if (assignment.status !== 'IN_PROGRESS') {
+      return res.status(409).json({ error: 'This mock examination is no longer active. Please start a new one.' });
+    }
+
+    const qMap = new Map<string, Question>(allQuestions.map((q) => [q.question_id, q]));
+    const clientSubs = new Map<string, any>(
+      (Array.isArray(submissions) ? submissions : []).map((s: any) => [String(s.questionId), s])
+    );
+    const clientAnswers: Record<string, any> = answers && typeof answers === 'object' ? answers : {};
+    const ordered = assignment.questions.slice().sort((a, b) => a.position - b.position);
+
+    // Only questions that belong to this assignment are scored.
+    const formatted: QuestionSubmission[] = ordered.map((aq) => {
+      const q = qMap.get(aq.questionId);
+      const s = clientSubs.get(aq.questionId);
+      const opt = s?.selectedOption ? String(s.selectedOption).toUpperCase() : null;
+      return {
+        questionId: aq.questionId,
+        subject: q ? q.subject : aq.subject,
+        selectedOption: opt && ['A', 'B', 'C', 'D'].includes(opt) ? opt : null,
+        correctAnswer: q ? q.correct_answer : 'A',
+        timeSpentSeconds: Number(s?.timeSpentSeconds) || 0
+      };
+    });
+
+    const normalizedAnswers: MockExamAttempt['answers'] = {};
+    for (const f of formatted) {
+      const a = clientAnswers[f.questionId] || {};
+      normalizedAnswers[f.questionId] = {
+        selectedOption: f.selectedOption,
+        timeSpent: Number(a.timeSpent) || 0,
+        markedForReview: Boolean(a.markedForReview)
+      };
+    }
+    const submittedIds = formatted.filter((f) => f.selectedOption !== null).map((f) => f.questionId);
+
+    const evalResult = evaluateSubmission(formatted);
+    const now = new Date();
+    const mockAttempt: MockExamAttempt = {
+      id: `mock_${now.getTime()}`,
+      userId: uid,
+      examTitle: examTitle || `SSC MTS 2026 Official Pattern Mock Examination #${assignment.sequenceNumber}`,
+      session1Score: evalResult.session1Score,
+      session2Score: evalResult.session2Score,
+      totalScore: evalResult.totalScore,
+      totalMax: evalResult.totalMax,
+      percentage: evalResult.totalPercentage,
+      qualified: evalResult.session1Qualified,
+      totalTimeSeconds: evalResult.totalTimeSeconds,
+      answers: normalizedAnswers,
+      completedAt: now.toISOString(),
+      assignmentId: assignment.id,
+      sequenceNumber: assignment.sequenceNumber
+    };
+    const historyEntry: LearningHistoryEntry = {
+      id: `hist_mock_${now.getTime()}`,
+      userId: uid,
+      type: 'mock_exam',
+      title: mockAttempt.examTitle,
+      summary: `Score: ${evalResult.totalScore}/${evalResult.totalMax} (${evalResult.totalPercentage}%). Session-I: ${evalResult.session1Qualified ? 'Qualified' : 'Not Qualified'}.`,
+      score: evalResult.totalScore,
+      maxScore: evalResult.totalMax,
+      durationSeconds: evalResult.totalTimeSeconds,
+      timestamp: now.toISOString()
+    };
+
+    try {
+      await repo.completeMockAssignment(assignment.id, submittedIds, mockAttempt, historyEntry);
+    } catch (err: any) {
+      if (err?.message === 'MOCK_ASSIGNMENT_NOT_ACTIVE') {
+        const latest = await repo.getMockAssignmentById(assignment.id);
+        if (latest?.status === 'COMPLETED') {
+          return res.json({ success: true, alreadySubmitted: true, attemptId: latest.mockAttemptId });
+        }
+        return res.status(409).json({ error: 'This mock examination is no longer active.' });
+      }
+      console.error('[Mock Rotation] submit error:', err);
+      return res.status(500).json({ error: 'Could not save mock examination. Your answers are preserved; please retry.' });
+    }
+
+    return res.json({
+      success: true,
+      attemptId: mockAttempt.id,
+      assignmentId: assignment.id,
+      sequenceNumber: assignment.sequenceNumber,
+      evaluation: evalResult
+    });
+  }
+
+  // ---- Legacy submission path (no assignment) — unchanged behaviour ----
   // Construct submissions array with verified correct answers
   const formattedSubmissions: QuestionSubmission[] = (submissions || []).map((s: any) => {
     const q = allQuestions.find((item) => item.question_id === s.questionId);
@@ -436,6 +820,361 @@ app.get('/api/mock/attempts/:id', async (req, res) => {
     return res.status(404).json({ error: 'Mock attempt not found' });
   }
   res.json(attempt);
+});
+
+// -------------------------------------------------------------
+// 5A. MATHEMATICAL VOICE INTELLIGENCE ENDPOINTS (no answers/explanations are ever returned)
+// -------------------------------------------------------------
+function mathError(res: express.Response, e: any) {
+  res.status(400).json({ success: false, error: e?.message || 'Invalid request' });
+}
+
+app.post('/api/math/parse', (req, res) => {
+  try {
+    const transcript = validateRequestString(req.body?.transcript, 'transcript');
+    const { ast, ...rest } = parseMathematicalSpeech(transcript);
+    res.json({ ...rest, ast });
+  } catch (e) {
+    mathError(res, e);
+  }
+});
+
+app.post('/api/math/evaluate', async (req, res) => {
+  try {
+    const expression = validateRequestString(req.body?.expression, 'expression');
+    const op = ['evaluate', 'simplify', 'solve'].includes(req.body?.op) ? req.body.op : 'evaluate';
+    res.json(await evaluateWithEngine(expression, op));
+  } catch (e) {
+    mathError(res, e);
+  }
+});
+
+app.post('/api/math/equivalent', async (req, res) => {
+  try {
+    const student = validateRequestString(req.body?.student, 'student');
+    const target = validateRequestString(req.body?.target, 'target');
+    res.json(await equivalenceWithEngine(student, target));
+  } catch (e) {
+    mathError(res, e);
+  }
+});
+
+app.post('/api/math/match-options', (req, res) => {
+  try {
+    const expression = validateRequestString(req.body?.expression, 'expression');
+    const o = req.body?.options || {};
+    const options = {
+      A: String(o.A ?? ''),
+      B: String(o.B ?? ''),
+      C: String(o.C ?? ''),
+      D: String(o.D ?? '')
+    };
+    const { matches, unique } = matchSpokenMathToOptions(expression, options);
+    res.json({ matches, unique });
+  } catch (e) {
+    mathError(res, e);
+  }
+});
+
+app.post('/api/math/speech', (req, res) => {
+  try {
+    if (typeof req.body?.expression === 'string') {
+      return res.json(renderMathExpressionToSpeech(validateRequestString(req.body.expression, 'expression')));
+    }
+    res.json({ spoken: renderTextWithMathToSpeech(validateRequestString(req.body?.text, 'text')) });
+  } catch (e) {
+    mathError(res, e);
+  }
+});
+
+// -------------------------------------------------------------
+// 5B. PILOT DEMO DIAGNOSTIC ENDPOINTS (20 Qs, 25 Min, 4 Sections)
+// -------------------------------------------------------------
+app.get('/api/diagnostic/questions', async (req, res) => {
+  const allQuestions = loadQuestions();
+  const selectedResult = selectPilotDemoWithMetadata(allQuestions);
+  const selected20 = selectedResult.questions;
+  const hideSolutions = req.query.examMode === 'true';
+
+  const questionsPayload = hideSolutions
+    ? selected20.map(({ correct_answer, explanation, ...rest }) => rest)
+    : selected20;
+
+  res.json({
+    examName: 'SSC MTS Pilot Demo Diagnostic',
+    totalQuestions: selected20.length,
+    durationSeconds: PILOT_DEMO_DURATION_SECONDS,
+    sections: DIAGNOSTIC_SECTIONS,
+    blueprintMeta: selectedResult.generalAwarenessBlueprint,
+    questions: questionsPayload
+  });
+});
+
+app.post('/api/diagnostic/submit', async (req, res) => {
+  try {
+    const {
+      userId,
+      clientSubmissionId,
+      examTitle,
+      submissions,
+      totalTimeSeconds,
+      acceptanceStatus,
+      acceptanceMethod,
+      acceptedAt,
+      examStartedAt
+    } = req.body;
+
+    if (!userId || typeof userId !== 'string') {
+      return res.status(401).json({ error: 'Authenticated candidate userId is required.' });
+    }
+
+    const repo = await getRepository();
+    const user = await repo.getUserById(userId);
+    if (!user) {
+      return res.status(401).json({ error: 'Authenticated candidate not found.' });
+    }
+
+    if (!Array.isArray(submissions) || submissions.length === 0) {
+      return res.status(400).json({ error: 'Diagnostic submissions payload is required.' });
+    }
+
+    const allQuestions = loadQuestions();
+    const default20 = selectPilotDemoQuestions(allQuestions);
+
+    // Resolve questions in submission order (falling back to the 20 diagnostic questions)
+    const submissionQuestions = submissions
+      .map((s: any) => allQuestions.find((q) => q.question_id === s.questionId))
+      .filter((q): q is NonNullable<typeof q> => Boolean(q));
+
+    const questionsToEvaluate =
+      submissionQuestions.length === 20 ? submissionQuestions : default20;
+
+    const evalResult = evaluatePilotDemoSubmission(
+      questionsToEvaluate,
+      submissions,
+      Number(totalTimeSeconds) || 0
+    );
+
+    const nowIso = new Date().toISOString();
+    const attemptId =
+      clientSubmissionId && typeof clientSubmissionId === 'string'
+        ? `diag_${clientSubmissionId.replace(/[^a-zA-Z0-9_-]/g, '')}`
+        : `diag_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+
+    const validAcceptanceMethod =
+      acceptanceMethod === 'VOICE' || acceptanceMethod === 'CHECKBOX' || acceptanceMethod === 'KEYBOARD'
+        ? acceptanceMethod
+        : 'CHECKBOX';
+    const validAcceptanceStatus =
+      acceptanceStatus === 'NOT_ACCEPTED' || acceptanceStatus === 'ACCEPTED'
+        ? acceptanceStatus
+        : 'ACCEPTED';
+
+    const diagnosticAttempt: DiagnosticAttempt = {
+      id: attemptId,
+      clientSubmissionId: clientSubmissionId || attemptId,
+      userId: user.id,
+      examTitle: examTitle || 'SSC MTS Pilot Demo Diagnostic',
+      status: 'completed',
+      totalQuestions: evalResult.totalQuestions,
+      attemptedCount: evalResult.attemptedCount,
+      correctCount: evalResult.correctCount,
+      incorrectCount: evalResult.incorrectCount,
+      unansweredCount: evalResult.unansweredCount,
+      session1Score: evalResult.session1Score,
+      session2Score: evalResult.session2Score,
+      totalScore: evalResult.totalScore,
+      totalMax: evalResult.totalMax,
+      percentage: evalResult.percentage,
+      accuracyPercentage: evalResult.accuracyPercentage,
+      totalTimeSeconds: evalResult.totalTimeSeconds,
+      responses: evalResult.responses,
+      subjectBreakdown: evalResult.subjectBreakdown,
+      topicBreakdown: evalResult.topicBreakdown,
+      acceptanceStatus: validAcceptanceStatus,
+      acceptanceMethod: validAcceptanceMethod,
+      acceptedAt: typeof acceptedAt === 'string' ? acceptedAt : nowIso,
+      examStartedAt: typeof examStartedAt === 'string' ? examStartedAt : nowIso,
+      completedAt: nowIso
+    };
+
+    // Compute BKT Topic Mastery updates for answered questions
+    const currentMasteryList = await repo.getTopicMastery(user.id);
+    const masteryMap = new Map<string, TopicMasteryRecord>();
+    for (const m of currentMasteryList) {
+      masteryMap.set(m.topic, {
+        id: m.id || `mst_${user.id}_${m.topic.replace(/\s+/g, '_')}`,
+        userId: user.id,
+        subject: m.subject,
+        topic: m.topic,
+        p_known: Number(m.p_known) || 0.25,
+        masteryPercentage: Number(m.masteryPercentage) || 25,
+        tier: m.tier || 'Novice',
+        attemptsCount: Number(m.attemptsCount) || 0,
+        correctCount: Number(m.correctCount) || 0,
+        updatedAt: nowIso
+      });
+    }
+
+    const bktUpdatesMap = new Map<string, TopicMasteryRecord>();
+    for (const resp of evalResult.responses) {
+      if (!resp.isAnswered) continue;
+      const existing = bktUpdatesMap.get(resp.topic) || masteryMap.get(resp.topic);
+      const prevP = existing ? existing.p_known : 0.25;
+      const newP = updateBKT(prevP, resp.isCorrect);
+      const attemptsCount = (existing ? existing.attemptsCount : 0) + 1;
+      const correctCount = (existing ? existing.correctCount : 0) + (resp.isCorrect ? 1 : 0);
+
+      bktUpdatesMap.set(resp.topic, {
+        id: existing?.id || `mst_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+        userId: user.id,
+        subject: resp.subject,
+        topic: resp.topic,
+        p_known: newP,
+        masteryPercentage: Math.round(newP * 100),
+        tier: classifyMasteryTier(newP),
+        attemptsCount,
+        correctCount,
+        updatedAt: nowIso
+      });
+    }
+
+    const historyEntry: LearningHistoryEntry = {
+      id: `hist_diag_${attemptId}`,
+      userId: user.id,
+      type: 'diagnostic',
+      title: diagnosticAttempt.examTitle,
+      summary: `Pilot Demo Diagnostic: Score ${evalResult.totalScore}/${evalResult.totalMax} (${evalResult.accuracyPercentage}% accuracy, ${evalResult.correctCount} correct, ${evalResult.incorrectCount} incorrect, ${evalResult.unansweredCount} unanswered).`,
+      score: evalResult.totalScore,
+      maxScore: evalResult.totalMax,
+      durationSeconds: evalResult.totalTimeSeconds,
+      timestamp: nowIso
+    };
+
+    const persistedAttempt = await repo.recordDiagnosticAttempt(
+      diagnosticAttempt,
+      Array.from(bktUpdatesMap.values()),
+      historyEntry
+    );
+
+    const allCandidateAttempts = await repo.getDiagnosticAttempts(user.id);
+    const recommendationData = generateDiagnosticRecommendations(allCandidateAttempts);
+
+    // Enrich responses with question text & explanation for results screen
+    const enrichedResponses = persistedAttempt.responses.map((r) => {
+      const q = allQuestions.find((item) => item.question_id === r.questionId);
+      return {
+        ...r,
+        questionText: q?.question_text || '',
+        optionA: q?.option_a || '',
+        optionB: q?.option_b || '',
+        optionC: q?.option_c || '',
+        optionD: q?.option_d || '',
+        explanation: q?.explanation || ''
+      };
+    });
+
+    res.json({
+      success: true,
+      attempt: {
+        ...persistedAttempt,
+        enrichedResponses
+      },
+      recommendations: recommendationData.recommendations,
+      historicalSummaryNote: recommendationData.historicalSummaryNote,
+      hasSufficientHistory: recommendationData.hasSufficientHistory
+    });
+  } catch (err: any) {
+    console.error('Diagnostic submit error:', err);
+    res.status(500).json({
+      error: 'Failed to persist diagnostic attempt.',
+      details: err.message
+    });
+  }
+});
+
+app.get('/api/diagnostic/attempts', async (req, res) => {
+  const userId = String(req.query.userId || '');
+  if (!userId) {
+    return res.status(401).json({ error: 'Authenticated candidate userId is required.' });
+  }
+
+  const repo = await getRepository();
+  const attempts = await repo.getDiagnosticAttempts(userId);
+  const allQuestions = loadQuestions();
+  const recommendationData = generateDiagnosticRecommendations(attempts);
+
+  const enrichedAttempts = attempts.map((att) => ({
+    ...att,
+    enrichedResponses: (att.responses || []).map((r) => {
+      const q = allQuestions.find((item) => item.question_id === r.questionId);
+      return {
+        ...r,
+        questionText: q?.question_text || '',
+        optionA: q?.option_a || '',
+        optionB: q?.option_b || '',
+        optionC: q?.option_c || '',
+        optionD: q?.option_d || '',
+        explanation: q?.explanation || ''
+      };
+    })
+  }));
+
+  res.json({
+    attempts: enrichedAttempts,
+    totalAttempts: enrichedAttempts.length,
+    latestAttempt: enrichedAttempts[0] || null,
+    recommendations: recommendationData.recommendations,
+    historicalSummaryNote: recommendationData.historicalSummaryNote,
+    hasSufficientHistory: recommendationData.hasSufficientHistory
+  });
+});
+
+app.get('/api/diagnostic/attempts/:id', async (req, res) => {
+  const userId = String(req.query.userId || '');
+  if (!userId) {
+    return res.status(401).json({ error: 'Authenticated candidate userId is required.' });
+  }
+
+  const repo = await getRepository();
+  const attempt = await repo.getDiagnosticAttemptById(req.params.id);
+  if (!attempt) {
+    return res.status(404).json({ error: 'Diagnostic attempt not found.' });
+  }
+
+  // Candidate ownership validation
+  if (attempt.userId !== userId) {
+    return res.status(403).json({
+      error: 'Forbidden: You do not have permission to access another candidate’s diagnostic record.'
+    });
+  }
+
+  const allQuestions = loadQuestions();
+  const allCandidateAttempts = await repo.getDiagnosticAttempts(userId);
+  const recommendationData = generateDiagnosticRecommendations(allCandidateAttempts);
+
+  const enrichedResponses = (attempt.responses || []).map((r) => {
+    const q = allQuestions.find((item) => item.question_id === r.questionId);
+    return {
+      ...r,
+      questionText: q?.question_text || '',
+      optionA: q?.option_a || '',
+      optionB: q?.option_b || '',
+      optionC: q?.option_c || '',
+      optionD: q?.option_d || '',
+      explanation: q?.explanation || ''
+    };
+  });
+
+  res.json({
+    attempt: {
+      ...attempt,
+      enrichedResponses
+    },
+    recommendations: recommendationData.recommendations,
+    historicalSummaryNote: recommendationData.historicalSummaryNote,
+    hasSufficientHistory: recommendationData.hasSufficientHistory
+  });
 });
 
 // -------------------------------------------------------------
@@ -601,8 +1340,32 @@ app.get('/api/model/evaluation', (req, res) => {
 });
 
 function getPythonExecutable(): string {
-  const userPy = path.join(process.env.LOCALAPPDATA || '', 'Programs', 'Python', 'Python311', 'python.exe');
-  if (fs.existsSync(userPy)) return userPy;
+  if (process.platform === 'win32') {
+    const venv = path.resolve(process.cwd(), '.venv', 'Scripts', 'python.exe');
+    if (fs.existsSync(venv)) return venv;
+
+    if (process.env.PYTHON && fs.existsSync(process.env.PYTHON)) {
+      return process.env.PYTHON;
+    }
+
+    const localApp = process.env.LOCALAPPDATA;
+    if (localApp) {
+      const pyBase = path.join(localApp, 'Programs', 'Python');
+      if (fs.existsSync(pyBase)) {
+        try {
+          const dirs = fs.readdirSync(pyBase).filter((d) => d.toLowerCase().startsWith('python'));
+          for (const d of dirs) {
+            const p = path.join(pyBase, d, 'python.exe');
+            if (fs.existsSync(p)) return p;
+          }
+        } catch {}
+      }
+    }
+    return 'python';
+  }
+
+  const venv = path.resolve(process.cwd(), '.venv', 'bin', 'python3');
+  if (fs.existsSync(venv)) return venv;
   return 'python3';
 }
 
@@ -682,7 +1445,8 @@ app.get('/api/audio/status', (req, res) => {
     if (!err && stdout.trim() === 'ok') {
       return res.json({ whisperAvailable: true, pythonAvailable: true });
     }
-    execFile('python', ['-c', 'import whisper; print("ok")'], { timeout: 8000, env: getExecutionEnv() }, (err2, stdout2) => {
+    const fallbackCmd = process.platform === 'win32' ? 'python' : 'python3';
+    execFile(fallbackCmd, ['-c', 'import whisper; print("ok")'], { timeout: 8000, env: getExecutionEnv() }, (err2, stdout2) => {
       const available = !err2 && stdout2.trim() === 'ok';
       res.json({ whisperAvailable: available, pythonAvailable: !err2 });
     });
@@ -724,7 +1488,8 @@ app.post('/api/audio/transcribe', upload.single('audio'), (req, res) => {
 
   execFile(getPythonExecutable(), [scriptPath, filePath], { timeout: 45000, env: getExecutionEnv() }, (error, stdout, stderr) => {
     if (error) {
-      execFile('python', [scriptPath, filePath], { timeout: 45000, env: getExecutionEnv() }, (err2, stdout2, stderr2) => {
+      const fallbackCmd = process.platform === 'win32' ? 'python' : 'python3';
+      execFile(fallbackCmd, [scriptPath, filePath], { timeout: 45000, env: getExecutionEnv() }, (err2, stdout2, stderr2) => {
         if (err2) {
           return handleWhisperUnavailable(err2.message || stderr2);
         }
@@ -991,5 +1756,7 @@ async function startServer() {
     console.log(`ACCESSPREP-X Portal running on http://0.0.0.0:${PORT}`);
   });
 }
+
+export { app };
 
 startServer();

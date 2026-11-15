@@ -4,6 +4,7 @@ import {
   Question,
   PracticeAttempt,
   MockExamAttempt,
+  DiagnosticAttempt,
   RevisionItem,
   TopicMasteryRecord,
   LearningHistoryEntry,
@@ -14,6 +15,7 @@ import {
 import { query, withTransaction, isPostgresConnected, checkPostgresConnection } from './db_pool.ts';
 import { updateBKT, classifyMasteryTier } from '../utils/bkt.ts';
 import { calculateSM2, getNextReviewDate } from '../utils/sm2.ts';
+import type { MockExamAssignment, MockAssignmentStatus } from '../utils/mockExamRotation.ts';
 
 export interface SubjectAnalyticsBreakdown {
   subject: string;
@@ -42,6 +44,7 @@ export interface QuestionFilter {
   topic?: string;
   difficulty?: string;
   search?: string;
+  language?: string;
   limit?: number;
   offset?: number;
 }
@@ -65,6 +68,28 @@ export interface IDataRepository {
   recordMockAttempt(attempt: MockExamAttempt, historyEntry: LearningHistoryEntry): Promise<void>;
   getMockAttempts(userId: string): Promise<MockExamAttempt[]>;
   getMockAttemptById(id: string): Promise<MockExamAttempt | null>;
+  // Mock Examination Non-Repeating Question Rotation
+  getMockAssignments(userId: string): Promise<MockExamAssignment[]>;
+  getMockAssignmentById(id: string): Promise<MockExamAssignment | null>;
+  getMockCycle(userId: string): Promise<number>;
+  resetMockCycle(userId: string): Promise<number>;
+  /** Persists a new IN_PROGRESS assignment. Returns the existing active one instead if a race created it first. */
+  createMockAssignment(assignment: MockExamAssignment): Promise<MockExamAssignment>;
+  setMockAssignmentStatus(id: string, status: MockAssignmentStatus): Promise<void>;
+  /** Atomically records the mock attempt + history and marks the assignment COMPLETED. */
+  completeMockAssignment(
+    assignmentId: string,
+    submittedQuestionIds: string[],
+    attempt: MockExamAttempt,
+    historyEntry: LearningHistoryEntry
+  ): Promise<void>;
+  recordDiagnosticAttempt(
+    attempt: DiagnosticAttempt,
+    bktUpdates: TopicMasteryRecord[],
+    historyEntry: LearningHistoryEntry
+  ): Promise<DiagnosticAttempt>;
+  getDiagnosticAttempts(userId: string): Promise<DiagnosticAttempt[]>;
+  getDiagnosticAttemptById(id: string): Promise<DiagnosticAttempt | null>;
   getRevisionItems(userId: string): Promise<{
     totalCount: number;
     dueTodayCount: number;
@@ -380,6 +405,341 @@ export class PostgresRepository implements IDataRepository {
       ...r,
       percentage: Number(r.percentage) || 0,
       answers: typeof r.answers === 'string' ? JSON.parse(r.answers) : r.answers
+    };
+  }
+
+  // -------------------------------------------------------------
+  // MOCK EXAM QUESTION ROTATION (PostgreSQL)
+  // -------------------------------------------------------------
+  private async loadAssignments(whereSql: string, params: any[]): Promise<MockExamAssignment[]> {
+    const aRes = await query<any>(
+      `SELECT id, user_id, sequence_number, status, assigned_at, completed_at, mock_attempt_id, rotation_summary
+       FROM mock_exam_assignments WHERE ${whereSql} ORDER BY sequence_number ASC`,
+      params
+    );
+    if (aRes.rows.length === 0) return [];
+    const ids = aRes.rows.map((r) => r.id);
+    const uRes = await query<any>(
+      `SELECT assignment_id, question_id, subject, position, question_submitted
+       FROM mock_exam_question_usage WHERE assignment_id = ANY($1) ORDER BY position ASC`,
+      [ids]
+    );
+    const byAssignment = new Map<string, MockExamAssignment['questions']>();
+    for (const u of uRes.rows) {
+      const list = byAssignment.get(u.assignment_id) || [];
+      list.push({
+        questionId: u.question_id,
+        subject: u.subject,
+        position: Number(u.position),
+        submitted: Boolean(u.question_submitted)
+      });
+      byAssignment.set(u.assignment_id, list);
+    }
+    return aRes.rows.map((r) => ({
+      id: r.id,
+      userId: r.user_id,
+      sequenceNumber: Number(r.sequence_number),
+      cycleNumber: Number(r.cycle_number ?? 1),
+      status: r.status,
+      questions: byAssignment.get(r.id) || [],
+      assignedAt: new Date(r.assigned_at).toISOString(),
+      completedAt: r.completed_at ? new Date(r.completed_at).toISOString() : null,
+      mockAttemptId: r.mock_attempt_id,
+      rotationSummary:
+        typeof r.rotation_summary === 'string' ? JSON.parse(r.rotation_summary) : r.rotation_summary
+    }));
+  }
+
+  async getMockCycle(userId: string): Promise<number> {
+    try {
+      const res = await query<any>(`SELECT current_cycle FROM mock_exam_cycles WHERE user_id = $1 LIMIT 1`, [userId]);
+      if (res.rows[0]) return Number(res.rows[0].current_cycle) || 1;
+    } catch {}
+    return 1;
+  }
+
+  async resetMockCycle(userId: string): Promise<number> {
+    try {
+      const res = await query<any>(
+        `INSERT INTO mock_exam_cycles (user_id, current_cycle, updated_at)
+         VALUES ($1, 2, NOW())
+         ON CONFLICT (user_id) DO UPDATE SET current_cycle = mock_exam_cycles.current_cycle + 1, updated_at = NOW()
+         RETURNING current_cycle`,
+        [userId]
+      );
+      if (res.rows[0]) return Number(res.rows[0].current_cycle);
+    } catch {}
+    return 2;
+  }
+
+  async getMockAssignments(userId: string): Promise<MockExamAssignment[]> {
+    return this.loadAssignments('user_id = $1', [userId]);
+  }
+
+  async getMockAssignmentById(id: string): Promise<MockExamAssignment | null> {
+    const rows = await this.loadAssignments('id = $1', [id]);
+    return rows[0] || null;
+  }
+
+  async createMockAssignment(assignment: MockExamAssignment): Promise<MockExamAssignment> {
+    try {
+      await withTransaction(async (client) => {
+        await client.query(
+          `INSERT INTO mock_exam_assignments (id, user_id, sequence_number, cycle_number, status, assigned_at, rotation_summary)
+           VALUES ($1, $2, $3, $4, 'IN_PROGRESS', $5, $6)`,
+          [
+            assignment.id,
+            assignment.userId,
+            assignment.sequenceNumber,
+            assignment.cycleNumber || 1,
+            assignment.assignedAt,
+            JSON.stringify(assignment.rotationSummary || {})
+          ]
+        );
+        for (const q of assignment.questions) {
+          await client.query(
+            `INSERT INTO mock_exam_question_usage
+               (assignment_id, user_id, question_id, subject, position, sequence_number, assigned_at)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+            [assignment.id, assignment.userId, q.questionId, q.subject, q.position, assignment.sequenceNumber, assignment.assignedAt]
+          );
+        }
+      });
+      return assignment;
+    } catch (err: any) {
+      // Unique violation: another request already created the active assignment / sequence.
+      if (err?.code === '23505') {
+        const existing = (await this.getMockAssignments(assignment.userId)).find((a) => a.status === 'IN_PROGRESS');
+        if (existing) return existing;
+      }
+      throw err;
+    }
+  }
+
+  async setMockAssignmentStatus(id: string, status: MockAssignmentStatus): Promise<void> {
+    await withTransaction(async (client) => {
+      await client.query(`UPDATE mock_exam_assignments SET status = $2 WHERE id = $1`, [id, status]);
+      await client.query(`UPDATE mock_exam_question_usage SET attempt_status = $2 WHERE assignment_id = $1`, [id, status]);
+    });
+  }
+
+  async completeMockAssignment(
+    assignmentId: string,
+    submittedQuestionIds: string[],
+    attempt: MockExamAttempt,
+    historyEntry: LearningHistoryEntry
+  ): Promise<void> {
+    await withTransaction(async (client) => {
+      // Lock the assignment row and only transition IN_PROGRESS -> COMPLETED once.
+      const upd = await client.query(
+        `UPDATE mock_exam_assignments
+           SET status = 'COMPLETED', completed_at = $2, mock_attempt_id = $3
+         WHERE id = $1 AND status = 'IN_PROGRESS'`,
+        [assignmentId, attempt.completedAt, attempt.id]
+      );
+      if (upd.rowCount === 0) {
+        throw new Error('MOCK_ASSIGNMENT_NOT_ACTIVE');
+      }
+      await client.query(
+        `UPDATE mock_exam_question_usage
+           SET attempt_status = 'COMPLETED', exam_completed = TRUE,
+               question_submitted = (question_id = ANY($2))
+         WHERE assignment_id = $1`,
+        [assignmentId, submittedQuestionIds]
+      );
+      await client.query(
+        `INSERT INTO mock_attempts (id, user_id, exam_title, session1_score, session2_score, total_score, total_max, percentage, qualified, total_time_seconds, answers, completed_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`,
+        [
+          attempt.id,
+          attempt.userId,
+          attempt.examTitle,
+          attempt.session1Score,
+          attempt.session2Score,
+          attempt.totalScore,
+          attempt.totalMax,
+          attempt.percentage,
+          attempt.qualified,
+          attempt.totalTimeSeconds,
+          JSON.stringify(attempt.answers),
+          attempt.completedAt
+        ]
+      );
+      await client.query(
+        `INSERT INTO learning_history (id, user_id, type, title, summary, score, max_score, duration_seconds, timestamp)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+        [historyEntry.id, historyEntry.userId, historyEntry.type, historyEntry.title, historyEntry.summary, historyEntry.score ?? null, historyEntry.maxScore ?? null, historyEntry.durationSeconds, historyEntry.timestamp]
+      );
+    });
+  }
+
+  // TRANSACTIONAL DIAGNOSTIC ATTEMPT (Idempotent insert + BKT updates + history entry)
+  async recordDiagnosticAttempt(
+    attempt: DiagnosticAttempt,
+    bktUpdates: TopicMasteryRecord[],
+    historyEntry: LearningHistoryEntry
+  ): Promise<DiagnosticAttempt> {
+    if (attempt.clientSubmissionId) {
+      const existing = await query<any>(
+        `SELECT id FROM diagnostic_attempts WHERE client_submission_id = $1 AND user_id = $2 LIMIT 1`,
+        [attempt.clientSubmissionId, attempt.userId]
+      );
+      if (existing.rows[0]?.id) {
+        const found = await this.getDiagnosticAttemptById(existing.rows[0].id);
+        if (found) return found;
+      }
+    }
+
+    await withTransaction(async (client) => {
+      await client.query(
+        `INSERT INTO diagnostic_attempts (
+           id, client_submission_id, user_id, exam_title, status,
+           total_questions, attempted_count, correct_count, incorrect_count, unanswered_count,
+           session1_score, session2_score, total_score, total_max,
+           percentage, accuracy_percentage, total_time_seconds,
+           responses, subject_breakdown, topic_breakdown,
+           acceptance_status, acceptance_method, accepted_at, exam_started_at, completed_at
+         )
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25)
+         ON CONFLICT (id) DO NOTHING`,
+        [
+          attempt.id,
+          attempt.clientSubmissionId || null,
+          attempt.userId,
+          attempt.examTitle,
+          attempt.status,
+          attempt.totalQuestions,
+          attempt.attemptedCount,
+          attempt.correctCount,
+          attempt.incorrectCount,
+          attempt.unansweredCount,
+          attempt.session1Score,
+          attempt.session2Score,
+          attempt.totalScore,
+          attempt.totalMax,
+          attempt.percentage,
+          attempt.accuracyPercentage,
+          attempt.totalTimeSeconds,
+          JSON.stringify(attempt.responses),
+          JSON.stringify(attempt.subjectBreakdown),
+          JSON.stringify(attempt.topicBreakdown),
+          attempt.acceptanceStatus || 'ACCEPTED',
+          attempt.acceptanceMethod || 'CHECKBOX',
+          attempt.acceptedAt || null,
+          attempt.examStartedAt || null,
+          attempt.completedAt
+        ]
+      );
+
+      for (const bktUpdate of bktUpdates) {
+        await client.query(
+          `INSERT INTO topic_mastery (id, user_id, subject, topic, p_known, mastery_percentage, tier, attempts_count, correct_count, updated_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+           ON CONFLICT (user_id, topic) DO UPDATE SET
+             p_known = EXCLUDED.p_known,
+             mastery_percentage = EXCLUDED.mastery_percentage,
+             tier = EXCLUDED.tier,
+             attempts_count = EXCLUDED.attempts_count,
+             correct_count = EXCLUDED.correct_count,
+             updated_at = EXCLUDED.updated_at`,
+          [
+            bktUpdate.id,
+            bktUpdate.userId,
+            bktUpdate.subject,
+            bktUpdate.topic,
+            bktUpdate.p_known,
+            bktUpdate.masteryPercentage,
+            bktUpdate.tier,
+            bktUpdate.attemptsCount,
+            bktUpdate.correctCount,
+            bktUpdate.updatedAt
+          ]
+        );
+      }
+
+      await client.query(
+        `INSERT INTO learning_history (id, user_id, type, title, summary, score, max_score, duration_seconds, timestamp)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+         ON CONFLICT (id) DO NOTHING`,
+        [
+          historyEntry.id,
+          historyEntry.userId,
+          historyEntry.type,
+          historyEntry.title,
+          historyEntry.summary,
+          historyEntry.score ?? null,
+          historyEntry.maxScore ?? null,
+          historyEntry.durationSeconds,
+          historyEntry.timestamp
+        ]
+      );
+    });
+
+    return attempt;
+  }
+
+  async getDiagnosticAttempts(userId: string): Promise<DiagnosticAttempt[]> {
+    const res = await query<any>(
+      `SELECT id, client_submission_id as "clientSubmissionId", user_id as "userId",
+              exam_title as "examTitle", status, total_questions as "totalQuestions",
+              attempted_count as "attemptedCount", correct_count as "correctCount",
+              incorrect_count as "incorrectCount", unanswered_count as "unansweredCount",
+              session1_score as "session1Score", session2_score as "session2Score",
+              total_score as "totalScore", total_max as "totalMax",
+              percentage, accuracy_percentage as "accuracyPercentage",
+              total_time_seconds as "totalTimeSeconds",
+              responses, subject_breakdown as "subjectBreakdown",
+              topic_breakdown as "topicBreakdown",
+              acceptance_status as "acceptanceStatus", acceptance_method as "acceptanceMethod",
+              accepted_at as "acceptedAt", exam_started_at as "examStartedAt",
+              completed_at as "completedAt"
+       FROM diagnostic_attempts
+       WHERE user_id = $1
+       ORDER BY completed_at DESC`,
+      [userId]
+    );
+    return res.rows.map((r) => ({
+      ...r,
+      percentage: Number(r.percentage) || 0,
+      accuracyPercentage: Number(r.accuracyPercentage) || 0,
+      responses: typeof r.responses === 'string' ? JSON.parse(r.responses) : r.responses || [],
+      subjectBreakdown:
+        typeof r.subjectBreakdown === 'string' ? JSON.parse(r.subjectBreakdown) : r.subjectBreakdown || [],
+      topicBreakdown:
+        typeof r.topicBreakdown === 'string' ? JSON.parse(r.topicBreakdown) : r.topicBreakdown || []
+    }));
+  }
+
+  async getDiagnosticAttemptById(id: string): Promise<DiagnosticAttempt | null> {
+    const res = await query<any>(
+      `SELECT id, client_submission_id as "clientSubmissionId", user_id as "userId",
+              exam_title as "examTitle", status, total_questions as "totalQuestions",
+              attempted_count as "attemptedCount", correct_count as "correctCount",
+              incorrect_count as "incorrectCount", unanswered_count as "unansweredCount",
+              session1_score as "session1Score", session2_score as "session2Score",
+              total_score as "totalScore", total_max as "totalMax",
+              percentage, accuracy_percentage as "accuracyPercentage",
+              total_time_seconds as "totalTimeSeconds",
+              responses, subject_breakdown as "subjectBreakdown",
+              topic_breakdown as "topicBreakdown",
+              acceptance_status as "acceptanceStatus", acceptance_method as "acceptanceMethod",
+              accepted_at as "acceptedAt", exam_started_at as "examStartedAt",
+              completed_at as "completedAt"
+       FROM diagnostic_attempts
+       WHERE id = $1 LIMIT 1`,
+      [id]
+    );
+    if (!res.rows[0]) return null;
+    const r = res.rows[0];
+    return {
+      ...r,
+      percentage: Number(r.percentage) || 0,
+      accuracyPercentage: Number(r.accuracyPercentage) || 0,
+      responses: typeof r.responses === 'string' ? JSON.parse(r.responses) : r.responses || [],
+      subjectBreakdown:
+        typeof r.subjectBreakdown === 'string' ? JSON.parse(r.subjectBreakdown) : r.subjectBreakdown || [],
+      topicBreakdown:
+        typeof r.topicBreakdown === 'string' ? JSON.parse(r.topicBreakdown) : r.topicBreakdown || []
     };
   }
 
@@ -710,40 +1070,34 @@ export class JsonRepository implements IDataRepository {
   }
 
   async getQuestions(filter: QuestionFilter): Promise<{ total: number; questions: Question[] }> {
-    const all = loadQuestions();
-    let filtered = [...all];
-
-    if (filter.subject) {
-      filtered = filtered.filter((q) => q.subject.toLowerCase() === filter.subject!.toLowerCase());
+    let list = [...loadQuestions()];
+    if (filter.subject && filter.subject !== 'all') {
+      list = list.filter((q) => q.subject.toLowerCase() === filter.subject!.toLowerCase());
     }
-    if (filter.topic) {
-      filtered = filtered.filter((q) => q.topic.toLowerCase() === filter.topic!.toLowerCase());
+    if (filter.topic && filter.topic !== 'all') {
+      list = list.filter((q) => q.topic.toLowerCase() === filter.topic!.toLowerCase());
     }
-    if (filter.difficulty) {
-      filtered = filtered.filter((q) => q.difficulty_label.toLowerCase() === filter.difficulty!.toLowerCase());
+    if (filter.difficulty && filter.difficulty !== 'all') {
+      list = list.filter((q) => (q.difficulty_label || '').toLowerCase() === filter.difficulty!.toLowerCase());
     }
     if (filter.search) {
       const s = filter.search.toLowerCase();
-      filtered = filtered.filter(
+      list = list.filter(
         (q) =>
+          q.question_id.toLowerCase().includes(s) ||
           q.question_text.toLowerCase().includes(s) ||
           q.topic.toLowerCase().includes(s) ||
           q.subtopic.toLowerCase().includes(s)
       );
     }
-
-    const total = filtered.length;
+    const total = list.length;
     const limit = Number(filter.limit) || 20;
     const offset = Number(filter.offset) || 0;
-    return {
-      total,
-      questions: filtered.slice(offset, offset + limit)
-    };
+    return { total, questions: list.slice(offset, offset + limit) };
   }
 
   async getQuestionById(id: string): Promise<Question | null> {
-    const all = loadQuestions();
-    return all.find((q) => q.question_id === id) || null;
+    return loadQuestions().find((q) => q.question_id === id) || null;
   }
 
   async recordPracticeAttempt(
@@ -788,6 +1142,145 @@ export class JsonRepository implements IDataRepository {
   async getMockAttemptById(id: string): Promise<MockExamAttempt | null> {
     const db = getDb();
     return db.mockAttempts.find((m) => m.id === id) || null;
+  }
+
+  // -------------------------------------------------------------
+  // MOCK EXAM QUESTION ROTATION (File JSON Store)
+  // -------------------------------------------------------------
+  private assignmentsStore(): MockExamAssignment[] {
+    const db = getDb();
+    if (!Array.isArray(db.mockExamAssignments)) db.mockExamAssignments = [];
+    return db.mockExamAssignments;
+  }
+
+  async getMockCycle(userId: string): Promise<number> {
+    const db = getDb();
+    return db.mockExamCycles?.[userId] || 1;
+  }
+
+  async resetMockCycle(userId: string): Promise<number> {
+    const db = getDb();
+    if (!db.mockExamCycles || typeof db.mockExamCycles !== 'object') {
+      db.mockExamCycles = {};
+    }
+    const current = db.mockExamCycles[userId] || 1;
+    const next = current + 1;
+    db.mockExamCycles[userId] = next;
+    saveDatabase(db);
+    return next;
+  }
+
+  async getMockAssignments(userId: string): Promise<MockExamAssignment[]> {
+    return this.assignmentsStore()
+      .filter((a) => a.userId === userId)
+      .sort((a, b) => a.sequenceNumber - b.sequenceNumber)
+      .map((a) => ({ ...a, questions: a.questions.map((q) => ({ ...q })) }));
+  }
+
+  async getMockAssignmentById(id: string): Promise<MockExamAssignment | null> {
+    const found = this.assignmentsStore().find((a) => a.id === id);
+    return found ? { ...found, questions: found.questions.map((q) => ({ ...q })) } : null;
+  }
+
+  async createMockAssignment(assignment: MockExamAssignment): Promise<MockExamAssignment> {
+    const store = this.assignmentsStore();
+    // Synchronous check-and-insert (single Node event loop tick) prevents duplicate active exams.
+    const active = store.find((a) => a.userId === assignment.userId && a.status === 'IN_PROGRESS');
+    if (active) return { ...active, questions: active.questions.map((q) => ({ ...q })) };
+    if (store.some((a) => a.userId === assignment.userId && a.sequenceNumber === assignment.sequenceNumber)) {
+      throw new Error('MOCK_ASSIGNMENT_SEQUENCE_CONFLICT');
+    }
+    store.push({ ...assignment, questions: assignment.questions.map((q) => ({ ...q })) });
+    saveDatabase(getDb());
+    return assignment;
+  }
+
+  async setMockAssignmentStatus(id: string, status: MockAssignmentStatus): Promise<void> {
+    const found = this.assignmentsStore().find((a) => a.id === id);
+    if (!found) return;
+    found.status = status;
+    saveDatabase(getDb());
+  }
+
+  async completeMockAssignment(
+    assignmentId: string,
+    submittedQuestionIds: string[],
+    attempt: MockExamAttempt,
+    historyEntry: LearningHistoryEntry
+  ): Promise<void> {
+    const db = getDb();
+    const found = this.assignmentsStore().find((a) => a.id === assignmentId);
+    if (!found || found.status !== 'IN_PROGRESS') {
+      throw new Error('MOCK_ASSIGNMENT_NOT_ACTIVE');
+    }
+    const submitted = new Set(submittedQuestionIds);
+    found.status = 'COMPLETED';
+    found.completedAt = attempt.completedAt;
+    found.mockAttemptId = attempt.id;
+    found.questions = found.questions.map((q) => ({ ...q, submitted: submitted.has(q.questionId) }));
+    db.mockAttempts.unshift(attempt);
+    db.learningHistory.unshift(historyEntry);
+    saveDatabase(db);
+  }
+
+  async recordDiagnosticAttempt(
+    attempt: DiagnosticAttempt,
+    bktUpdates: TopicMasteryRecord[],
+    historyEntry: LearningHistoryEntry
+  ): Promise<DiagnosticAttempt> {
+    const db = getDb();
+    if (!Array.isArray(db.diagnosticAttempts)) {
+      db.diagnosticAttempts = [];
+    }
+
+    // Idempotency check: prevent duplicate attempts from repeated submit requests
+    if (attempt.clientSubmissionId) {
+      const existing = db.diagnosticAttempts.find(
+        (d) => d.userId === attempt.userId && d.clientSubmissionId === attempt.clientSubmissionId
+      );
+      if (existing) {
+        return existing;
+      }
+    }
+    const existingById = db.diagnosticAttempts.find((d) => d.id === attempt.id);
+    if (existingById) {
+      return existingById;
+    }
+
+    db.diagnosticAttempts.unshift(attempt);
+
+    for (const bktUpdate of bktUpdates) {
+      const tmIndex = db.topicMastery.findIndex(
+        (m) => m.userId === bktUpdate.userId && m.topic === bktUpdate.topic
+      );
+      if (tmIndex >= 0) {
+        db.topicMastery[tmIndex] = bktUpdate;
+      } else {
+        db.topicMastery.push(bktUpdate);
+      }
+    }
+
+    db.learningHistory.unshift(historyEntry);
+    saveDatabase(db);
+    return attempt;
+  }
+
+  async getDiagnosticAttempts(userId: string): Promise<DiagnosticAttempt[]> {
+    const db = getDb();
+    if (!Array.isArray(db.diagnosticAttempts)) {
+      return [];
+    }
+    return db.diagnosticAttempts
+      .filter((d) => d.userId === userId)
+      .sort((a, b) => new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime());
+  }
+
+  async getDiagnosticAttemptById(id: string): Promise<DiagnosticAttempt | null> {
+    const db = getDb();
+    if (!Array.isArray(db.diagnosticAttempts)) {
+      return null;
+    }
+    return db.diagnosticAttempts.find((d) => d.id === id) || null;
   }
 
   async getRevisionItems(userId: string): Promise<{

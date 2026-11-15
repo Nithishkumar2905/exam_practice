@@ -51,6 +51,34 @@ export function MockExamScreen() {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentIdx, setCurrentIdx] = useState(0);
+  const [assignmentId, setAssignmentId] = useState<string | null>(() => {
+    try {
+      return sessionStorage.getItem('mockExamAssignmentId');
+    } catch {
+      return null;
+    }
+  });
+  const [sequenceNumber, setSequenceNumber] = useState<number | null>(() => {
+    try {
+      const s = sessionStorage.getItem('mockExamSequenceNumber');
+      return s ? Number(s) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // Rotation & Cycle States
+  const [cycleNumber, setCycleNumber] = useState<number>(1);
+  const [isNearingExhaustion, setIsNearingExhaustion] = useState(false);
+  const [isExhausted, setIsExhausted] = useState(false);
+  const [isResettingCycle, setIsResettingCycle] = useState(false);
+  const [rotationStats, setRotationStats] = useState<{
+    completedQuestionsInCycle: number;
+    remainingUnusedQuestions: number;
+    isNearingExhaustion: boolean;
+    isExhausted: boolean;
+    cycleNumber: number;
+  } | null>(null);
 
   // Exam answers map: questionId -> { selectedOption, timeSpent, markedForReview }
   const [answers, setAnswers] = useState<
@@ -73,6 +101,12 @@ export function MockExamScreen() {
 
   const secondsRemainingRef = useRef<number>(secondsRemaining);
   secondsRemainingRef.current = secondsRemaining;
+
+  const assignmentIdRef = useRef<string | null>(assignmentId);
+  assignmentIdRef.current = assignmentId;
+
+  const sequenceNumberRef = useRef<number | null>(sequenceNumber);
+  sequenceNumberRef.current = sequenceNumber;
 
   // Session storage recovery: restore exam progress on mount
   useEffect(() => {
@@ -101,39 +135,169 @@ export function MockExamScreen() {
 
   // Register active exam status with global NavigationController so it can intercept navigation
   useEffect(() => {
-    if (!loading && questions.length > 0) {
+    if (!loading && questions.length > 0 && !isExhausted) {
       setIsExamActive(true);
     }
     return () => {
       // Deregister when component unmounts (submit or navigate away)
       setIsExamActive(false);
     };
-  }, [loading, questions.length, setIsExamActive]);
+  }, [loading, questions.length, isExhausted, setIsExamActive]);
 
-  useEffect(() => {
-    fetch('/api/questions?limit=400')
+  const loadMockExam = useCallback(() => {
+    setLoading(true);
+    const uid = user?.id || 'usr_candidate_01';
+
+    // Fetch student's current cycle rotation metrics
+    fetch(`/api/mock/rotation-status?userId=${encodeURIComponent(uid)}`)
+      .then((r) => r.json())
+      .then((statData) => {
+        if (statData.success) {
+          setRotationStats({
+            completedQuestionsInCycle: statData.completedQuestionsInCycle,
+            remainingUnusedQuestions: statData.remainingUnusedQuestions,
+            isNearingExhaustion: statData.isNearingExhaustion,
+            isExhausted: statData.isExhausted,
+            cycleNumber: statData.cycleNumber
+          });
+        }
+      })
+      .catch((e) => console.warn('Rotation status load failed:', e));
+
+    fetch('/api/mock/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: uid })
+    })
       .then((r) => r.json())
       .then((data) => {
-        const allQ: Question[] = data.questions || [];
-        // Assemble official SSC MTS pattern: 20 Math, 20 Reasoning (Session I) + 25 GA, 25 English (Session II) = 90 total
-        const mathQ = allQ.filter((q) => q.subject === 'Numerical and Mathematical Ability').slice(0, 20);
-        const reasoningQ = allQ.filter((q) => q.subject === 'Reasoning Ability and Problem Solving').slice(0, 20);
-        const gaQ = allQ.filter((q) => q.subject === 'General Awareness').slice(0, 25);
-        const englishQ = allQ.filter((q) => q.subject === 'English Language and Comprehension').slice(0, 25);
+        if (data.isExhausted) {
+          setIsExhausted(true);
+          setCycleNumber(data.cycleNumber || 1);
+          setQuestions([]);
+          setLoading(false);
+          announce('You have completed all available Mock Examination questions. Would you like to start a new question cycle?', 'assertive');
+          speakText('You have completed all available Mock Examination questions. Would you like to start a new question cycle? Say "Start new cycle" or press the button.');
+          return;
+        }
 
-        const balanced90 = [...mathQ, ...reasoningQ, ...gaQ, ...englishQ];
-        const qList = balanced90.length === 90 ? balanced90 : allQ.slice(0, 90);
+        if (!data.success || !Array.isArray(data.questions)) {
+          throw new Error(data.error || 'Failed to load mock examination questions.');
+        }
+
+        const qList: Question[] = data.questions;
+        const asgId = data.assignment?.id || null;
+        const seq = data.assignment?.sequenceNumber || 1;
+        const activeCycle = data.cycleNumber || 1;
 
         setQuestions(qList);
+        setAssignmentId(asgId);
+        setSequenceNumber(seq);
+        setCycleNumber(activeCycle);
+        setIsNearingExhaustion(Boolean(data.isNearingExhaustion));
+        setIsExhausted(false);
+        assignmentIdRef.current = asgId;
+        sequenceNumberRef.current = seq;
+
+        if (asgId) sessionStorage.setItem('mockExamAssignmentId', asgId);
+        if (seq) sessionStorage.setItem('mockExamSequenceNumber', String(seq));
+
+        // Restore saved answers if present in sessionStorage, or initialize
+        const savedAnswersRaw = sessionStorage.getItem('mockExamAnswers');
+        const savedTimer = sessionStorage.getItem('mockExamTimer');
+        let parsedSaved: Record<string, any> = {};
+        if (savedAnswersRaw) {
+          try {
+            parsedSaved = JSON.parse(savedAnswersRaw);
+          } catch {}
+        }
+
         const initialAnswers: Record<string, any> = {};
         qList.forEach((q: Question) => {
-          initialAnswers[q.question_id] = { selectedOption: null, timeSpent: 0, markedForReview: false };
+          if (parsedSaved[q.question_id]) {
+            initialAnswers[q.question_id] = parsedSaved[q.question_id];
+          } else {
+            initialAnswers[q.question_id] = { selectedOption: null, timeSpent: 0, markedForReview: false };
+          }
         });
         setAnswers(initialAnswers);
+
+        // Proportional timer calculation when no prior session timer exists:
+        // 60s per question (standard) or 80s per question (PwD compensatory time)
+        if (!savedTimer) {
+          const baseRate = isPwD ? 80 : 60;
+          const proportionalSeconds = qList.length * baseRate;
+          setSecondsRemaining(proportionalSeconds);
+        }
+
+        if (data.resumed) {
+          announce(`Resumed Mock Examination #${seq}. Progress recovered.`, 'polite');
+        } else if (data.isNearingExhaustion) {
+          announce(`Notice: Nearing question bank exhaustion. Only ${qList.length} unused questions remain in cycle ${activeCycle}.`, 'assertive');
+          speakText(`Notice: Nearing question bank exhaustion. Only ${qList.length} unused questions remain in question cycle ${activeCycle}. This examination will contain ${qList.length} questions.`);
+        } else {
+          announce(`Mock Examination #${seq} loaded with ${qList.length} fresh questions.`, 'polite');
+        }
       })
-      .catch((e) => console.warn('Mock questions error:', e))
+      .catch((e) => {
+        console.warn('Mock rotation start failed, falling back to static questions:', e);
+        fetch('/api/questions?limit=400')
+          .then((r) => r.json())
+          .then((data) => {
+            const allQ: Question[] = data.questions || [];
+            const mathQ = allQ.filter((q) => q.subject === 'Numerical and Mathematical Ability').slice(0, 20);
+            const reasoningQ = allQ.filter((q) => q.subject === 'Reasoning Ability and Problem Solving').slice(0, 20);
+            const gaQ = allQ.filter((q) => q.subject === 'General Awareness').slice(0, 25);
+            const englishQ = allQ.filter((q) => q.subject === 'English Language and Comprehension').slice(0, 25);
+
+            const balanced90 = [...mathQ, ...reasoningQ, ...gaQ, ...englishQ];
+            const qList = balanced90.length === 90 ? balanced90 : allQ.slice(0, 90);
+
+            setQuestions(qList);
+            const initialAnswers: Record<string, any> = {};
+            qList.forEach((q: Question) => {
+              initialAnswers[q.question_id] = { selectedOption: null, timeSpent: 0, markedForReview: false };
+            });
+            setAnswers(initialAnswers);
+          })
+          .catch((err) => console.warn('Mock questions error:', err));
+      })
       .finally(() => setLoading(false));
-  }, []);
+  }, [user?.id, isPwD, announce, speakText]);
+
+  useEffect(() => {
+    loadMockExam();
+  }, [loadMockExam]);
+
+  const handleResetCycle = useCallback(async () => {
+    setIsResettingCycle(true);
+    try {
+      const uid = user?.id || 'usr_candidate_01';
+      const res = await fetch('/api/mock/reset-cycle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: uid })
+      });
+      const data = await res.json();
+      if (data.success) {
+        sessionStorage.removeItem('mockExamAnswers');
+        sessionStorage.removeItem('mockExamTimer');
+        sessionStorage.removeItem('mockExamIndex');
+        sessionStorage.removeItem('mockExamAssignmentId');
+        sessionStorage.removeItem('mockExamSequenceNumber');
+        setIsExhausted(false);
+        setCycleNumber(data.cycleNumber);
+        announce(`Started question cycle ${data.cycleNumber}. Loading fresh examination.`, 'polite');
+        speakText(`Started question cycle ${data.cycleNumber}. Loading fresh examination.`);
+        loadMockExam();
+      }
+    } catch (err) {
+      console.error('Reset cycle error:', err);
+      announce('Failed to reset question cycle. Please try again.', 'assertive');
+    } finally {
+      setIsResettingCycle(false);
+    }
+  }, [user?.id, announce, speakText, loadMockExam]);
 
   const handleFinalSubmit = useCallback(async () => {
     setIsSubmitting(true);
@@ -142,7 +306,7 @@ export function MockExamScreen() {
         questionId: q.question_id,
         subject: q.subject,
         selectedOption: answers[q.question_id]?.selectedOption || null,
-        timeSpentSeconds: 40
+        timeSpentSeconds: answers[q.question_id]?.timeSpent || 40
       }));
 
       const res = await fetch('/api/mock/submit', {
@@ -150,7 +314,8 @@ export function MockExamScreen() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userId: user?.id,
-          examTitle: 'SSC MTS 2026 Official Pattern Mock Examination #1',
+          assignmentId: assignmentIdRef.current,
+          examTitle: `SSC MTS 2026 Official Pattern Mock Examination #${sequenceNumberRef.current || 1}`,
           submissions,
           answers
         })
@@ -160,6 +325,8 @@ export function MockExamScreen() {
       sessionStorage.removeItem('mockExamAnswers');
       sessionStorage.removeItem('mockExamTimer');
       sessionStorage.removeItem('mockExamIndex');
+      sessionStorage.removeItem('mockExamAssignmentId');
+      sessionStorage.removeItem('mockExamSequenceNumber');
       setIsExamActive(false); // Deregister before navigating to results
       announce('Examination submitted successfully. Reviewing results...', 'assertive');
       speakText('Examination submitted successfully. Loading scorecard and results analysis.', () => {
@@ -414,6 +581,33 @@ export function MockExamScreen() {
     return () => unregister();
   }, [currentQ, registerVoiceHandler, readQuestionAloud, handleToggleMarkForReview, handleRecordOption, handleFinalSubmit, speakText]);
 
+  // Voice handler when question repository is exhausted
+  useEffect(() => {
+    if (!isExhausted) return;
+
+    const unregister = registerVoiceHandler((transcript: string) => {
+      const t = transcript.toLowerCase();
+      if (
+        t.includes('start new cycle') ||
+        t.includes('start cycle') ||
+        t.includes('reset cycle') ||
+        t.includes('new cycle') ||
+        t.includes('yes') ||
+        t.includes('confirm')
+      ) {
+        handleResetCycle();
+        return true;
+      }
+      if (t.includes('dashboard') || t.includes('home') || t.includes('go back')) {
+        navigateTo('dashboard');
+        return true;
+      }
+      return false;
+    });
+
+    return () => unregister();
+  }, [isExhausted, registerVoiceHandler, handleResetCycle, navigateTo]);
+
   // Single-key WCAG keyboard accessibility backup
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -449,6 +643,55 @@ export function MockExamScreen() {
     return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   };
 
+  if (isExhausted) {
+    return (
+      <div className="max-w-3xl mx-auto px-4 py-16 text-center space-y-6" id="main-content">
+        <div className="bg-white border-2 border-blue-600 rounded-2xl p-8 shadow-lg space-y-6">
+          <div className="w-16 h-16 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center mx-auto">
+            <RotateCcw className="w-8 h-8" />
+          </div>
+          <div className="space-y-2">
+            <span className="text-xs font-bold text-blue-800 uppercase tracking-wider">
+              Question Cycle {cycleNumber} Complete
+            </span>
+            <h1 className="text-2xl font-black text-slate-900">
+              All Mock Examination Questions Completed
+            </h1>
+            <p className="text-sm text-slate-600 max-w-lg mx-auto leading-relaxed">
+              You have completed all 400 available Mock Examination questions across your current cycle (Cycle {cycleNumber}). All your past attempts, scores, and analytics are preserved.
+            </p>
+            <p className="text-sm font-semibold text-blue-900">
+              Would you like to start a new question cycle?
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
+            <button
+              type="button"
+              onClick={handleResetCycle}
+              disabled={isResettingCycle}
+              className="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm rounded-xl shadow-md transition-all flex items-center gap-2 focus:ring-2 focus:ring-blue-600 disabled:opacity-50"
+            >
+              <RotateCcw className={`w-4 h-4 ${isResettingCycle ? 'animate-spin' : ''}`} />
+              <span>{isResettingCycle ? 'Initializing Cycle...' : 'Start New Question Cycle'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => navigateTo('dashboard')}
+              className="px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm rounded-xl border border-slate-300 transition-all"
+            >
+              Return to Dashboard
+            </button>
+          </div>
+
+          <p className="text-xs text-slate-500">
+            Tip: You can also say &quot;Start new cycle&quot; or &quot;Dashboard&quot; using voice commands.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (loading || !currentQ) {
     return (
       <div className="max-w-4xl mx-auto px-4 py-16 text-center text-slate-600" id="main-content">
@@ -479,6 +722,47 @@ export function MockExamScreen() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-6" id="main-content">
+      {/* 0. Rotation Status & Progress Bar */}
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 flex flex-wrap items-center justify-between gap-3 text-xs text-blue-900 font-medium">
+        <div className="flex flex-wrap items-center gap-3">
+          <span className="font-bold px-2 py-0.5 bg-blue-700 text-white rounded">
+            Cycle {cycleNumber}
+          </span>
+          <span>
+            Examination: <strong>#{sequenceNumber || 1}</strong>
+          </span>
+          <span>·</span>
+          <span>
+            Questions in Exam: <strong>{questions.length}</strong>
+          </span>
+        </div>
+        <div className="flex flex-wrap items-center gap-3">
+          <span>
+            Completed in Cycle: <strong>{rotationStats ? rotationStats.completedQuestionsInCycle : ((sequenceNumber || 1) - 1) * 90}</strong> / 400
+          </span>
+          <span>·</span>
+          <span>
+            Remaining Unused: <strong>{rotationStats ? rotationStats.remainingUnusedQuestions : Math.max(0, 400 - ((sequenceNumber || 1) - 1) * 90)}</strong>
+          </span>
+        </div>
+      </div>
+
+      {/* 0b. Nearing Exhaustion Alert Banner */}
+      {isNearingExhaustion && (
+        <div
+          role="alert"
+          className="bg-amber-50 border-2 border-amber-400 p-4 rounded-xl flex items-center gap-3 text-amber-950 shadow-xs"
+        >
+          <AlertCircle className="w-5 h-5 text-amber-600 shrink-0" />
+          <div className="text-xs sm:text-sm">
+            <strong className="font-bold">Notice: Nearing Question Bank Exhaustion. </strong>
+            <span>
+              Only {questions.length} unused questions remain in Cycle {cycleNumber}. All remaining unused questions have been selected for this exam. Timer ({formatTime(secondsRemaining)}) and maximum marks ({questions.length * 3} marks) have been adjusted proportionally.
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* 1. Examination Countdown & PwD Timer Header */}
       <div className="bg-slate-900 text-white p-4 rounded-xl flex flex-wrap items-center justify-between gap-4 shadow-md">
         <div>
@@ -493,7 +777,9 @@ export function MockExamScreen() {
               </span>
             )}
           </div>
-          <h1 className="text-lg font-bold">SSC MTS 2026 Tier-I Mock Examination</h1>
+          <h1 className="text-lg font-bold">
+            SSC MTS 2026 Tier-I Mock Examination {sequenceNumber ? `#${sequenceNumber}` : ''}
+          </h1>
           <p className="text-xs text-slate-300">
             Session I (Math/Reasoning: No Negative) &amp; Session II (GK/English: -1 Mark Penalty)
           </p>

@@ -10,12 +10,12 @@ import { calculateSM2, getNextReviewDate } from '../utils/sm2.ts';
 import { updateBKT, classifyMasteryTier } from '../utils/bkt.ts';
 import { runPostgresMigrationAndSeed } from '../db/seed_postgres.ts';
 
-test('1. Strict Screen Limit: exactly 16 unique approved screens enforced', () => {
+test('1. Strict Screen Limit: 17 unique approved screens enforced (16 core + Pilot Demo Diagnostic)', () => {
   const result = validateScreenRegistry();
   assert.equal(result.isValid, true);
-  assert.equal(result.totalScreens, 16);
-  assert.equal(APPROVED_SCREENS.length, 16);
-  assert.equal(Object.keys(SCREEN_REGISTRY).length, 16);
+  assert.equal(result.totalScreens, 17);
+  assert.equal(APPROVED_SCREENS.length, 17);
+  assert.equal(Object.keys(SCREEN_REGISTRY).length, 17);
 });
 
 test('2. Curated Dataset: exactly 400 records, 100 per subject, balanced answers', () => {

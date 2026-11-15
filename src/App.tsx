@@ -20,6 +20,7 @@ import { AccessibilitySettingsScreen } from './screens/AccessibilitySettingsScre
 import { LearningHistoryScreen } from './screens/LearningHistoryScreen';
 import { ModelEvaluationScreen } from './screens/ModelEvaluationScreen';
 import { ModelTrainingScreen } from './screens/ModelTrainingScreen';
+import { PilotDemoScreen } from './screens/PilotDemoScreen';
 
 const MainApp: React.FC = () => {
   const { currentScreen, announceMessage, theme, user, pendingExamExit, confirmExamExit } = useAccessibility();
@@ -51,7 +52,9 @@ const MainApp: React.FC = () => {
       'model_evaluation': 'Dataset & Model Evaluation Dashboard',
       'model-evaluation': 'Dataset & Model Evaluation Dashboard',
       'model_training': 'Dataset Management & Model Training',
-      'model-training': 'Dataset Management & Model Training'
+      'model-training': 'Dataset Management & Model Training',
+      'pilot_demo': 'Pilot Demo Diagnostic',
+      'pilot-demo': 'Pilot Demo Diagnostic'
     };
     const title = screenNames[currentScreen] || currentScreen;
     document.title = `ACCESSPREP-X | ${title}`;
@@ -100,13 +103,16 @@ const MainApp: React.FC = () => {
       case 'model_training':
       case 'model-training' as any:
         return <ModelTrainingScreen />;
+      case 'pilot_demo':
+      case 'pilot-demo' as any:
+        return <PilotDemoScreen />;
       default:
         return <DashboardScreen />;
     }
   };
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans theme-${theme} bg-slate-50`}>
+    <div className={`h-screen overflow-hidden flex flex-col font-sans theme-${theme} bg-slate-50`}>
       {/* WCAG Accessible Skip Link */}
       <a
         href="#main-content"
@@ -118,13 +124,13 @@ const MainApp: React.FC = () => {
       {/* Institutional Header */}
       <Header />
 
-      {/* Main Layout Container: Collapsible Sidebar + Content Area */}
-      <div className="flex-1 flex overflow-hidden">
+      {/* Main Layout Container: Fixed Sidebar + Independently Scrollable Content Area */}
+      <div className="flex-1 flex min-h-0 overflow-hidden">
         {/* Professional Blue/Purple Collapsible Sidebar - Only displayed for authenticated sessions */}
         {user && <Navigation />}
 
         {/* Dynamic Main Content & Footer Area */}
-        <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 overflow-y-auto">
           <main id="main-content" className="flex-1 focus:outline-none px-2 sm:px-4 py-4" tabIndex={-1}>
             {renderActiveScreen()}
           </main>

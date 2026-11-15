@@ -8,6 +8,8 @@ import { RecommendedActivity } from '../components/dashboard/RecommendedActivity
 import { QuickActions } from '../components/dashboard/QuickActions.tsx';
 import { RecentActivity, LearningHistoryItem } from '../components/dashboard/RecentActivity.tsx';
 import { RevisionOverview, RevisionData } from '../components/dashboard/RevisionOverview.tsx';
+import { PilotDemoCard } from '../components/dashboard/PilotDemoCard.tsx';
+import { DiagnosticAttempt } from '../db/database.ts';
 import { AlertCircle, RefreshCw, BarChart2, ArrowRight } from 'lucide-react';
 
 interface Analytics {
@@ -40,6 +42,7 @@ export function DashboardScreen() {
   const [revisionData, setRevisionData] = useState<RevisionData | null>(null);
   const [masteryData, setMasteryData] = useState<TopicMasteryItem[]>([]);
   const [activities, setActivities] = useState<LearningHistoryItem[]>([]);
+  const [diagnosticAttempts, setDiagnosticAttempts] = useState<DiagnosticAttempt[]>([]);
 
   const fetchDashboardData = useCallback(async () => {
     setLoading(true);
@@ -47,28 +50,31 @@ export function DashboardScreen() {
     const uid = user?.id || 'usr_candidate_01';
 
     try {
-      const [analyticsRes, revisionRes, masteryRes, historyRes] = await Promise.all([
+      const [analyticsRes, revisionRes, masteryRes, historyRes, diagRes] = await Promise.all([
         fetch(`/api/progress/analytics?userId=${uid}`),
         fetch(`/api/revision/items?userId=${uid}`),
         fetch(`/api/mastery?userId=${uid}`),
-        fetch(`/api/history?userId=${uid}`)
+        fetch(`/api/history?userId=${uid}`),
+        fetch(`/api/diagnostic/attempts?userId=${uid}`)
       ]);
 
       if (!analyticsRes.ok || !revisionRes.ok || !masteryRes.ok || !historyRes.ok) {
         throw new Error('Could not retrieve candidate assessment data.');
       }
 
-      const [analyticsJson, revisionJson, masteryJson, historyJson] = await Promise.all([
+      const [analyticsJson, revisionJson, masteryJson, historyJson, diagJson] = await Promise.all([
         analyticsRes.json(),
         revisionRes.json(),
         masteryRes.json(),
-        historyRes.json()
+        historyRes.json(),
+        diagRes.ok ? diagRes.json() : Promise.resolve({ attempts: [] })
       ]);
 
       setAnalytics(analyticsJson);
       setRevisionData(revisionJson);
       setMasteryData(Array.isArray(masteryJson) ? masteryJson : []);
       setActivities(Array.isArray(historyJson) ? historyJson : []);
+      setDiagnosticAttempts(Array.isArray(diagJson?.attempts) ? diagJson.attempts : []);
     } catch (err: any) {
       console.warn('Dashboard fetch error:', err);
       setError('Unable to refresh some assessment metrics. Showing cached data.');
@@ -121,6 +127,24 @@ export function DashboardScreen() {
       sessionStorage.setItem('practice_filter_subject', subject);
     }
     navigateTo('voice_practice');
+  };
+
+  const handleStartPilotDemo = () => {
+    try {
+      sessionStorage.setItem('pilot_demo_initial_view', 'instructions');
+      sessionStorage.removeItem('pilot_demo_view_attempt_id');
+    } catch {}
+    navigateTo('pilot_demo');
+  };
+
+  const handleViewDiagnosticResults = (attemptId?: string) => {
+    try {
+      sessionStorage.setItem('pilot_demo_initial_view', 'results');
+      if (attemptId) {
+        sessionStorage.setItem('pilot_demo_view_attempt_id', attemptId);
+      }
+    } catch {}
+    navigateTo('pilot_demo');
   };
 
   const isNewUser = !analytics || analytics.totalPracticeQuestions === 0;
@@ -181,7 +205,15 @@ export function DashboardScreen() {
         loading={loading}
       />
 
-      {/* 4. Personalized Learning Recommendation ("Recommended for you today") */}
+      {/* 4. Pilot Demo Diagnostic Card */}
+      <PilotDemoCard
+        attempts={diagnosticAttempts}
+        loading={loading}
+        onStartPilotDemo={handleStartPilotDemo}
+        onViewDiagnosticResults={handleViewDiagnosticResults}
+      />
+
+      {/* 5. Personalized Learning Recommendation ("Recommended for you today") */}
       <RecommendedActivity
         masteryData={masteryData}
         analytics={analytics}

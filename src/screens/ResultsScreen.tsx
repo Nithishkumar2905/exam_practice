@@ -16,13 +16,13 @@ import {
 import { useAccessibility } from '../context/AccessibilityContext.tsx';
 import { AudioToolbar } from '../components/AudioToolbar.tsx';
 import { MockExamAttempt, Question } from '../db/database.ts';
+import { QuestionReview, QuestionReviewItem } from '../components/results/QuestionReview.tsx';
 
 export function ResultsScreen() {
   const { navigateTo, user, speakText, announce } = useAccessibility();
 
   const [attempt, setAttempt] = useState<MockExamAttempt | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [filterType, setFilterType] = useState<'all' | 'correct' | 'incorrect' | 'unattempted' | 'review'>('all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -75,28 +75,48 @@ export function ResultsScreen() {
     );
   }
 
-  // Filter question reviews
-  const questionsReview = Object.entries(attempt.answers).map(([qid, ans]) => {
-    const q = questions.find((item) => item.question_id === qid);
-    const isAnswered = ans.selectedOption !== null;
-    const isCorrect = isAnswered && q && ans.selectedOption?.toUpperCase() === q.correct_answer.toUpperCase();
-    return {
-      questionId: qid,
-      selectedOption: ans.selectedOption,
-      isAnswered,
-      isCorrect,
-      markedForReview: Boolean(ans.markedForReview),
-      question: q
-    };
-  });
+  // Build normalized question review items for the shared QuestionReview component
+  const reviewItems: QuestionReviewItem[] = Object.entries(attempt.answers)
+    .map(([qid, ans], index) => {
+      const q = questions.find((item) => item.question_id === qid);
+      if (!q) return null;
+      const isAnswered = ans.selectedOption !== null;
+      const isCorrect =
+        isAnswered && ans.selectedOption?.toUpperCase() === q.correct_answer.toUpperCase();
+      const status = !isAnswered ? 'unattempted' : isCorrect ? 'correct' : 'incorrect';
+      const isSession1 =
+        q.subject === 'Numerical and Mathematical Ability' ||
+        q.subject === 'Reasoning Ability and Problem Solving';
+      const marksDelta =
+        status === 'correct' ? 3 : status === 'incorrect' ? (isSession1 ? 0 : -1) : 0;
 
-  const filteredItems = questionsReview.filter((item) => {
-    if (filterType === 'correct') return item.isCorrect;
-    if (filterType === 'incorrect') return item.isAnswered && !item.isCorrect;
-    if (filterType === 'unattempted') return !item.isAnswered;
-    if (filterType === 'review') return item.markedForReview;
-    return true;
-  });
+      return {
+        questionNumber: index + 1,
+        questionId: qid,
+        questionText: q.question_text,
+        subject: q.subject,
+        topic: q.topic,
+        options: {
+          A: q.option_a,
+          B: q.option_b,
+          C: q.option_c,
+          D: q.option_d,
+        },
+        selectedOption: ans.selectedOption,
+        correctOption: q.correct_answer,
+        status,
+        marksDelta,
+        timeSpentSeconds:
+          typeof (ans as { timeSpentSeconds?: number }).timeSpentSeconds === 'number'
+            ? (ans as { timeSpentSeconds?: number }).timeSpentSeconds
+            : null,
+        explanation: q.explanation,
+        sourceReference: q.source_reference,
+        sourceName: q.source_name,
+        markedForReview: Boolean(ans.markedForReview),
+      } as QuestionReviewItem;
+    })
+    .filter((item): item is QuestionReviewItem => item !== null);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-8" id="main-content">
@@ -176,164 +196,12 @@ export function ResultsScreen() {
         </div>
       </div>
 
-      {/* 3. Review Filter Controls */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-        <h2 className="text-lg font-bold text-slate-900">Detailed Question-by-Question Review</h2>
-
-        <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg border border-slate-300">
-          <button
-            type="button"
-            onClick={() => setFilterType('all')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-md ${
-              filterType === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            All ({questionsReview.length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilterType('correct')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-md ${
-              filterType === 'correct' ? 'bg-emerald-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Correct ({questionsReview.filter((q) => q.isCorrect).length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilterType('incorrect')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-md ${
-              filterType === 'incorrect' ? 'bg-red-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Incorrect ({questionsReview.filter((q) => q.isAnswered && !q.isCorrect).length})
-          </button>
-          <button
-            type="button"
-            onClick={() => setFilterType('unattempted')}
-            className={`px-3 py-1.5 text-xs font-bold rounded-md ${
-              filterType === 'unattempted' ? 'bg-slate-700 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            Unattempted ({questionsReview.filter((q) => !q.isAnswered).length})
-          </button>
-        </div>
-      </div>
-
-      {/* 4. Filtered Question Cards with Explanations */}
-      <div className="space-y-4">
-        {filteredItems.map((item, idx) => {
-          const q = item.question;
-          if (!q) return null;
-
-          return (
-            <div
-              key={item.questionId}
-              className={`p-6 bg-white border-2 rounded-xl space-y-4 shadow-2xs ${
-                item.isCorrect
-                  ? 'border-emerald-300'
-                  : item.isAnswered
-                  ? 'border-red-300'
-                  : 'border-slate-300'
-              }`}
-            >
-              {/* Question Header & Status Badge */}
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold px-2 py-0.5 bg-slate-100 text-slate-800 rounded border border-slate-300">
-                    Q #{idx + 1} ({q.subject})
-                  </span>
-                  <span className="text-xs font-semibold text-slate-600">
-                    Topic: {q.topic}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  {item.isCorrect ? (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      Correct (+3)
-                    </span>
-                  ) : item.isAnswered ? (
-                    <span className="inline-flex items-center gap-1 text-xs font-bold text-red-800 bg-red-100 px-2.5 py-1 rounded">
-                      <XCircle className="w-4 h-4 text-red-600" />
-                      Incorrect
-                    </span>
-                  ) : (
-                    <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-2.5 py-1 rounded">
-                      Unattempted (0)
-                    </span>
-                  )}
-
-                  <AudioToolbar
-                    textToRead={`${q.question_text}. Correct Answer is option ${q.correct_answer}. Explanation: ${q.explanation}`}
-                    label={`Read question ${idx + 1} explanation`}
-                  />
-                </div>
-              </div>
-
-              {/* Question Text */}
-              <p className="text-sm sm:text-base font-bold text-slate-900 leading-relaxed">
-                {q.question_text}
-              </p>
-
-              {/* Options Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                {['A', 'B', 'C', 'D'].map((optKey) => {
-                  const optText = (q as any)[`option_${optKey.toLowerCase()}`];
-                  const isCorrectOpt = q.correct_answer === optKey;
-                  const isUserSelection = item.selectedOption === optKey;
-
-                  let style = 'bg-slate-50 border-slate-200 text-slate-700';
-                  if (isCorrectOpt) {
-                    style = 'bg-emerald-100 border-emerald-500 text-emerald-950 font-bold';
-                  } else if (isUserSelection && !item.isCorrect) {
-                    style = 'bg-red-100 border-red-500 text-red-950 line-through';
-                  }
-
-                  return (
-                    <div key={optKey} className={`p-2.5 rounded-lg border flex items-center gap-2.5 ${style}`}>
-                      <span className="w-5 h-5 rounded-full bg-white border border-slate-300 flex items-center justify-center font-bold text-[11px] shrink-0">
-                        {optKey}
-                      </span>
-                      <span>{optText}</span>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Detailed Academic Explanation */}
-              <div className="p-4 bg-slate-50 border border-slate-300 rounded-lg space-y-1.5 text-xs text-slate-800">
-                <span className="font-bold text-slate-900 block">Academic Derivation / Rule:</span>
-                <p className="leading-relaxed">{q.explanation}</p>
-                <div className="pt-1 flex items-center justify-between text-[11px] text-slate-500">
-                  <span>Source: {q.source_name} ({q.source_reference})</span>
-                </div>
-              </div>
-
-              {/* Action Buttons: Add to Revision / Ask AI */}
-              <div className="flex flex-wrap items-center justify-end gap-3 pt-1">
-                <button
-                  type="button"
-                  onClick={() => handleAddToRevision(q.question_id)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-purple-800 bg-purple-50 hover:bg-purple-100 border border-purple-300 rounded-md transition-colors"
-                >
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>Add to Spaced Revision Planner</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => navigateTo('ai_tutor')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-blue-800 bg-blue-50 hover:bg-blue-100 border border-blue-300 rounded-md transition-colors"
-                >
-                  <Brain className="w-3.5 h-3.5" />
-                  <span>Ask AI Tutor to Clarify (Alt+T)</span>
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {/* 3. Shared Detailed Question Review */}
+      <QuestionReview
+        items={reviewItems}
+        onAddToRevision={handleAddToRevision}
+        onAskAiTutor={() => navigateTo('ai_tutor')}
+      />
     </div>
   );
 }

@@ -8,9 +8,9 @@
     "build": "vite build",
     "start": "tsx server.ts",
     "preview": "vite preview",
-    "clean": "rm -rf dist server.js",
+    "clean": "node -e \"const fs = require('fs'); ['dist', 'server.js'].forEach(p => { try { fs.rmSync(p, { recursive: true, force: true }); } catch {} });\"",
     "lint": "tsc --noEmit",
-    "test": "tsx --test src/tests/*.test.ts"
+    "test": "node scripts/run_tests.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

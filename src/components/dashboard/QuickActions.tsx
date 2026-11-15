@@ -86,7 +86,13 @@ export function QuickActions({ onNavigate }: QuickActionsProps) {
 
             <button
               type="button"
-              onClick={() => onNavigate(act.screenId)}
+              onClick={() => {
+                if (act.screenId === 'voice_practice') {
+                  sessionStorage.removeItem('practice_filter_subject');
+                  sessionStorage.removeItem('practice_filter_topic');
+                }
+                onNavigate(act.screenId);
+              }}
               className="w-full inline-flex items-center justify-between px-3 py-2 text-xs font-semibold rounded-lg bg-[#F8F9FB] hover:bg-[#1749E8] text-[#172033] hover:text-white border border-[#E8EBF0] hover:border-[#1749E8] transition-all focus:outline-none focus:ring-2 focus:ring-[#1749E8] focus:ring-offset-2"
               aria-label={`Open ${act.title}`}
             >

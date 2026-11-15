@@ -279,7 +279,7 @@ export const ProgressScreen: React.FC = () => {
         <div>
           <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-[#1749E8] bg-[#EEF4FF] px-2.5 py-1 rounded-md border border-[#D9E1EF] mb-2">
             <TrendingUp className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Screen 11 of 16 · Progress Analytics &amp; BI Dashboard</span>
+            <span>Screen 11 of 18 · Progress Analytics &amp; BI Dashboard</span>
           </div>
           <h1 className="text-xl font-bold text-[#172033]">
             Candidate Performance &amp; Progress Dashboard

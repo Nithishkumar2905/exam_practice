@@ -18,7 +18,11 @@ import {
   Cpu,
   Database,
   X,
-  LogIn
+  LogIn,
+  ClipboardCheck,
+  Award,
+  Target,
+  Volume2
 } from 'lucide-react';
 import { useAccessibility } from '../context/AccessibilityContext.tsx';
 import { SCREEN_REGISTRY, ScreenId } from '../types/screens.ts';
@@ -43,16 +47,23 @@ export function Navigation({ onOpenHelp }: NavigationProps) {
 
   const isAdmin = user?.role === 'admin';
 
-  // Main Navigation items per Phase 3 specifications
-  const mainNavItems: { id: ScreenId; label: string; icon: React.ReactNode }[] = [
+  // Practice & Examination section
+  const practiceExamItems: { id: ScreenId; label: string; icon: React.ReactNode }[] = [
     { id: 'dashboard', label: 'Overview', icon: <Home className="w-4 h-4 shrink-0" /> },
     { id: 'topics', label: 'Explore Subjects', icon: <Compass className="w-4 h-4 shrink-0" /> },
     { id: 'voice_practice', label: 'Voice Practice', icon: <Mic className="w-4 h-4 shrink-0" /> },
+    { id: 'pilot_demo', label: 'Pilot Demo Diagnostic', icon: <ClipboardCheck className="w-4 h-4 shrink-0" /> },
     { id: 'mock_exam', label: 'Mock Examination', icon: <Clock className="w-4 h-4 shrink-0" /> },
+    { id: 'results', label: 'Results', icon: <Award className="w-4 h-4 shrink-0" /> }
+  ];
+
+  // Learning & Mastery section
+  const learningMasteryItems: { id: ScreenId; label: string; icon: React.ReactNode }[] = [
     { id: 'ai_tutor', label: 'AI Tutor', icon: <Brain className="w-4 h-4 shrink-0" /> },
     { id: 'revision_planner', label: 'Revision Planner', icon: <Calendar className="w-4 h-4 shrink-0" /> },
     { id: 'learning_history', label: 'Learning History', icon: <History className="w-4 h-4 shrink-0" /> },
-    { id: 'progress', label: 'Progress Analytics', icon: <BarChart2 className="w-4 h-4 shrink-0" /> }
+    { id: 'progress', label: 'Progress Analytics', icon: <BarChart2 className="w-4 h-4 shrink-0" /> },
+    { id: 'topic_mastery', label: 'Topic Mastery', icon: <Target className="w-4 h-4 shrink-0" /> }
   ];
 
   // Admin items
@@ -85,15 +96,61 @@ export function Navigation({ onOpenHelp }: NavigationProps) {
     return (
       <div className="flex flex-col h-full justify-between">
         {/* Main Links */}
-        <div className="space-y-6">
+        <div className="space-y-5">
+          {/* Group 1: Practice & Examination */}
           <div>
             {!collapsed && (
-              <p className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
-                Menu
+              <p className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
+                Practice &amp; Examination
               </p>
             )}
             <ul className="space-y-1" role="list">
-              {mainNavItems.map((item) => {
+              {practiceExamItems.map((item) => {
+                const isActive = currentScreen === item.id;
+                return (
+                  <li key={item.id}>
+                    <button
+                      type="button"
+                      onClick={() => handleNavClick(item.id)}
+                      aria-current={isActive ? 'page' : undefined}
+                      aria-label={item.label}
+                      title={collapsed ? item.label : undefined}
+                      className={`w-full flex items-center transition-colors group relative rounded-lg text-left ${
+                        collapsed
+                          ? 'justify-center p-2.5'
+                          : 'gap-3 px-3 py-2 text-xs font-semibold'
+                      } ${
+                        isActive
+                          ? 'bg-[#EEF4FF] text-[#1749E8] font-bold'
+                          : 'text-[#64748B] hover:text-[#172033] hover:bg-[#F8F9FB]'
+                      }`}
+                    >
+                      {isActive && (
+                        <span
+                          className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-[#1749E8] rounded-r"
+                          aria-hidden="true"
+                        />
+                      )}
+                      <span className={isActive ? 'text-[#1749E8]' : 'text-[#64748B] group-hover:text-[#172033]'}>
+                        {item.icon}
+                      </span>
+                      {!collapsed && <span className="truncate">{item.label}</span>}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+
+          {/* Group 2: Learning & Mastery */}
+          <div>
+            {!collapsed && (
+              <p className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
+                Learning &amp; Mastery
+              </p>
+            )}
+            <ul className="space-y-1" role="list">
+              {learningMasteryItems.map((item) => {
                 const isActive = currentScreen === item.id;
                 return (
                   <li key={item.id}>
@@ -178,8 +235,13 @@ export function Navigation({ onOpenHelp }: NavigationProps) {
           )}
         </div>
 
-        {/* Bottom Navigation: Settings, Help, Profile, Logout */}
+        {/* Bottom Navigation: Settings & Support, Profile, Logout */}
         <div className="pt-4 border-t border-[#E8EBF0] space-y-1">
+          {!collapsed && (
+            <p className="px-3 mb-1.5 text-[10px] font-bold uppercase tracking-wider text-[#64748B]">
+              Settings &amp; Support
+            </p>
+          )}
           {/* Accessibility Settings */}
           <button
             type="button"
@@ -196,6 +258,24 @@ export function Navigation({ onOpenHelp }: NavigationProps) {
           >
             <Settings className="w-4 h-4 shrink-0 text-[#64748B] group-hover:text-[#172033]" />
             {!collapsed && <span className="truncate">Accessibility Settings</span>}
+          </button>
+
+          {/* Screen Reader Settings */}
+          <button
+            type="button"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.location.hash = 'screen=accessibility_settings&tab=screen_reader';
+              }
+              handleNavClick('accessibility_settings');
+            }}
+            title={collapsed ? 'Screen Reader Settings' : undefined}
+            className={`w-full flex items-center transition-colors group relative rounded-lg text-left ${
+              collapsed ? 'justify-center p-2.5' : 'gap-3 px-3 py-2 text-xs font-semibold'
+            } text-[#64748B] hover:text-[#172033] hover:bg-[#F8F9FB]`}
+          >
+            <Volume2 className="w-4 h-4 shrink-0 text-[#64748B] group-hover:text-[#172033]" />
+            {!collapsed && <span className="truncate">Screen Reader Settings</span>}
           </button>
 
           {/* Help & Support */}
@@ -245,10 +325,10 @@ export function Navigation({ onOpenHelp }: NavigationProps) {
 
   return (
     <>
-      {/* 1. Desktop Sidebar */}
+      {/* 1. Desktop Sidebar (fixed height, independent internal scroll) */}
       <aside
         aria-label="Application Sidebar Navigation"
-        className={`hidden lg:flex flex-col shrink-0 bg-white border-r border-[#E8EBF0] transition-all duration-200 select-none ${
+        className={`hidden lg:flex flex-col shrink-0 h-full overflow-y-auto bg-white border-r border-[#E8EBF0] transition-all duration-200 select-none ${
           isSidebarCollapsed ? 'w-16' : 'w-60'
         }`}
       >
@@ -374,7 +454,7 @@ export function Navigation({ onOpenHelp }: NavigationProps) {
             </div>
             <div className="space-y-2 text-xs">
               <div className="flex justify-between p-2 bg-[#F8F9FB] rounded border border-[#E8EBF0]">
-                <span>Toggle Hands-Free Blind Mode</span>
+                <span>Toggle Hands-Free Vision Mode</span>
                 <kbd className="font-mono font-bold bg-white px-1.5 py-0.5 rounded border border-[#E8EBF0]">Alt + B</kbd>
               </div>
               <div className="flex justify-between p-2 bg-[#F8F9FB] rounded border border-[#E8EBF0]">
